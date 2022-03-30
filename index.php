@@ -1,8 +1,10 @@
 
 <?php
 require_once 'helpers.php';
-// require_once 'db/popular_posts.php';
 require('db/popular_posts.php');
+
+$popular_posts = get_popular_posts();
+
 $is_auth = rand(0, 1);
 
 $user_name = 'Margarita'; // укажите здесь ваше имя
@@ -206,7 +208,6 @@ $user_name = 'Margarita'; // укажите здесь ваше имя
         </div>
 
         <div class="popular__posts">
-            <?php $popular_posts = get_popular_posts(); ?>
             <?php foreach($popular_posts as $post): ?>
                 <article class="popular__post post <?=$post['type']?>">
                     <header class="post__header">
@@ -215,55 +216,51 @@ $user_name = 'Margarita'; // укажите здесь ваше имя
                     <div class="post__main">
                         <!--содержимое для поста-цитаты-->
                         <?php if($post['type'] === 'post-quote'): ?>
-                            <blockquote>
-                                <p><?=$post['quote']?></p>
-                                <cite>Неизвестный Автор</cite>
-                            </blockquote>
-                        <? endif; ?>
+                        <blockquote>
+                            <p><?=$post['content']?></p>
+                            <cite>Неизвестный Автор</cite>
+                        </blockquote>
 
                         <!--содержимое для поста-ссылки-->
-                        <?php if($post['type'] === 'post-link'): ?>
-                            <div class="post-link__wrapper">
-                                <a class="post-link__external" href="http://<?=$post['link']?>" title="Перейти по ссылке">
-                                    <div class="post-link__info-wrapper">
-                                        <div class="post-link__icon-wrapper">
-                                            <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
-                                        </div>
-                                        <div class="post-link__info">
-                                            <h3><?=$post['subtitle']?></h3>
-                                        </div>
+                        <?php elseif ($post['type'] === 'post-link'): ?>
+                        <div class="post-link__wrapper">
+                            <a class="post-link__external" href="http://<?=$post['content']?>" title="Перейти по ссылке">
+                                <div class="post-link__info-wrapper">
+                                    <div class="post-link__icon-wrapper">
+                                        <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                                     </div>
-                                    <span><?=$post['link']?></span>
-                                </a>
-                            </div>
-                        <? endif; ?>
+                                    <div class="post-link__info">
+                                        <h3><?=$post['title']?></h3>
+                                    </div>
+                                </div>
+                                <span><?=$post['content']?></span>
+                            </a>
+                        </div>
 
                         <!--содержимое для поста-фото-->
-                        <?php if($post['type'] === 'post-photo'): ?>
-                            <div class="post-photo__image-wrapper">
-                                <img src="img/<?=$post['photo']?>" alt="Фото от пользователя" width="360" height="240">
-                            </div>
-                        <? endif; ?>
+                        <?php elseif ($post['type'] === 'post-photo'): ?>
+                        <div class="post-photo__image-wrapper">
+                            <img src="img/<?=$post['content']?>" alt="Фото от пользователя" width="360" height="240">
+                        </div>
 
                         <!--содержимое для поста-видео-->
-                        <?php if($post['type'] === 'post-video'): ?>
-                            <div class="post-video__block">
-                                <div class="post-video__preview">
-                                    <?=embed_youtube_cover($post['video']); ?>
-                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
-                                </div>
-                                <a href="post-details.html" class="post-video__play-big button">
-                                    <svg class="post-video__play-big-icon" width="14" height="14">
-                                        <use xlink:href="#icon-video-play-big"></use>
-                                    </svg>
-                                    <span class="visually-hidden">Запустить проигрыватель</span>
-                                </a>
+                        <?php elseif ($post['type'] === 'post-video'): ?>
+                        <div class="post-video__block">
+                            <div class="post-video__preview">
+                                <?=embed_youtube_cover($post['content']); ?>
+                                <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
                             </div>
-                        <? endif; ?>
+                            <a href="post-details.html" class="post-video__play-big button">
+                                <svg class="post-video__play-big-icon" width="14" height="14">
+                                    <use xlink:href="#icon-video-play-big"></use>
+                                </svg>
+                                <span class="visually-hidden">Запустить проигрыватель</span>
+                            </a>
+                        </div>
 
                         <!--содержимое для поста-текста-->
-                        <?php if($post['type'] === 'post-text'): ?>
-                            <p><?=$post['text']?></p>
+                        <?php elseif ($post['type'] === 'post-text'): ?>
+                        <p><?=$post['content']?></p>
                         <? endif; ?>
                     </div>
                     <footer class="post__footer">
