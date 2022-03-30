@@ -32,7 +32,7 @@ function get_popular_posts() {
         4 => [
             'title' => 'Лучшие курсы',
             'type' => 'post-link',
-            'subtitle' => 'Курсы для всех'
+            'subtitle' => 'Курсы для всех',
             'link' => 'www.htmlacademy.ru',
             'user_name' => 'Владик',
             'avatar' => 'userpic.jpg'
