@@ -5,9 +5,12 @@ require('db/popular_posts.php');
 
 $popular_posts = get_popular_posts();
 
+define('POST_LIMIT', 300);
+
 $is_auth = rand(0, 1);
 
 $user_name = 'Margarita'; // укажите здесь ваше имя
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -260,7 +263,7 @@ $user_name = 'Margarita'; // укажите здесь ваше имя
 
                         <!--содержимое для поста-текста-->
                         <?php elseif ($post['type'] === 'post-text'): ?>
-                        <p><?=$post['content']?></p>
+                            <?= crop_text($post['content'], POST_LIMIT) ?>
                         <? endif; ?>
                     </div>
                     <footer class="post__footer">
