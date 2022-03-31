@@ -262,3 +262,69 @@ function generate_random_date($index)
 
     return $dt;
 }
+
+/**
+  Количество символов в карточке для превью поста
+*/
+define('TEXT_LIMIT', 300);
+
+/**
+  Проверяем длину текста на количество знаков
+ * @param string, int
+ * @return bull
+*/
+function limit_text(string $input, int $limit = TEXT_LIMIT) {
+    return mb_strlen($input, 'utf-8') > $limit;
+}
+
+/**
+ Прибавляет к тексту многоточие
+ * @param string
+ * @return string
+*/
+function add_ellipsis(string $input) {
+    $last_symbols = [',', '.', ';', ':'];
+
+    foreach($last_symbols as $symbol) {
+        if (mb_substr($input, -1) === $symbol) {
+            return $input . '..';
+        }
+    }
+
+    return $input . '...';
+}
+
+/**
+ * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
+ * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
+ * @param string, int
+ * @return string
+*/
+function crop_text(string $input, int $limit = TEXT_LIMIT) {
+    if (limit_text($input, $limit)) {
+        $count = 0;
+        $output = [];
+
+        /** Переводим строку в массив */
+        $arr = explode(' ', $input);
+
+        foreach($arr as $item) {
+            /** Добавляем слово в новый массив */
+            array_push($output, $item);
+
+            /** Складываем количество символов - добавляем длину слова + 1 пробел */
+            $count += mb_strlen($item, 'utf-8') + 1;
+
+            if ($count > ($limit + 1)) {
+                /** Переводим массив в строку */
+                $output = implode(' ', $output);
+                /** Добавляем точки */
+                $output = add_ellipsis($output);
+                /** Возвращаем результат */
+                return $output;
+            }
+        }
+    } else {
+        return $input;
+    }
+}
