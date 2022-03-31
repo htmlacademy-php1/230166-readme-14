@@ -264,67 +264,29 @@ function generate_random_date($index)
 }
 
 /**
-  Количество символов в карточке для превью поста
-*/
-define('TEXT_LIMIT', 300);
-
-/**
-  Проверяем длину текста на количество знаков
- * @param string, int
- * @return bull
-*/
-function limit_text(string $input, int $limit = TEXT_LIMIT) {
-    return mb_strlen($input, 'utf-8') > $limit;
-}
-
-/**
- Прибавляет к тексту многоточие
- * @param string
- * @return string
-*/
-function add_ellipsis(string $input) {
-    $last_symbols = [',', '.', ';', ':'];
-
-    foreach($last_symbols as $symbol) {
-        if (mb_substr($input, -1) === $symbol) {
-            return $input . '..';
-        }
-    }
-
-    return $input . '...';
-}
-
-/**
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
  * @param string, int
  * @return string
 */
-function crop_text(string $input, int $limit = TEXT_LIMIT) {
-    if (limit_text($input, $limit)) {
-        $count = 0;
-        $output = [];
+function crop_text(string $input, int $limit = 300) {
+    if (mb_strlen($input, 'utf-8') < $limit) {
+        return '<p>' . $input . '</p>';
+    }
 
-        /** Переводим строку в массив */
-        $arr = explode(' ', $input);
+    $count = 0;
+    $output = [];
 
-        foreach($arr as $item) {
-            /** Добавляем слово в новый массив */
-            array_push($output, $item);
+    $arr = explode(' ', $input);
 
-            /** Складываем количество символов - добавляем длину слова + 1 пробел */
-            $count += mb_strlen($item, 'utf-8') + 1;
+    foreach($arr as $item) {
+        array_push($output, $item);
 
-            if ($count > ($limit + 1)) {
-                /** Переводим массив в строку */
-                $output = implode(' ', $output);
-                /** Добавляем точки */
-                $output = add_ellipsis($output);
-                /** Возвращаем результат */
-                return $output;
-            }
+        $count += mb_strlen($item, 'utf-8') + 1;
+
+        if ($count > ($limit + 1)) {
+            $output = implode(' ', $output);
+            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='#'>Читать далее</a>";
         }
-    } else {
-        return $input;
     }
 }

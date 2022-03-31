@@ -263,10 +263,7 @@ $user_name = 'Margarita'; // укажите здесь ваше имя
 
                         <!--содержимое для поста-текста-->
                         <?php elseif ($post['type'] === 'post-text'): ?>
-                            <p><?= crop_text($post['content'], POST_LIMIT) ?></p>
-                            <?php if (limit_text($post['content'], POST_LIMIT)): ?>
-                                <a class='post-text__more-link' href='#'>Читать далее</a>
-                            <? endif; ?>
+                            <?= crop_text($post['content'], POST_LIMIT) ?>
                         <? endif; ?>
                     </div>
                     <footer class="post__footer">
