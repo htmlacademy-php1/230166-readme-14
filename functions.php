@@ -21,3 +21,10 @@ function crop_text(string $input, int $limit = 300) {
     }
 }
 
+function esc($str) {
+    $text = htmlspecialchars($str);
+    // $text = strip_tags($str);
+
+    return $text;
+}
+
