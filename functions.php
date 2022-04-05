@@ -57,9 +57,7 @@ function get_relative_date(string $input):string
     $post_date = strtotime($input);
     $dif_date = $cur_date - $post_date;
 
-    if($dif_date < 60) {
-        return $dif_date . ' ' . get_noun_plural_form($dif_date, 'секунда', 'секунды', 'секунд') . ' назад';
-    } elseif ($dif_date < 3600) {
+    if ($dif_date < 3600) {
         $minuts = floor($dif_date / 60);
         return $minuts . ' ' . get_noun_plural_form($minuts, 'минута', 'минуты', 'минут') . ' назад';
     } elseif ($dif_date < 86400) {
