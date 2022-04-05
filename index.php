@@ -11,7 +11,7 @@ $page_header = include_template('header.php', [
 ]);
 
 $page_content = include_template('main.php', [
-    'popular_posts' => $popular_posts
+    'popular_posts' => $popular_posts,
 ]);
 
 $page_footer = include_template('footer.php', []);
