@@ -61,7 +61,8 @@
                                         <a class="header__profile-nav-link" href="#">
                                             <span class="header__profile-nav-text">
                                                 Мой профиль
-                                            </span>
+
+    'popular_posts' => $popular_posts     </span>
                                         </a>
                                     </li>
                                     <li class="header__profile-nav-item">

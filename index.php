@@ -14,10 +14,13 @@ $page_content = include_template('main.php', [
     'popular_posts' => $popular_posts
 ]);
 
+$page_footer = include_template('footer.php', []);
+
 $layout_content = include_template('layout.php', [
     'page_title' => $page_title,
     'page_header' => $page_header,
     'page_content' => $page_content,
+    'page_footer' => $page_footer
 ]);
 
 print($layout_content);
