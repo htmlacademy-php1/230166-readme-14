@@ -42,11 +42,6 @@ function esc($input):string
 }
 
 /**
- * Часовой пояс по умолчанию
-*/
-date_default_timezone_set("Europe/Moscow");
-
-/**
  * Функция форматирует дату в относительном виде
  * @param string
  * @return string
@@ -60,19 +55,25 @@ function get_relative_date(string $input):string
     if ($dif_date < 3600) {
         $minuts = floor($dif_date / 60);
         return $minuts . ' ' . get_noun_plural_form($minuts, 'минута', 'минуты', 'минут') . ' назад';
-    } elseif ($dif_date < 86400) {
+    }
+
+    if ($dif_date < 86400) {
         $hours = floor($dif_date / 3600);
         return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
-    } elseif ($dif_date < 604800) {
+    }
+
+    if ($dif_date < 604800) {
         $days = floor($dif_date / 86400);
         return $days . ' ' . get_noun_plural_form($days, 'день', 'дня', 'дней') . ' назад';
-    } elseif ($dif_date < 3024000) {
+    }
+
+    if ($dif_date < 3024000) {
         $weeks = floor($dif_date / 604800);
         return $weeks . ' ' . get_noun_plural_form($weeks, 'неделя', 'недели', 'недель') . ' назад';
-    } else {
-        $months = floor($dif_date / 3024000);
-        return $months . ' ' . get_noun_plural_form($months, 'месяц', 'месяца', 'месяцев') . ' назад';
     }
+
+    $months = floor($dif_date / 3024000);
+    return $months . ' ' . get_noun_plural_form($months, 'месяц', 'месяца', 'месяцев') . ' назад';
 }
 
 /**
