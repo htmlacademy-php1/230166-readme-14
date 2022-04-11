@@ -1,33 +1,31 @@
-DROP DATABASE readme;
-
 CREATE DATABASE IF NOT EXISTS readme
-  DEFAULT CHARACTER SET utf8
-  DEFAULT COLLATE utf8_general_ci;
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_general_ci;
 
 USE readme;
 
-CREATE TABLE users (
+CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(128) NOT NULL UNIQUE,
-  login VARCHAR(255) NOT NULL UNIQUE,
-  password CHAR(64) NOT NULL,
+  email VARCHAR(128) NOT NULL,
+  login VARCHAR(255) NOT NULL,
+  password CHAR(6) NOT NULL,
   avatar VARCHAR(255) DEFAULT NULL,
 
-  UNIQUE INDEX email_index (email),
-  UNIQUE INDEX login_index (login)
+  UNIQUE INDEX user_email (email),
+  UNIQUE INDEX user_login (login)
 );
 
-CREATE TABLE types (
+CREATE TABLE type (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   class TINYTEXT DEFAULT NULL
 );
 
-CREATE TABLE posts (
+CREATE TABLE post (
   id INT AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  author INT,
-  type INT,
+  user_id INT,
+  type_id INT,
   title VARCHAR(255) NOT NULL,
   text TEXT DEFAULT NULL,
   caption VARCHAR(255) DEFAULT NULL,
@@ -36,70 +34,62 @@ CREATE TABLE posts (
   link VARCHAR(255) DEFAULT NULL,
   views INT UNSIGNED DEFAULT 0,
 
-  INDEX author_index (author),
-  INDEX type_index (type),
-  FULLTEXT INDEX title_index (title),
-  FULLTEXT INDEX text_index (text),
+  FULLTEXT INDEX post_text (title, text),
 
-  FOREIGN KEY (author) REFERENCES users(id),
-  FOREIGN KEY (type) REFERENCES types(id)
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (type_id) REFERENCES type(id)
 );
 
-CREATE TABLE comments (
+CREATE TABLE comment (
   id INT AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  author INT,
-  post INT,
-  content MEDIUMTEXT NOT NULL,
+  user_id INT,
+  post_id INT,
+  text MEDIUMTEXT NOT NULL,
 
-  INDEX author_index (author),
-
-  FOREIGN KEY (author) REFERENCES users(id),
-  FOREIGN KEY (post) REFERENCES posts(id)
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (post_id) REFERENCES post(id)
 );
 
-CREATE TABLE likes (
-  author INT,
-  post INT,
+CREATE TABLE fav (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  post_id INT,
 
-  INDEX author_index (author),
-
-  FOREIGN KEY (author) REFERENCES users(id),
-  FOREIGN KEY (post) REFERENCES posts(id)
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (post_id) REFERENCES post(id)
 );
 
-CREATE TABLE subscribes (
-  subscriber INT,
-  publisher INT,
+CREATE TABLE subscribe (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id_subscriber INT,
+  user_id_publisher INT,
 
-  FOREIGN KEY (subscriber) REFERENCES users(id),
-  FOREIGN KEY (publisher) REFERENCES users(id)
+  FOREIGN KEY (user_id_subscriber) REFERENCES user(id),
+  FOREIGN KEY (user_id_publisher) REFERENCES user(id)
 );
 
-CREATE TABLE messages (
+CREATE TABLE message (
   id INT AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  sender INT,
-  recipient INT,
+  user_id_sender INT,
+  user_id_recipient INT,
   content MEDIUMTEXT NOT NULL,
 
-  INDEX sender_index (sender),
-  INDEX recipient_index (recipient),
-
-  FOREIGN KEY (sender) REFERENCES users(id),
-  FOREIGN KEY (recipient) REFERENCES users(id)
+  FOREIGN KEY (user_id_sender) REFERENCES user(id),
+  FOREIGN KEY (user_id_recipient) REFERENCES user(id)
 );
 
-CREATE TABLE hashtags (
+CREATE TABLE hashtag (
   id INT AUTO_INCREMENT PRIMARY KEY,
   hashtag VARCHAR(255)
 );
 
--- связь вида «многие-ко-многим»
 CREATE TABLE post_hashtag (
-  post INT,
-  hashtag INT,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  post_id INT,
+  hashtag_id INT,
 
-  FOREIGN KEY (post) REFERENCES posts(id),
-  FOREIGN KEY (hashtag) REFERENCES hashtags(id)
+  FOREIGN KEY (post_id) REFERENCES post(id),
+  FOREIGN KEY (hashtag_id) REFERENCES hashtag(id)
 );
