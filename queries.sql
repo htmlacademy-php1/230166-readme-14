@@ -51,8 +51,8 @@ INSERT INTO comment
 
 -- получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента;
 SELECT p.created_at, u.login, t.name, p.title, p.text, p.caption, p.img, p.video, p.link, p.views FROM post p
-  JOIN user u ON p.author = u.id
-  JOIN type t ON p.type = t.id
+  JOIN user u ON p.user_id = u.id
+  JOIN type t ON p.type_id = t.id
   ORDER BY p.views DESC;
 
 -- получить список постов для конкретного пользователя;
