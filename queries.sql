@@ -1,6 +1,6 @@
 -- список типов контента для поста
 INSERT INTO type (name, class)
-  VALUES ('Текст', 'text'), ('Цитата', 'quote'), ('Картинка', 'photo'), ('Видео', 'video'), ('Ссылка', 'link');
+  VALUES ('Текст', 'post-text'), ('Цитата', 'post-quote'), ('Картинка', 'post-photo'), ('Видео', 'post-video'), ('Ссылка', 'post-link');
 
 -- придумайте пару пользователей
 INSERT INTO user
@@ -38,6 +38,13 @@ INSERT INTO post
       img = 'coast-adding.png',
       views = 6;
 
+INSERT INTO post
+  SET user_id = 1,
+      type_id = 3,
+      title = 'Наконец, обработала фотки!',
+      img = 'coast-adding.png',
+      views = 8;
+
 -- придумайте пару комментариев к разным постам;
 INSERT INTO comment
   SET user_id = 1,
@@ -65,10 +72,10 @@ SELECT p.created_at, u.login, t.name, p.title, p.text, p.caption, p.img, p.video
 SELECT c.created_at, c.text, u.login FROM comment c
   JOIN post p ON c.post_id = p.id
   JOIN user u ON c.user_id = u.id
-  WHERE u.id = 2;
+  WHERE p.id = 2;
 
 -- добавить лайк к посту;
 INSERT INTO fav (user_id, post_id) VALUES (1, 1);
 
 -- подписаться на пользователя.
-INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (2, 2);
+INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (2, 1);
