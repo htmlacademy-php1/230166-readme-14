@@ -1,17 +1,41 @@
 <?php
-require_once 'helpers.php';
-require_once 'data.php';
-require_once 'functions.php';
+require_once 'config/init.php';
 
 $page_title = 'readme: популярное';
+
+if (!$link) {
+    $error = mysqli_connect_error();
+    $page_content = include_template('error.php', ['error' => $error]);
+}
+else {
+    $sql = "SELECT id, name, class FROM type";
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $types = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $page_content = include_template('error.php', ['error' => $error]);
+    }
+
+    $sql = "SELECT p.created_at, u.login, u.avatar, t.name, t.class, p.title, p.text, p.caption, p.img, p.video, p.link, p.views FROM post p JOIN user u ON p.user_id = u.id JOIN type t ON p.type_id = t.id ORDER BY p.views DESC";
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $popular_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $page_content = include_template('main.php', [
+            'popular_posts' => $popular_posts,
+        ]);
+    }
+    else {
+        $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
+    }
+}
 
 $page_header = include_template('header.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-]);
-
-$page_content = include_template('main.php', [
-    'popular_posts' => $popular_posts,
 ]);
 
 $page_footer = include_template('footer.php', []);

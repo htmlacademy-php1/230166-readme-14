@@ -1,6 +1,13 @@
 <?php
 define('POST_LIMIT', 300);
 
+$user = [
+    'host' => '127.0.0.1',
+    'user' => 'root',
+    'password' => '',
+    'database' => 'readme'
+];
+
 $is_auth = rand(0, 1);
 $user_name = 'Margarita';
 $popular_posts = [
