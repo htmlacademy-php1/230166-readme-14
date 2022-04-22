@@ -42,7 +42,7 @@ function esc($input):string
 }
 
 /**
- * Функция форматирует дату в относительном виде
+ * Получение относительной даты
  * @param string
  * @return string
 */
@@ -77,7 +77,7 @@ function get_relative_date(string $input):string
 }
 
 /**
- * Функция форматирует дату в виде дд.мм.гггг чч: мм
+ * Получение даты в виде дд.мм.гггг чч: мм
  * @param string
  * @return string
 */
@@ -85,3 +85,4 @@ function get_date_for_title(string $input):string
 {
     return date('d.m.Y H:i', strtotime($input));
 }
+

@@ -37,12 +37,14 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                        <?php $classname = !filter_input(INPUT_GET, 'type_id') ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--ellipse filters__button--all <?= $classname ?>" href="/">
                             <span>Все</span>
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--photo button" href="#">
+                        <?php $classname = filter_input(INPUT_GET, 'type_id') === '3' ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--photo button <?= $classname ?>" href="/?type_id=3">
                             <span class="visually-hidden">Фото</span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-photo"></use>
@@ -50,7 +52,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--video button" href="#">
+                        <?php $classname = filter_input(INPUT_GET, 'type_id') === '4' ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--video button <?= $classname ?>" href="/?type_id=4">
                             <span class="visually-hidden">Видео</span>
                             <svg class="filters__icon" width="24" height="16">
                                 <use xlink:href="#icon-filter-video"></use>
@@ -58,7 +61,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--text button" href="#">
+                        <?php $classname = filter_input(INPUT_GET, 'type_id') === '1' ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--text button <?= $classname ?>" href="/?type_id=1">
                             <span class="visually-hidden">Текст</span>
                             <svg class="filters__icon" width="20" height="21">
                                 <use xlink:href="#icon-filter-text"></use>
@@ -66,7 +70,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--quote button" href="#">
+                        <?php $classname = filter_input(INPUT_GET, 'type_id') === '2' ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--quote button <?= $classname ?>" href="/?type_id=2">
                             <span class="visually-hidden">Цитата</span>
                             <svg class="filters__icon" width="21" height="20">
                                 <use xlink:href="#icon-filter-quote"></use>
@@ -74,7 +79,8 @@
                         </a>
                     </li>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--link button" href="#">
+                        <?php $classname = filter_input(INPUT_GET, 'type_id') === '5' ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--link button <?= $classname ?>" href="/?type_id=5">
                             <span class="visually-hidden">Ссылка</span>
                             <svg class="filters__icon" width="21" height="18">
                                 <use xlink:href="#icon-filter-link"></use>
@@ -87,8 +93,9 @@
 
         <div class="popular__posts">
             <?php foreach($popular_posts as $post): ?>
-                <?= include_template('popular_post.php', [
-                        'post' => $post
+                <?= include_template('post_card.php', [
+                        'post' => $post,
+                        'link' => $link
                     ]);
                 ?>
             <? endforeach; ?>
