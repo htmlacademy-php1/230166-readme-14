@@ -1,4 +1,4 @@
-<article class="popular__post post <?= $post['class'] ?>">
+<article class="popular__post post post-<?= $post['class'] ?>">
     <header class="post__header">
         <h2>
             <a href="/post.php?post_id=<?= $post['id'] ?>"><?= esc($post['title']) ?></a>
@@ -78,14 +78,14 @@
                     <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                         <use xlink:href="#icon-heart-active"></use>
                     </svg>
-                    <span><?= get_count_favs($link, $post['id']) ?></span>
+                    <span><?= $post['count_favs']; ?></span>
                     <span class="visually-hidden">количество лайков</span>
                 </a>
                 <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                     <svg class="post__indicator-icon" width="19" height="17">
                         <use xlink:href="#icon-comment"></use>
                     </svg>
-                    <span><?= get_count_comments($link, $post['id']) ?></span>
+                    <span><?= $post['count_comments'] ?></span>
                     <span class="visually-hidden">количество комментариев</span>
                 </a>
             </div>

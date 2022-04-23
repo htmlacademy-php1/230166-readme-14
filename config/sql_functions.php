@@ -6,6 +6,7 @@
 */
 function show_error(&$page_content, $error):string {
     $page_content = include_template('error.php', ['error' => $error]);
+    die();
 }
 
 /**
@@ -47,7 +48,17 @@ function get_popular_posts($link, $type_id):array {
     $result = mysqli_query($link, $sql);
 
     if ($result) {
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $arr = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $popular_posts = [];
+
+        foreach($arr as $post) {
+            $post_id = $post['id'];
+            $post['count_favs'] = get_count_favs($link, $post_id);
+            $post['count_comments'] = get_count_comments($link, $post_id);
+            $popular_posts[] = $post;
+        }
+
+        return $popular_posts;
     }
 
     show_error($page_content, mysqli_error($link));

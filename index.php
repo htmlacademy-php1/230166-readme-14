@@ -6,7 +6,6 @@ $type_id = filter_input(INPUT_GET, 'type_id');
 
 $page_content = include_template('popular.php', [
     'popular_posts' => get_popular_posts($link, $type_id),
-    'link' => $link
 ]);
 
 $page_header = include_template('header.php', [

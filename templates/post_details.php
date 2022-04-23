@@ -11,13 +11,13 @@
                 <div class="post-details__main-block post post--details">
                     <?php if ($post['type_id'] === '1'): ?>
                         <?= include_template('post-text.php', [
-                                'text' => esc($post['text'])
+                                'text' => $post['text']
                             ]);
                         ?>
                     <?php elseif($post['type_id'] === '2'): ?>
                         <?= include_template('post-quote.php', [
-                                'text' => esc($post['text']),
-                                'author' => esc($post['caption'])
+                                'text' => $post['text'],
+                                'author' => $post['caption']
                             ]);
                         ?>
                     <?php elseif ($post['type_id'] === '3'): ?>
@@ -33,7 +33,7 @@
                     <?php elseif ($post['type_id'] === '5'): ?>
                         <?= include_template('post-link.php', [
                                 'url' => $post['link'],
-                                'title' => esc($post['title']),
+                                'title' => $post['title'],
                             ]);
                         ?>
                     <? endif; ?>

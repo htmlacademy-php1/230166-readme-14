@@ -95,7 +95,6 @@
             <?php foreach($popular_posts as $post): ?>
                 <?= include_template('post_card.php', [
                         'post' => $post,
-                        'link' => $link
                     ]);
                 ?>
             <? endforeach; ?>

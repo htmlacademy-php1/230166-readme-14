@@ -67,7 +67,7 @@ INSERT INTO post
   SET user_id = 3,
       type_id = 5,
       title = 'Делюсь с вами ссылочкой',
-      link = 'https://vitadental.ru/',
+      link = 'vitadental.ru',
       views = 2;
 
 INSERT INTO post
