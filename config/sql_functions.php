@@ -6,7 +6,7 @@
 */
 function show_error(&$page_content, $error):string {
     $page_content = include_template('error.php', ['error' => $error]);
-    die();
+    die($page_content);
 }
 
 /**
@@ -22,7 +22,7 @@ function get_types():array {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -61,7 +61,7 @@ function get_popular_posts($link, $type_id):array {
         return $popular_posts;
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -86,7 +86,7 @@ function get_post($link, $post_id):array
         return mysqli_fetch_assoc($result);
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -105,7 +105,7 @@ function get_comments($link, $post_id): array
         return mysqli_fetch_all($result, MYSQLI_ASSOC);;
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -126,7 +126,7 @@ function get_hashtags($link, $post_id): array
         return mysqli_fetch_all($result, MYSQLI_ASSOC);;
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -143,7 +143,7 @@ function get_count_favs($link, $post_id): int
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -160,7 +160,7 @@ function get_count_comments($link, $post_id): int
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -177,7 +177,7 @@ function get_count_posts($link, $user_id): int
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 
 /**
@@ -194,6 +194,6 @@ function get_count_subscribers($link, $user_id):int
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error($page_content, mysqli_error($link));
+    show_error(mysqli_error($link));
 }
 

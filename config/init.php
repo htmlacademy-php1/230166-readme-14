@@ -9,6 +9,5 @@ mysqli_set_charset($link, 'utf8mb4');
 
 if (!$link) {
     $error = mysqli_connect_error();
-    $page_content = include_template('error.php', ['error' => $error]);
-    die();
+    show_error($error);
 }

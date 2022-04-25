@@ -1,6 +1,6 @@
 -- types
 INSERT INTO type (name, class)
-  VALUES ('Текст', 'post-text'), ('Цитата', 'post-quote'), ('Картинка', 'post-photo'), ('Видео', 'post-video'), ('Ссылка', 'post-link');
+  VALUES ('Текст', 'text'), ('Цитата', 'quote'), ('Картинка', 'photo'), ('Видео', 'video'), ('Ссылка', 'link');
 
 -- users
 INSERT INTO user
