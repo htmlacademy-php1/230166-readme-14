@@ -9,8 +9,6 @@ $comments = get_comments($link, $post_id);
 $user_id = (int)$post['user_id'];
 $is_show_comments = filter_input(INPUT_GET, 'is_show_comments');
 
-// var_dump($user_id);
-
 $page_content = include_template('post_details.php', [
     'post' => $post,
     'comments' => $comments,

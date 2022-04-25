@@ -23,7 +23,7 @@ function crop_text(string $input, int $limit = 300):string
 
         if ($count > ($limit + 1)) {
             $output = implode(' ', $output);
-            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='#'>Читать далее</a>";
+            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='#'></a>";
         }
     }
 }
