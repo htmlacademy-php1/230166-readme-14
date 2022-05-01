@@ -8,7 +8,7 @@
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
                         <?php foreach($types as $type): ?>
-                            <?php $classnames = (is_null($current_type_id) && (int)$type['id'] === 1) || $current_type_id === (int)$type['id'] ? 'filters__button--active tabs__item tabs__item--active' : ''; ?>
+                            <?php $classnames = $current_type_id === (int)$type['id'] ? 'filters__button--active tabs__item tabs__item--active' : ''; ?>
                             <li class="adding-post__tabs-item filters__item">
                                 <a
                                     class="adding-post__tabs-link filters__button filters__button--<?= $type['class']; ?> <?= $classnames; ?> button"
@@ -24,32 +24,16 @@
                     </ul>
                 </div>
                 <div class="adding-post__tab-content">
-                    <?php if(is_null($current_type_id) || $current_type_id === 1): ?>
-                        <?= include_template('adding-post-text.php', [
-                                'errors' => $errors,
-                            ]);
-                        ?>
-                    <?php elseif ($current_type_id === 2): ?>
-                        <?= include_template('adding-post-quote.php', [
-                                'errors' => $errors,
-                            ]);
-                        ?>
-                    <?php elseif ($current_type_id === 3): ?>
-                        <?= include_template('adding-post-photo.php', [
-                                'errors' => $errors,
-                            ]);
-                        ?>
-                    <?php elseif ($current_type_id === 4): ?>
-                        <?= include_template('adding-post-video.php', [
-                                'errors' => $errors,
-                            ]);
-                        ?>
-                    <?php elseif ($current_type_id === 5): ?>
-                        <?= include_template('adding-post-link.php', [
-                                'errors' => $errors,
-                            ]);
-                        ?>
-                    <? endif; ?>
+                    <?php foreach($types as $type): ?>
+                        <?php if ((int)$type['id'] === $current_type_id): ?>
+                            <?= include_template("adding-post-{$type['class']}.php", [
+                                    'type' => $type,
+                                    'errors' => $errors,
+                                    'post' => $post
+                                ]);
+                            ?>
+                        <? endif; ?>
+                    <? endforeach; ?>
                 </div>
             </div>
         </div>

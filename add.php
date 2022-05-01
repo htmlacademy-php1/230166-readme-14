@@ -7,16 +7,19 @@ $types_id = array_column($types, "id");
 $errors = [];
 $required = ['title' => 'Заголовок', 'text' => 'Текст', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'youtube_url' => 'Ссылка youtube'];
 $current_type_id = (int)get_parametr('type_id');
+$post = [];
 
 $page_content = include_template('adding-post.php', [
     'types' => $types,
     'errors' => $errors,
-    'current_type_id' => $current_type_id
+    'current_type_id' => $current_type_id,
+    'post' => $post
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_type_id = (int)post_parametr('type_id');
-    // var_dump($current_type_id);
+    $error_img = '';
+
 
     switch ($current_type_id) {
         // Текст
@@ -31,17 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         // Фото
         case 3:
-            if (post_parametr('img_url')) {
+            if (post_parametr('img_file')) {
+                $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_file' => FILTER_DEFAULT], true);
+                $sql = "INSERT INTO post (user_id, type_id, title, img_file) VALUES (1, ?, ?, ?)";
+            } else {
                 $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_url' => FILTER_DEFAULT], true);
                 $sql = "INSERT INTO post (user_id, type_id, title, img_url) VALUES (1, ?, ?, ?)";
-            } elseif (post_parametr('img_file')) {
-                $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_file' => FILTER_DEFAULT], true);
-                $sql = "INSERT INTO post (user_id, type_id, title, youtube_url) VALUES (1, ?, ?, ?)";
-            } else {
-                $post ="";
-                $sql="";
-                $required['img'] = 'Загрузите фото';
             }
+
+            if (is_null(post_parametr('img_file')) && is_null(post_parametr('img_url'))) {
+                $error_img = 'Загрузите фото';
+            }
+
             break;
         // Видео
         case 4:
@@ -56,19 +60,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     var_dump(post_parametr('img_url'));
-    var_dump($post);
+
 
     $tag = post_parametr('tag');
     $all_input = $post;
     $all_input['tag'] = $tag;
     $errors = get_required_errors($all_input, $required);
 
+    $errors['img'] = $error_img;
+    $errors = array_filter($errors);
+    // var_dump($errors);
+    var_dump($post);
+
     if(count($errors)) {
+        var_dump($current_type_id);
         $page_content = include_template('adding-post.php', [
             'types' => $types,
             'errors' => $errors,
-            'current_type_id' => $current_type_id
+            'current_type_id' => $current_type_id,
+            'post' => $post
         ]);
+
+        // header("Location: add.php?type_id=" . $current_type_id);
     } else {
         $stmt = db_get_prepare_stmt($link, $sql, $post);
         $res = mysqli_stmt_execute($stmt);
