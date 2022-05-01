@@ -1,10 +1,10 @@
 <section class="adding-post__video tabs__content tabs__content--active">
     <h2 class="visually-hidden">Форма добавления видео</h2>
-    <form class="adding-post__form form" action="/add.php" method="post" enctype="multipart/form-data">
+    <form class="adding-post__form form" action="/add.php?type_id=<?= $type['id'] ?>" method="post" enctype="multipart/form-data">
         <div class="form__text-inputs-wrapper">
             <div class="form__text-inputs">
                 <!-- скрытое поле для типа контента -->
-                <input type="hidden" type="text" name="type_id" value="4">
+                <input type="hidden" type="text" name="type_id" value="<?= $type['id'] ?>">
 
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
@@ -61,14 +61,16 @@
                     </div>
                 </div>
             </div>
-            <div class="form__invalid-block">
-                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                <ul class="form__invalid-list">
-                    <?php foreach($errors as $error): ?>
-                        <li class="form__invalid-item"><?= $error ?></li>
-                    <? endforeach ?>
-                </ul>
-            </div>
+            <?php if(count($errors)): ?>
+                <div class="form__invalid-block">
+                    <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                    <ul class="form__invalid-list">
+                        <?php foreach($errors as $key => $value): ?>
+                            <li class="form__invalid-item"><?= $value ?></li>
+                        <? endforeach ?>
+                    </ul>
+                </div>
+            <? endif ?>
         </div>
 
         <div class="adding-post__buttons">

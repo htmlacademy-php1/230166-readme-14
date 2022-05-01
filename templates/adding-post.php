@@ -29,7 +29,7 @@
                             <?= include_template("adding-post-{$type['class']}.php", [
                                     'type' => $type,
                                     'errors' => $errors,
-                                    'post' => $post
+                                    'post' => $post,
                                 ]);
                             ?>
                         <? endif; ?>
