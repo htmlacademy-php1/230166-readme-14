@@ -21,7 +21,9 @@ CREATE TABLE user (
 CREATE TABLE type (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  class VARCHAR(255) DEFAULT NULL
+  class VARCHAR(255) DEFAULT NULL,
+  icon_width TINYINT,
+  icon_height TINYINT
 );
 
 CREATE TABLE post (
@@ -31,8 +33,10 @@ CREATE TABLE post (
   type_id INT,
   title VARCHAR(255) NOT NULL,
   text TEXT DEFAULT NULL,
-  caption VARCHAR(255) DEFAULT 'Неизвестный Автор',
+  quote TEXT DEFAULT NULL,
+  caption VARCHAR(255) DEFAULT NULL,
   img_url VARCHAR(255) DEFAULT NULL,
+  img_file BLOB,
   youtube_url VARCHAR(255) DEFAULT NULL,
   link VARCHAR(255) DEFAULT NULL,
   views INT UNSIGNED DEFAULT 0,
@@ -83,16 +87,16 @@ CREATE TABLE message (
   FOREIGN KEY (user_id_recipient) REFERENCES user(id)
 );
 
-CREATE TABLE hashtag (
+CREATE TABLE tag (
   id INT AUTO_INCREMENT PRIMARY KEY,
   text VARCHAR(255)
 );
 
-CREATE TABLE post_hashtag (
+CREATE TABLE post_tag (
   id INT AUTO_INCREMENT PRIMARY KEY,
   post_id INT,
-  hashtag_id INT,
+  tag_id INT,
 
   FOREIGN KEY (post_id) REFERENCES post(id),
-  FOREIGN KEY (hashtag_id) REFERENCES hashtag(id)
+  FOREIGN KEY (tag_id) REFERENCES tag(id)
 );

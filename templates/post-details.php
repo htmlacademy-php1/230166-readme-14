@@ -12,7 +12,7 @@
                         ?>
                     <?php elseif($post['type_id'] === '2'): ?>
                         <?= include_template('post-quote.php', [
-                                'text' => $post['text'],
+                                'quote' => $post['quote'],
                                 'author' => $post['caption']
                             ]);
                         ?>
@@ -28,7 +28,7 @@
                         ?>
                     <?php elseif ($post['type_id'] === '5'): ?>
                         <?= include_template('post-link.php', [
-                                'url' => $post['link'],
+                                'link' => $post['link'],
                                 'title' => $post['title'],
                             ]);
                         ?>
@@ -65,8 +65,8 @@
                     </span>
                 </div>
                 <ul class="post__tags">
-                    <?php foreach ($hashtags as $hashtag): ?>
-                        <li><a href="#"><?= $hashtag['text'] ?></a></li>
+                    <?php foreach ($tags as $tag): ?>
+                        <li><a href="#"><?= $tag['text'] ?></a></li>
                     <? endforeach ?>
                 </ul>
                 <div class="comments">

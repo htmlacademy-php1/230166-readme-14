@@ -12,7 +12,7 @@
         <!--содержимое для поста-цитаты-->
         <?php elseif ($post['type_id'] === '2'): ?>
             <blockquote>
-                <p><?= esc($post['text']) ?></p>
+                <p><?= esc($post['quote']) ?></p>
                 <cite><?= esc($post['caption']) ?></cite>
             </blockquote>
 
@@ -40,7 +40,7 @@
         <!--содержимое для поста-ссылки-->
         <?php elseif ($post['type_id'] === '5'): ?>
             <div class="post-link__wrapper">
-                <a class="post-link__external" href="http://<?= $post['link'] ?>" title="Перейти по ссылке">
+                <a class="post-link__external" href="<?= $post['link'] ?>" title="Перейти по ссылке">
                     <div class="post-link__info-wrapper">
                         <div class="post-link__icon-wrapper">
                             <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">

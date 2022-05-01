@@ -3,13 +3,13 @@ require_once 'config/init.php';
 
 $page_title = 'readme: публикация';
 
-$post_id = (int)filter_input(INPUT_GET, 'post_id');
+$post_id = (int) get_parametr('post_id');
 $post = get_post($link, $post_id);
 $comments = get_comments($link, $post_id);
-$user_id = (int)$post['user_id'];
-$is_show_comments = filter_input(INPUT_GET, 'is_show_comments');
+$user_id = (int) $post['user_id'];
+$is_show_comments = get_parametr('is_show_comments');
 
-$page_content = include_template('post_details.php', [
+$page_content = include_template('post-details.php', [
     'post' => $post,
     'comments' => $comments,
     'comments_start' => array_slice($comments, 0, 2),
@@ -18,7 +18,7 @@ $page_content = include_template('post_details.php', [
     'count_posts' => get_count_posts($link, $user_id),
     'count_subscribes' => get_count_subscribers($link, $user_id),
     'count_comments' => count($comments),
-    'hashtags' => get_hashtags($link, $post_id),
+    'tags' => get_tags($link, $post_id),
     'is_show_comments' => $is_show_comments
 ]);
 

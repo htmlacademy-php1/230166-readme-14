@@ -3,7 +3,7 @@
   <div class="post__main">
     <blockquote>
       <p>
-        <?= esc($text); ?>
+        <?= esc($quote); ?>
       </p>
       <cite><?= esc($author) ;?></cite>
     </blockquote>

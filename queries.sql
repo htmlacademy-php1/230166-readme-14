@@ -1,6 +1,6 @@
 -- types
-INSERT INTO type (name, class)
-  VALUES ('Текст', 'text'), ('Цитата', 'quote'), ('Картинка', 'photo'), ('Видео', 'video'), ('Ссылка', 'link');
+INSERT INTO type (name, class, icon_width, icon_height)
+  VALUES ('Текст', 'text', 20, 21), ('Цитата', 'quote', 21, 20), ('Картинка', 'photo',  22, 18), ('Видео', 'video', 24, 16), ('Ссылка', 'link', 21, 18);
 
 -- users
 INSERT INTO user
@@ -38,7 +38,7 @@ INSERT INTO post
   SET user_id = 1,
       type_id = 2,
       title = 'Цитата',
-      text = 'Тысячи людей живут без любви, но никто — без воды.',
+      quote = 'Тысячи людей живут без любви, но никто — без воды.',
       caption = 'Xью Оден',
       views = 3;
 
@@ -74,7 +74,7 @@ INSERT INTO post
   SET user_id = 5,
       type_id = 2,
       title = 'Цитата',
-      text = 'Тысячи людей живут без любви, но никто — без воды.',
+      quote = 'Тысячи людей живут без любви, но никто — без воды.',
       caption = 'Xью Оден',
       views = 1;
 
@@ -116,9 +116,9 @@ INSERT INTO fav (user_id, post_id) VALUES (1, 1), (1, 2), (2, 1), (3, 1);
 INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (1, 2), (2, 1), (3, 1), (4, 1);
 
 -- хэштеги
-INSERT INTO hashtag (text) VALUES ('#nature'), ('#globe'), ('#photooftheday'), ('#canon'), ('#landscape'), ('#щикарныйвид');
+INSERT INTO tag (text) VALUES ('#nature'), ('#globe'), ('#photooftheday'), ('#canon'), ('#landscape'), ('#щикарныйвид');
 
-INSERT INTO post_hashtag (post_id, hashtag_id) VALUES (1, 1), (1, 1), (1, 2), (1, 3), (1, 3), (1, 4), (2, 3), (3, 3), (3, 4);
+INSERT INTO post_tag (post_id, tag_id) VALUES (1, 1), (1, 1), (1, 2), (1, 3), (1, 3), (1, 4), (2, 3), (3, 3), (3, 4);
 
 -- получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента;
 SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.caption, p.img_url, p.youtube_url, p.link, p.views FROM post p
