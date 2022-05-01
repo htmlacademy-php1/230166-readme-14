@@ -8,7 +8,7 @@
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
                         <?php foreach($types as $type): ?>
-                            <?php $classnames = (is_null(get_parametr('type_id')) && (int)$type['id'] === 1) || (int)get_parametr('type_id') === (int)$type['id'] ? 'filters__button--active tabs__item tabs__item--active' : ''; ?>
+                            <?php $classnames = (is_null($current_type_id) && (int)$type['id'] === 1) || $current_type_id === (int)$type['id'] ? 'filters__button--active tabs__item tabs__item--active' : ''; ?>
                             <li class="adding-post__tabs-item filters__item">
                                 <a
                                     class="adding-post__tabs-link filters__button filters__button--<?= $type['class']; ?> <?= $classnames; ?> button"
@@ -24,27 +24,27 @@
                     </ul>
                 </div>
                 <div class="adding-post__tab-content">
-                    <?php if(is_null(get_parametr('type_id')) || (int)get_parametr('type_id') === 1): ?>
+                    <?php if(is_null($current_type_id) || $current_type_id === 1): ?>
                         <?= include_template('adding-post-text.php', [
                                 'errors' => $errors,
                             ]);
                         ?>
-                    <?php elseif ((int)get_parametr('type_id') === 2): ?>
+                    <?php elseif ($current_type_id === 2): ?>
                         <?= include_template('adding-post-quote.php', [
                                 'errors' => $errors,
                             ]);
                         ?>
-                    <?php elseif ((int)get_parametr('type_id') === 3): ?>
+                    <?php elseif ($current_type_id === 3): ?>
                         <?= include_template('adding-post-photo.php', [
                                 'errors' => $errors,
                             ]);
                         ?>
-                    <?php elseif ((int)get_parametr('type_id') === 4): ?>
+                    <?php elseif ($current_type_id === 4): ?>
                         <?= include_template('adding-post-video.php', [
                                 'errors' => $errors,
                             ]);
                         ?>
-                    <?php elseif ((int)get_parametr('type_id') === 5): ?>
+                    <?php elseif ($current_type_id === 5): ?>
                         <?= include_template('adding-post-link.php', [
                                 'errors' => $errors,
                             ]);

@@ -5,17 +5,20 @@ $page_title = 'readme: добавление публикации';
 $types = get_types($link);
 $types_id = array_column($types, "id");
 $errors = [];
-$required = ['title' => 'Заголовок', 'text' => 'Текст', 'tags' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'youtube_url' => 'Ссылка youtube'];
+$required = ['title' => 'Заголовок', 'text' => 'Текст', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'youtube_url' => 'Ссылка youtube'];
+$current_type_id = (int)get_parametr('type_id');
 
 $page_content = include_template('adding-post.php', [
     'types' => $types,
-    'errors' => $errors
+    'errors' => $errors,
+    'current_type_id' => $current_type_id
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $type_id = (int)post_parametr('type_id');
+    $current_type_id = (int)post_parametr('type_id');
+    // var_dump($current_type_id);
 
-    switch ($type_id) {
+    switch ($current_type_id) {
         // Текст
         case 1:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'text' => FILTER_DEFAULT], true);
@@ -28,14 +31,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         // Фото
         case 3:
-            if (get_parametr('img_url')) {
+            if (post_parametr('img_url')) {
                 $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_url' => FILTER_DEFAULT], true);
                 $sql = "INSERT INTO post (user_id, type_id, title, img_url) VALUES (1, ?, ?, ?)";
-            } elseif (get_parametr('img_file')) {
+            } elseif (post_parametr('img_file')) {
                 $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_file' => FILTER_DEFAULT], true);
                 $sql = "INSERT INTO post (user_id, type_id, title, youtube_url) VALUES (1, ?, ?, ?)";
             } else {
-                $required['img'] = 'Загрузите фото.';
+                $post ="";
+                $sql="";
+                $required['img'] = 'Загрузите фото';
             }
             break;
         // Видео
@@ -50,22 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
     }
 
-    $tags = filter_input(INPUT_POST, 'tags');
-    $all_input = $post;
-    $all_input['tags'] = $tags;
+    var_dump(post_parametr('img_url'));
+    var_dump($post);
 
+    $tag = post_parametr('tag');
+    $all_input = $post;
+    $all_input['tag'] = $tag;
     $errors = get_required_errors($all_input, $required);
 
     if(count($errors)) {
         $page_content = include_template('adding-post.php', [
-            'types' => get_types($link),
-            'errors' => $errors
+            'types' => $types,
+            'errors' => $errors,
+            'current_type_id' => $current_type_id
         ]);
     } else {
         $stmt = db_get_prepare_stmt($link, $sql, $post);
         $res = mysqli_stmt_execute($stmt);
-
-        $sql_post = "INSERT INTO tags (text) VALUES (?)";
 
         if ($res) {
             $post_id = mysqli_insert_id($link);

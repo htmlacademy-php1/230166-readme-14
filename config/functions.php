@@ -316,9 +316,10 @@ function post_parametr($name) {
  * @param $reqiured array
  * @return array
 */
-function get_required_errors($post, $required) {
+function get_required_errors($array, $required) {
     $errors = [];
-    foreach ($post as $key => $value) {
+
+    foreach ($array as $key => $value) {
         if (array_key_exists($key, $required) && empty($value)) {
             $errors[$key] = "$required[$key]. Это поле должно быть заполнено.";
         }

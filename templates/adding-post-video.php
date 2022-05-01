@@ -49,9 +49,9 @@
                             class="adding-post__input form__input"
                             id="video-tags"
                             type="text"
-                            name="tags"
+                            name="tag"
                             placeholder="Введите ссылку"
-                            value="<?= post_parametr('tags') ?>"
+                            value="<?= post_parametr('tag') ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">

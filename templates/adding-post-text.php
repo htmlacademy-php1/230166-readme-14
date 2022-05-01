@@ -49,8 +49,9 @@
                             class="adding-post__input form__input"
                             id="post-tags"
                             type="text"
-                            name="tags"
+                            name="tag"
                             placeholder="Введите теги"
+                            value="<?= post_parametr('tag') ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
@@ -65,8 +66,8 @@
                 <div class="form__invalid-block">
                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                     <ul class="form__invalid-list">
-                        <?php foreach($errors as $error): ?>
-                            <li class="form__invalid-item"><?= $error ?></li>
+                        <?php foreach($errors as $key => $value): ?>
+                            <li class="form__invalid-item"><?= $value ?></li>
                         <? endforeach ?>
                     </ul>
                 </div>
