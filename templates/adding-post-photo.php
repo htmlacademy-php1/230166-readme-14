@@ -8,19 +8,19 @@
 
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="photo-heading">Заголовок <span class="form__input-required">*</span></label>
-                    <div class="form__input-section">
+                    <div class="form__input-section <?= isset($errors['title']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
                             id="photo-heading"
                             type="text"
                             name="title"
                             placeholder="Введите заголовок"
-                            value="<?= post_parametr('title') ?>"
+                            value="<?= isset($post['title']) ? $post['title'] : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                            <p class="form__error-desc"><?= isset($errors['title']) ? $errors['title'] : ''; ?></p>
                         </div>
                     </div>
                 </div>
@@ -42,22 +42,21 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="adding-post__input-wrapper form__input-wrapper">
-                    <label class="adding-post__label form__label" for="photo-tags">Теги</label>
-                    <div class="form__input-section">
+                    <label class="adding-post__label form__label" for="post-tags">Теги</label>
+                    <div class="form__input-section <?= isset($errors['tag']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
-                            id="photo-tags"
+                            id="post-tags"
                             type="text"
                             name="tag"
                             placeholder="Введите теги"
-                            value="<?= post_parametr('tag') ?>"
+                            value="<?= isset($post['tag']) ? $post['tag'] : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                            <p class="form__error-desc"><?= isset($errors['tag']) ? $errors['tag'] : ''; ?></p>
                         </div>
                     </div>
                 </div>

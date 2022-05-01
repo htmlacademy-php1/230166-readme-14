@@ -5,9 +5,9 @@ $page_title = 'readme: добавление публикации';
 $types = get_types($link);
 $types_id = array_column($types, "id");
 $errors = [];
-$required = ['title' => 'Заголовок', 'text' => 'Текст', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'youtube_url' => 'Ссылка youtube'];
 $current_type_id = (int)get_parametr('type_id');
 $post = [];
+$required = ['title' => 'Заголовок', 'text' => 'Текст поста', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'youtube_url' => 'Ссылка youtube'];
 
 $page_content = include_template('adding-post.php', [
     'types' => $types,
