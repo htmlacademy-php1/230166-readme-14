@@ -58,7 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
     }
 
-    if ($_FILES['img_file']['name']) {
+    $file_name = $_FILES['img_file']['name'] ?? NULL;
+
+    if ($file_name) {
         var_dump($_FILES);
         $tmp_name = $_FILES['img_file']['tmp_name'];
 
@@ -84,17 +86,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Валидация записи типа «Картинка»
-    if (!$_FILES['img_file']['name'] && !$post['img_url']) {
+    if (!$file_name && isset($post['img_url'])) {
         $errors['img_url'] = 'Вы не загрузили файл';
     }
 
-    $tag = post_parametr('tag');
+    // Получение тегов из массива POST, обрезаем пробелы вначале и в конце, и переводим в безопасные символы
+    $tag = trim(esc(post_parametr('tag')));
+    // Объединение в один массив данные для поста и тэгов для проверки валидации на обязательные поля
     $all_input = $post;
     $all_input['tag'] = $tag;
-    $errors = array_merge($errors, get_required_errors($all_input, $required));
-    $errors = array_filter($errors);
 
-    // var_dump($errors);
+    // Получение ошибок для обязательных полей
+    $required_errors = get_required_errors($all_input, $required);
+
+    // Валидация поля «Ссылка из интернета»
+    $url = $post['link'] ?? NULL;
+    $errors['link'] = validate_url($url);
+
+    var_dump($errors);
+
+    // Объеденение ошибок
+    $errors = array_merge($errors, $required_errors);
+
+    // Удаление из ошибок пустых значений
+    $errors = array_filter($errors);
 
     if(count($errors)) {
         $page_content = include_template('adding-post.php', [

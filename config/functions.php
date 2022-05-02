@@ -373,3 +373,16 @@ function fetch_result($result) {
 
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+/**
+ * Возвращает ошибку если передана ссылка в неправильном формате
+ * @param object $result_query mysqli Результат запроса к базе данных
+ * @return array
+ */
+function validate_url($url) {
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return 'Неправильный формат ссылки';
+    }
+
+    return NULL;
+}

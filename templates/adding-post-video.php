@@ -51,7 +51,7 @@
                             type="text"
                             name="tag"
                             placeholder="Введите теги"
-                            value="<?= isset($post['tag']) ? $post['tag'] : ''; ?>"
+                            value="<?= isset($tag) ? $tag : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
