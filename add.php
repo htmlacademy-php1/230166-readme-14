@@ -29,6 +29,7 @@ $page_content = include_template('adding-post.php', [
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_type_id = (int)post_parametr('type_id');
+    $file_name = $_FILES['img_file']['name'] ?? NULL;
 
     switch ($current_type_id) {
         // Текст
@@ -45,28 +46,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 3:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'photo_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES (1, ?, ?, ?)";
+            // Валидация записи типа «Картинка»
+            $errors['photo_url'] = !$file_name && !$post['photo_url'] ? 'Вы не загрузили файл' : NULL;
             break;
         // Видео
         case 4:
-            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'vider_url' => FILTER_DEFAULT], true);
+            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'video_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES (1, ?, ?, ?)";
+            // Валидация записи типа «Видео
+            $video_url = $post['video_url'];
+            $errors['video_url'] = validate_url($video_url);
+            if (!$errors['video_url']) {
+                $errors['video_url'] = validate_youtube_url($video_url);
+            }
             break;
         // Ссылка
         case 5:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'link_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, link_url) VALUES (1, ?, ?, ?)";
+            // Валидация поля «Ссылка из интернета»
+            $link_url = $post['link_url'];
+            $errors['link_url'] = validate_url($link_url);
             break;
     }
 
-    $file_name = $_FILES['img_file']['name'] ?? NULL;
-
     if ($file_name) {
-        var_dump($_FILES);
         $tmp_name = $_FILES['img_file']['tmp_name'];
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
+        // Валидация поля «Выбор файла» на допустимые форматы
         if ($file_type === 'image/jpeg') {
             $ext = '.jpg';
         } elseif ($file_type === 'image/png') {
@@ -80,14 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($_FILES['img_file']['tmp_name'], 'uploads/'. $filename);
             $post['photo_url'] = "uploads/". $filename;
         } else {
-            // Валидация поля «Выбор файла»
             $errors['photo_url'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
         }
-    }
-
-    // Валидация записи типа «Картинка»
-    if (!$file_name && isset($post['photo_url'])) {
-        $errors['photo_url'] = 'Вы не загрузили файл';
     }
 
     // Получение тегов из массива POST, обрезаем пробелы вначале и в конце, и переводим в безопасные символы
@@ -96,15 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $all_input = $post;
     $all_input['tag'] = $tag;
 
-
-
-    // Валидация поля «Ссылка из интернета»
-    $url = $post['link_url'] ?? NULL;
-    $errors['link_url'] = validate_url($url);
-    // Получение ошибок для обязательных полей
+    // Получение ошибок для всех обязательных полей
     $required_errors = get_required_errors($all_input, $required);
-    // Объеденение ошибок, если есть незаполненные поля они перезапишут предыдущие ошибки
+    // Объеденение ошибок, если есть незаполненные обязательные поля, то они перезапишут предыдущие ошибки
     $errors = array_merge($errors, $required_errors);
+
     // Удаление из ошибок пустых значений
     $errors = array_filter($errors);
 

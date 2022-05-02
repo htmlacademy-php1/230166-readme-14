@@ -375,13 +375,40 @@ function fetch_result($result) {
 }
 
 /**
- * Возвращает ошибку если передана ссылка в неправильном формате
+ * Возвращает ошибку если url передан в неправильном формате
  * @param string
- * @return array
+ * @return mixed
  */
 function validate_url($url) {
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         return 'Неправильный формат ссылки';
+    }
+
+    return NULL;
+}
+
+/**
+ * Функция проверяет доступно ли видео по ссылке на youtube
+ * @param string $url ссылка на видео
+ *
+ * @return string Ошибку если валидация не прошла
+ */
+function validate_youtube_url($url) {
+
+    $id = extract_youtube_id($url);
+
+    set_error_handler(function () {}, E_WARNING);
+    $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
+    restore_error_handler();
+
+    if (!is_array($headers)) {
+        return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
+    }
+
+    $err_flag = strpos($headers[0], '200') ? 200 : 404;
+
+    if ($err_flag !== 200) {
+        return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
     return NULL;
