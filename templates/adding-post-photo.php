@@ -26,7 +26,7 @@
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
-                    <div class="form__input-section <?= isset($errors['img']) ? 'form__input-section--error' : ''; ?>">
+                    <div class="form__input-section <?= isset($errors['img_url']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
                             id="photo-url"
@@ -38,7 +38,7 @@
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['img']) ? $errors['img'] : ''; ?>.</p>
+                            <p class="form__error-desc"><?= isset($errors['img_url']) ? $errors['img_url'] : ''; ?></p>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             type="text"
                             name="tag"
                             placeholder="Введите теги"
-                            value="<?= isset($post['tag']) ? $post['tag'] : ''; ?>"
+                            value="<?= isset($tag) ? $tag : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
@@ -81,7 +81,7 @@
                         type="file"
                         name="img_file"
                         title=" "
-                        value="<?= isset($post['img_file']) ? $post['img_file'] : ''; ?>"
+                        value=""
                     >
                     <div class="form__file-zone-text">
                         <span>Перетащите фото сюда</span>

@@ -9,7 +9,6 @@ $current_type_id = (int)get_parametr('type_id');
 $post = [];
 $required = ['title' => 'Заголовок', 'text' => 'Текст поста', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'caption' => 'Автор', 'youtube_url' => 'Ссылка youtube'];
 
-
 $page_content = include_template('adding-post.php', [
     'types' => $types,
     'errors' => $errors,
@@ -19,8 +18,6 @@ $page_content = include_template('adding-post.php', [
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_type_id = (int)post_parametr('type_id');
-    $error_img = '';
-    $file = $_FILES['img_file']['name'] ?? '';
 
     switch ($current_type_id) {
         // Текст
@@ -37,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 3:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, img_url) VALUES (1, ?, ?, ?)";
-
             break;
         // Видео
         case 4:
@@ -51,12 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
     }
 
-    $tag = post_parametr('tag');
-    $all_input = $post;
-    $all_input['tag'] = $tag;
-    $errors = get_required_errors($all_input, $required);
-
-    if ($file) {
+    if ($_FILES['img_file']['name']) {
         $tmp_name = $_FILES['img_file']['tmp_name'];
         $path = $_FILES['img_file']['name'];
 
@@ -73,18 +64,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($ext) {
             $filename = uniqid() . $ext;
-            $post['img_file'] = $_FILES['img_file'];
+            $post['img_url'] = "uploads/". $filename;
             move_uploaded_file($_FILES['img_file']['tmp_name'], 'uploads/'. $filename);
         } else {
-            $errors['img_file'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
+            $errors['img_url'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
         }
-    } else {
+    }
+
+    if (!$_FILES['img_file']['name'] && !$post['img_url']) {
         $errors['img_url'] = 'Вы не загрузили файл';
     }
 
-    var_dump($post);
+    $tag = post_parametr('tag');
 
+    // var_dump($tags);
 
+    $all_input = $post;
+    $all_input['tag'] = $tag;
+    $errors = array_merge($errors, get_required_errors($all_input, $required));
     $errors = array_filter($errors);
 
     if(count($errors)) {
@@ -93,13 +90,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors,
             'current_type_id' => $current_type_id,
             'post' => $post,
+            'tag' => $tag
         ]);
     } else {
         $stmt = db_get_prepare_stmt($link, $sql, $post);
-        $res = mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_execute($stmt);
 
-        if ($res) {
+        if ($result) {
             $post_id = mysqli_insert_id($link);
+
+            $tags = explode(' ', $tag);
+
+            foreach ($tags as $tag) {
+                $sql = "SELECT * FROM tag WHERE text = '{$tag}'";
+                $result = mysqli_query($link, $sql);
+
+                if ($result) {
+                    $exist_tag = mysqli_fetch_assoc($result);
+                    $tag_id = $exist_tag['id'];
+                } else {
+                    $new_tag = "INSERT INTO tag (text) VALUES ('{$tag}')";
+                    $tag_id = mysqli_insert_id($link);
+                }
+
+                $sql = "INSERT INTO post_tag (post_id, tag_id) VALUES ({$post_id}, {$tag_id})";
+                $result = mysqli_query($link, $sql);
+            }
 
             header('Location: post.php?post_id=' . $post_id);
         }

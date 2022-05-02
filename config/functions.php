@@ -342,8 +342,8 @@ function validate_type ($id, $allowed_list) {
 }
 
 /**
- * Валидирует поле категории, если такой категории нет в списке
- * возвращает сообщение об этом
+ * Валидирует количество символов в сообщении, максимальное и минимальное значение,
+ * возвращает сообщение об ошибке
  * @param int $id категория, которую ввел пользователь в форму
  * @param array $allowed_list Список существующих категорий
  * @return string Текст сообщения об ошибке
@@ -357,4 +357,19 @@ function validate_length($value, $min, $max) {
     }
 
     return null;
+}
+
+/**
+ * Возвращает массив из объекта результата запроса
+ * @param object $result_query mysqli Результат запроса к базе данных
+ * @return array
+ */
+function fetch_result($result) {
+    $row = mysqli_num_rows($result);
+
+    if ($row === 1) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }

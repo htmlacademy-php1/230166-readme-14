@@ -30,6 +30,7 @@
                                     'type' => $type,
                                     'errors' => $errors,
                                     'post' => $post,
+                                    'tag' => $tag
                                 ]);
                             ?>
                         <? endif; ?>
