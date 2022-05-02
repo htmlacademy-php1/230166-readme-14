@@ -4,16 +4,27 @@ require_once 'config/init.php';
 $page_title = 'readme: добавление публикации';
 $types = get_types($link);
 $types_id = array_column($types, 'id');
-$errors = [];
 $current_type_id = (int)get_parametr('type_id');
+$errors = [];
 $post = [];
-$required = ['title' => 'Заголовок', 'text' => 'Текст поста', 'tag' => 'Тэги', 'link' => 'Ссылка', 'quote' => 'Текст цитаты', 'caption' => 'Автор', 'youtube_url' => 'Ссылка youtube'];
+$tag = NULL;
+
+$required = [
+    'title' => 'Заголовок',
+    'text' => 'Текст поста',
+    'tag' => 'Тэги',
+    'link' => 'Ссылка',
+    'quote' => 'Текст цитаты',
+    'caption' => 'Автор',
+    'youtube_url' => 'Ссылка youtube'
+];
 
 $page_content = include_template('adding-post.php', [
     'types' => $types,
     'errors' => $errors,
     'current_type_id' => $current_type_id,
     'post' => $post,
+    'tag' => $tag
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -48,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($_FILES['img_file']['name']) {
+        var_dump($_FILES);
         $tmp_name = $_FILES['img_file']['tmp_name'];
-        $path = $_FILES['img_file']['name'];
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
@@ -64,25 +75,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($ext) {
             $filename = uniqid() . $ext;
-            $post['img_url'] = "uploads/". $filename;
             move_uploaded_file($_FILES['img_file']['tmp_name'], 'uploads/'. $filename);
+            $post['img_url'] = "uploads/". $filename;
         } else {
+            // Валидация поля «Выбор файла»
             $errors['img_url'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
         }
     }
 
+    // Валидация записи типа «Картинка»
     if (!$_FILES['img_file']['name'] && !$post['img_url']) {
         $errors['img_url'] = 'Вы не загрузили файл';
     }
 
     $tag = post_parametr('tag');
-
-    // var_dump($tags);
-
     $all_input = $post;
     $all_input['tag'] = $tag;
     $errors = array_merge($errors, get_required_errors($all_input, $required));
     $errors = array_filter($errors);
+
+    // var_dump($errors);
 
     if(count($errors)) {
         $page_content = include_template('adding-post.php', [
@@ -99,17 +111,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result) {
             $post_id = mysqli_insert_id($link);
 
+            // Привязка тегов к публикации
             $tags = explode(' ', $tag);
 
             foreach ($tags as $tag) {
                 $sql = "SELECT * FROM tag WHERE text = '{$tag}'";
                 $result = mysqli_query($link, $sql);
+                $exist_tag = mysqli_fetch_assoc($result);
 
-                if ($result) {
-                    $exist_tag = mysqli_fetch_assoc($result);
+                if ($exist_tag) {
                     $tag_id = $exist_tag['id'];
                 } else {
-                    $new_tag = "INSERT INTO tag (text) VALUES ('{$tag}')";
+                    $sql = "INSERT INTO tag SET text = '{$tag}'";
+                    $result = mysqli_query($link, $sql);
                     $tag_id = mysqli_insert_id($link);
                 }
 

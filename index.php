@@ -2,7 +2,7 @@
 require_once 'config/init.php';
 
 $page_title = 'readme: популярное';
-$type_id = (int)get_parametr('type_id');
+$type_id = get_parametr('type_id');
 
 $page_content = include_template('popular.php', [
     'popular_posts' => get_popular_posts($link, $type_id),

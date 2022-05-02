@@ -80,11 +80,11 @@ function get_date_for_title(string $input):string {
 }
 
 /**
- * Показ ошибки
+ * Вывод ошибки в отдельном шаблоне error.php
  * @param string
  * @return string
 */
-function show_error(&$page_content, $error):string {
+function show_error($error) {
     $page_content = include_template('error.php', ['error' => $error]);
     exit($page_content);
 }
@@ -129,14 +129,14 @@ function get_type($link, $type_id) {
 */
 function get_popular_posts($link, $type_id) {
     if ($type_id) {
-        $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.quote, p.text, p.caption, p.img_url, p.img_file, p.youtube_url, p.link, p.views FROM post p
+        $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.quote, p.text, p.caption, p.img_url, p.youtube_url, p.link, p.views FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
             WHERE type_id =" . (int)$type_id .
             " ORDER BY p.created_at DESC LIMIT 6";
     }
     else {
-        $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.quote, p.caption, p.img_url, p.img_file, p.youtube_url, p.link, p.views FROM post p
+        $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.quote, p.caption, p.img_url, p.youtube_url, p.link, p.views FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
             ORDER BY p.created_at DESC LIMIT 6";
@@ -169,7 +169,7 @@ function get_popular_posts($link, $type_id) {
 */
 function get_post(object $link, int $post_id) {
     $sql = "SELECT p.id post_id, p.created_at post_created_at, p.title, p.text,
-                p.quote, p.caption, p.img_url, p.img_file, p.youtube_url, p.link, p.views,
+                p.quote, p.caption, p.img_url, p.youtube_url, p.link, p.views,
                 u.id user_id, u.created_at user_created_at, u.login, u.avatar,
                 t.id type_id, t.name type_name, t.class type_class
             FROM post p
