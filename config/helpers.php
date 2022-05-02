@@ -24,18 +24,18 @@ function is_date_valid(string $date): bool
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
- * @param $link mysqli Ресурс соединения
+ * @param $con mysqli Ресурс соединения
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = [])
+function db_get_prepare_stmt($con, $sql, $data = [])
 {
-    $stmt = mysqli_prepare($link, $sql);
+    $stmt = mysqli_prepare($con, $sql);
 
     if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($con);
         die($errorMsg);
     }
 
@@ -69,8 +69,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
 
-        if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+        if (mysqli_errno($con) > 0) {
+            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($con);
             die($errorMsg);
         }
     }
@@ -154,7 +154,7 @@ function include_template($name, array $data = [])
  *
  * @return string Ошибку если валидация не прошла
  */
-function check_youtube_url($url)
+function check_video_url($url)
 {
     $id = extract_youtube_id($url);
 
@@ -177,13 +177,13 @@ function check_youtube_url($url)
 
 /**
  * Возвращает код iframe для вставки youtube видео на страницу
- * @param string $youtube_url Ссылка на youtube видео
+ * @param string $video_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_video($youtube_url)
+function embed_youtube_video($video_url)
 {
     $res = "";
-    $id = extract_youtube_id($youtube_url);
+    $id = extract_youtube_id($video_url);
 
     if ($id) {
         $src = "https://www.youtube.com/embed/" . $id;
@@ -195,13 +195,13 @@ function embed_youtube_video($youtube_url)
 
 /**
  * Возвращает img-тег с обложкой видео для вставки на страницу
- * @param string|null $youtube_url Ссылка на youtube видео
+ * @param string|null $video_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_cover(string $youtube_url = null)
+function embed_youtube_cover(string $video_url = null)
 {
     $res = "";
-    $id = extract_youtube_id($youtube_url);
+    $id = extract_youtube_id($video_url);
 
     if ($id) {
         $src = sprintf("https://img.youtube.com/vi/%s/mqdefault.jpg", $id);
@@ -213,14 +213,14 @@ function embed_youtube_cover(string $youtube_url = null)
 
 /**
  * Извлекает из ссылки на youtube видео его уникальный ID
- * @param string $youtube_url Ссылка на youtube видео
+ * @param string $video_url Ссылка на youtube видео
  * @return array
  */
-function extract_youtube_id($youtube_url)
+function extract_youtube_id($video_url)
 {
     $id = false;
 
-    $parts = parse_url($youtube_url);
+    $parts = parse_url($video_url);
 
     if ($parts) {
         if ($parts['path'] == '/watch') {

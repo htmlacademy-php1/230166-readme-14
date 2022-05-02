@@ -26,18 +26,18 @@
                 </div>
                 <div class="adding-post__textarea-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="post-link">Ссылка <span class="form__input-required">*</span></label>
-                    <div class="form__input-section <?= isset($errors['link']) ? 'form__input-section--error' : ''; ?>">
+                    <div class="form__input-section <?= isset($errors['link_url']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
                             id="post-link"
                             type="text"
-                            name="link"
-                            value="<?= isset($post['link']) ? $post['link'] : ''; ?>"
+                            name="link_url"
+                            value="<?= isset($post['link_url']) ? $post['link_url'] : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['link']) ? $errors['link'] : ''; ?></p>
+                            <p class="form__error-desc"><?= isset($errors['link_url']) ? $errors['link_url'] : ''; ?></p>
                         </div>
                     </div>
                 </div>

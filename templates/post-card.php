@@ -19,14 +19,14 @@
         <!--содержимое для поста-фото-->
         <?php elseif ($post['type_id'] === '3'): ?>
             <div class="post-photo__image-wrapper">
-                <img src="<?= esc($post['img_url']) ?>" alt="Фото от пользователя" width="360" height="240">
+                <img src="<?= esc($post['photo_url']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
 
         <!--содержимое для поста-видео-->
         <?php elseif ($post['type_id'] === '4'): ?>
             <div class="post-video__block">
                 <div class="post-video__preview">
-                    <?=embed_youtube_cover(esc($post['youtube_url'])); ?>
+                    <?=embed_youtube_cover(esc($post['video_url'])); ?>
                     <!-- <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188"> -->
                 </div>
                 <a href="post-details.html" class="post-video__play-big button">
@@ -40,16 +40,16 @@
         <!--содержимое для поста-ссылки-->
         <?php elseif ($post['type_id'] === '5'): ?>
             <div class="post-link__wrapper">
-                <a class="post-link__external" href="<?= esc($post['link']) ?>" title="Перейти по ссылке">
+                <a class="post-link__external" href="<?= esc($post['link_url']) ?>" title="Перейти по ссылке">
                     <div class="post-link__info-wrapper">
                         <div class="post-link__icon-wrapper">
-                            <img src="https://www.google.com/s2/favicons?domain=<?= esc($post['link']) ?>" alt="Иконка">
+                            <img src="https://www.google.com/s2/favicons?domain=<?= esc($post['link_url']) ?>" alt="Иконка">
                         </div>
                         <div class="post-link__info">
                             <h3><?= esc($post['title']) ?></h3>
                         </div>
                     </div>
-                    <span><?= esc($post['link']) ?></span>
+                    <span><?= esc($post['link_url']) ?></span>
                 </a>
             </div>
         <? endif; ?>

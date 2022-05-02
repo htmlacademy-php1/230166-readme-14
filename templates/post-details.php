@@ -18,17 +18,17 @@
                         ?>
                     <?php elseif ($post['type_id'] === '3'): ?>
                         <?= include_template('post-photo.php', [
-                                'img_url' => $post['img_url'],
+                                'photo_url' => $post['photo_url'],
                             ]);
                         ?>
                     <?php elseif ($post['type_id'] === '4'): ?>
                         <?= include_template('post-video.php', [
-                                'youtube_url' => $post['youtube_url'],
+                                'video_url' => $post['video_url'],
                             ]);
                         ?>
                     <?php elseif ($post['type_id'] === '5'): ?>
                         <?= include_template('post-link.php', [
-                                'link' => $post['link'],
+                                'link_url' => $post['link_url'],
                                 'title' => $post['title'],
                             ]);
                         ?>

@@ -2,7 +2,7 @@
 require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
-$types = get_types($link);
+$types = get_types($con);
 $types_id = array_column($types, 'id');
 $current_type_id = (int)get_parametr('type_id');
 $errors = [];
@@ -13,10 +13,10 @@ $required = [
     'title' => 'Заголовок',
     'text' => 'Текст поста',
     'tag' => 'Тэги',
-    'link' => 'Ссылка',
+    'link_url' => 'Ссылка',
     'quote' => 'Текст цитаты',
     'caption' => 'Автор',
-    'youtube_url' => 'Ссылка youtube'
+    'video_url' => 'Ссылка youtube'
 ];
 
 $page_content = include_template('adding-post.php', [
@@ -43,18 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         // Фото
         case 3:
-            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'img_url' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, img_url) VALUES (1, ?, ?, ?)";
+            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'photo_url' => FILTER_DEFAULT], true);
+            $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES (1, ?, ?, ?)";
             break;
         // Видео
         case 4:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, '' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, youtube_url) VALUES (1, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES (1, ?, ?, ?)";
             break;
         // Ссылка
         case 5:
-            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'link' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, link) VALUES (1, ?, ?, ?)";
+            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'link_url' => FILTER_DEFAULT], true);
+            $sql = "INSERT INTO post (user_id, type_id, title, link_url) VALUES (1, ?, ?, ?)";
             break;
     }
 
@@ -78,16 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($ext) {
             $filename = uniqid() . $ext;
             move_uploaded_file($_FILES['img_file']['tmp_name'], 'uploads/'. $filename);
-            $post['img_url'] = "uploads/". $filename;
+            $post['photo_url'] = "uploads/". $filename;
         } else {
             // Валидация поля «Выбор файла»
-            $errors['img_url'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
+            $errors['photo_url'] = 'Допустимые форматы файлов: jpg, jpeg, png, gif.';
         }
     }
 
     // Валидация записи типа «Картинка»
-    if (!$file_name && isset($post['img_url'])) {
-        $errors['img_url'] = 'Вы не загрузили файл';
+    if (!$file_name && isset($post['photo_url'])) {
+        $errors['photo_url'] = 'Вы не загрузили файл';
     }
 
     // Получение тегов из массива POST, обрезаем пробелы вначале и в конце, и переводим в безопасные символы
@@ -100,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required_errors = get_required_errors($all_input, $required);
 
     // Валидация поля «Ссылка из интернета»
-    $url = $post['link'] ?? NULL;
-    $errors['link'] = validate_url($url);
+    $url = $post['link_url'] ?? NULL;
+    $errors['link_url'] = validate_url($url);
 
     var_dump($errors);
 
@@ -120,36 +120,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'tag' => $tag
         ]);
     } else {
-        $stmt = db_get_prepare_stmt($link, $sql, $post);
+        $stmt = db_get_prepare_stmt($con, $sql, $post);
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) {
-            $post_id = mysqli_insert_id($link);
+            $post_id = mysqli_insert_id($con);
 
             // Привязка тегов к публикации
             $tags = explode(' ', $tag);
 
             foreach ($tags as $tag) {
                 $sql = "SELECT * FROM tag WHERE text = '{$tag}'";
-                $result = mysqli_query($link, $sql);
+                $result = mysqli_query($con, $sql);
                 $exist_tag = mysqli_fetch_assoc($result);
 
                 if ($exist_tag) {
                     $tag_id = $exist_tag['id'];
                 } else {
                     $sql = "INSERT INTO tag SET text = '{$tag}'";
-                    $result = mysqli_query($link, $sql);
-                    $tag_id = mysqli_insert_id($link);
+                    $result = mysqli_query($con, $sql);
+                    $tag_id = mysqli_insert_id($con);
                 }
 
                 $sql = "INSERT INTO post_tag (post_id, tag_id) VALUES ({$post_id}, {$tag_id})";
-                $result = mysqli_query($link, $sql);
+                $result = mysqli_query($con, $sql);
             }
 
             header('Location: post.php?post_id=' . $post_id);
         }
         else {
-            show_error(mysqli_error($link));
+            show_error(mysqli_error($con));
         }
     }
 }

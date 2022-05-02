@@ -5,8 +5,8 @@ $page_title = 'readme: популярное';
 $type_id = get_parametr('type_id');
 
 $page_content = include_template('popular.php', [
-    'popular_posts' => get_popular_posts($link, $type_id),
-    'types' => get_types($link)
+    'popular_posts' => get_popular_posts($con, $type_id),
+    'types' => get_types($con)
 ]);
 
 $page_header = include_template('header.php', [

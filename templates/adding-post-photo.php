@@ -26,19 +26,19 @@
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
-                    <div class="form__input-section <?= isset($errors['img_url']) ? 'form__input-section--error' : ''; ?>">
+                    <div class="form__input-section <?= isset($errors['photo_url']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
                             id="photo-url"
                             type="text"
-                            name="img_url"
+                            name="photo_url"
                             placeholder="Введите ссылку"
-                            value="<?= isset($post['img_url']) ? $post['img_url'] : ''; ?>"
+                            value="<?= isset($post['photo_url']) ? $post['photo_url'] : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['img_url']) ? $errors['img_url'] : ''; ?></p>
+                            <p class="form__error-desc"><?= isset($errors['photo_url']) ? $errors['photo_url'] : ''; ?></p>
                         </div>
                     </div>
                 </div>

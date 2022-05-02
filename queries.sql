@@ -53,21 +53,21 @@ INSERT INTO post
   SET user_id = 2,
       type_id = 3,
       title = 'Наконец, обработала фотки!',
-      img_url = 'rock.jpg',
+      photo_url = 'img/rock.jpg',
       views = 6;
 
 INSERT INTO post
   SET user_id = 2,
       type_id = 4,
       title = 'Полезный пост про Байкал',
-      youtube_url = 'https://youtu.be/DAP6oTtUcZ4',
+      video_url = 'https://youtu.be/DAP6oTtUcZ4',
       views = 8;
 
 INSERT INTO post
   SET user_id = 3,
       type_id = 5,
       title = 'Делюсь с вами ссылочкой',
-      link = 'vitadental.ru',
+      link_url = 'https://vitadental.ru',
       views = 2;
 
 INSERT INTO post
@@ -121,13 +121,13 @@ INSERT INTO tag (text) VALUES ('#nature'), ('#globe'), ('#photooftheday'), ('#ca
 INSERT INTO post_tag (post_id, tag_id) VALUES (1, 1), (1, 1), (1, 2), (1, 3), (1, 3), (1, 4), (2, 3), (3, 3), (3, 4);
 
 -- получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента;
-SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.caption, p.img_url, p.youtube_url, p.link, p.views FROM post p
+SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
   JOIN user u ON p.user_id = u.id
   JOIN type t ON p.type_id = t.id
   ORDER BY p.views DESC LIMIT 6;
 
 -- получить список постов для конкретного пользователя;
-SELECT p.id, p.created_at, u.login, t.id type_id, t.name, p.title, p.text, p.caption, p.img_url, p.youtube_url, p.link, p.views from post p
+SELECT p.id, p.created_at, u.login, t.id type_id, t.name, p.title, p.text, p.caption, p.photo_url, p.video_url, p.link_url, p.views from post p
   JOIN user u ON p.user_id = u.id
   JOIN type t ON p.type_id = t.id
   WHERE u.id = 1;

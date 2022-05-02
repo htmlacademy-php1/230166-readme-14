@@ -26,19 +26,19 @@
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
-                    <div class="form__input-section <?= isset($errors['youtube_url']) ? 'form__input-section--error' : ''; ?>">
+                    <div class="form__input-section <?= isset($errors['video_url']) ? 'form__input-section--error' : ''; ?>">
                         <input
                             class="adding-post__input form__input"
                             id="video-url"
                             type="text"
-                            name="youtube_url"
+                            name="video_url"
                             placeholder="Введите ссылку"
-                            value="<?= isset($post['youtube_url']) ? $post['youtube_url'] : ''; ?>"
+                            value="<?= isset($post['video_url']) ? $post['video_url'] : ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['youtube_url']) ? $errors['youtube_url'] : ''; ?></p>
+                            <p class="form__error-desc"><?= isset($errors['video_url']) ? $errors['video_url'] : ''; ?></p>
                         </div>
                     </div>
                 </div>
