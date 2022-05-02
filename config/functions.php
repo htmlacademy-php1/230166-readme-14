@@ -376,7 +376,7 @@ function fetch_result($result) {
 
 /**
  * Возвращает ошибку если передана ссылка в неправильном формате
- * @param object $result_query mysqli Результат запроса к базе данных
+ * @param string
  * @return array
  */
 function validate_url($url) {

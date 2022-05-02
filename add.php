@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         // Видео
         case 4:
-            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, '' => FILTER_DEFAULT], true);
+            $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'vider_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES (1, ?, ?, ?)";
             break;
         // Ссылка
@@ -96,18 +96,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $all_input = $post;
     $all_input['tag'] = $tag;
 
-    // Получение ошибок для обязательных полей
-    $required_errors = get_required_errors($all_input, $required);
+
 
     // Валидация поля «Ссылка из интернета»
     $url = $post['link_url'] ?? NULL;
     $errors['link_url'] = validate_url($url);
-
-    var_dump($errors);
-
-    // Объеденение ошибок
+    // Получение ошибок для обязательных полей
+    $required_errors = get_required_errors($all_input, $required);
+    // Объеденение ошибок, если есть незаполненные поля они перезапишут предыдущие ошибки
     $errors = array_merge($errors, $required_errors);
-
     // Удаление из ошибок пустых значений
     $errors = array_filter($errors);
 
