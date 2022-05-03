@@ -61,8 +61,7 @@
                                         <a class="header__profile-nav-link" href="#">
                                             <span class="header__profile-nav-text">
                                                 Мой профиль
-
-    'popular_posts' => $popular_posts     </span>
+                                            </span>
                                         </a>
                                     </li>
                                     <li class="header__profile-nav-item">
@@ -85,7 +84,7 @@
                         </div>
                     </li>
                     <li>
-                        <a class="header__post-button button button--transparent" href="/add.php?type_id=1">Пост</a>
+                        <a class="header__post-button button button--transparent" href="add.php?type_id=1">Пост</a>
                     </li>
                 </ul>
             </nav>

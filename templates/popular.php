@@ -47,7 +47,7 @@
                         <li class="popular__filters-item filters__item">
                             <a
                                 class="filters__button filters__button--<?= $type['class'] ?> button <?= $classnames; ?>"
-                                href="/?type_id=<?= $type['id']; ?>"
+                                href="?type_id=<?= $type['id']; ?>"
                             >
                                 <span class="visually-hidden"><?= $type['name']; ?></span>
                                 <svg class="filters__icon" width="<?= $type['icon_width'] ?>" height="<?= $type['icon_height']; ?>">

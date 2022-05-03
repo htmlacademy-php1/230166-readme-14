@@ -3,11 +3,16 @@ require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
 $types = get_types($con);
-$types_id = array_column($types, 'id');
 $current_type_id = (int)get_parametr('type_id');
 $errors = [];
 $post = [];
 $tag = NULL;
+
+// Валидация типа контента
+$type_ids = array_column($types, 'id');
+$errors['type'] = validate_type($current_type_id, $type_ids);
+$errors = array_filter($errors);
+// var_dump($errors);
 
 // Обязательные поля
 $required = [
@@ -27,6 +32,7 @@ $page_content = include_template('adding-post.php', [
     'post' => $post,
     'tag' => $tag
 ]);
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_type_id = (int)post_parametr('type_id');
