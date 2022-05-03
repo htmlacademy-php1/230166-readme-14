@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Маргарита  Попова](https://up.htmlacademy.ru/php/14/user/230166).
-* Наставник: [Анатолий Пашин](https://htmlacademy.ru/profile/id1200767).
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 

@@ -2,7 +2,8 @@
 /**
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
- * @param string, int
+ * @param $input string
+ * @param $limit int
  * @return string
 */
 function crop_text(string $input, int $limit = 300):string {
@@ -90,7 +91,7 @@ function show_error($error) {
 }
 
 /**
- * типы категорий
+ * Получение всех типов контента для постов
  * @param $con mysqli Ресурс соединения
  * @return array or string
 */
@@ -106,9 +107,10 @@ function get_types($con) {
 }
 
 /**
- * типы категорий
+ * Получение одного типа контента по id
  * @param $con mysqli Ресурс соединения
- * @return array or string
+ * @param $type_id int
+ * @return array
 */
 function get_type($con, $type_id) {
     $sql = "SELECT * FROM type WHERE id = " . (int)$type_id;
@@ -124,8 +126,8 @@ function get_type($con, $type_id) {
 /**
  * популярные посты
  * @param $con mysqli Ресурс соединения
- * @param $type_id mysqli Ресурс соединения
- * @return array or string
+ * @param $type_id int
+ * @return array
 */
 function get_popular_posts($con, $type_id) {
     if ($type_id) {
@@ -192,7 +194,7 @@ function get_post(object $con, int $post_id) {
  * @param $post_id int
  * @return array
 */
-function get_comments($con, $post_id): array {
+function get_comments($con, $post_id) {
     $sql = "SELECT c.*, u.login author, u.avatar FROM comment c
             JOIN user u ON c.user_id = u.id
             WHERE c.post_id = $post_id";
@@ -208,9 +210,10 @@ function get_comments($con, $post_id): array {
 /**
  * Хэштеги
  * @param $con mysqli Ресурс соединения
+ * @param $post_id int
  * @return array
 */
-function get_tags($con, $post_id): array {
+function get_tags($con, $post_id) {
     $sql = "SELECT h.* FROM tag h
             JOIN post_tag ph ON ph.tag_id = h.id
             JOIN post p ON p.id = ph.post_id
@@ -228,9 +231,10 @@ function get_tags($con, $post_id): array {
 /**
  * Количество лайков
  * @param $con mysqli Ресурс соединения
+ * @param $post_id int
  * @return int
 */
-function get_count_favs($con, $post_id): int {
+function get_count_favs($con, $post_id) {
     $sql = "SELECT COUNT(id) AS count FROM fav WHERE post_id = $post_id";
     $result = mysqli_query($con, $sql);
 
@@ -295,7 +299,7 @@ function get_count_subscribers($con, $user_id) {
 /**
  * Получение данных из массива GET
  * @param $name string
- * @return any
+ * @return mixed
 */
 function get_parametr($name) {
     return filter_input(INPUT_GET, $name);
@@ -304,7 +308,7 @@ function get_parametr($name) {
 /**
  * Получение данных из массива POST
  * @param $name string
- * @return any
+ * @return mixed
 */
 function post_parametr($name) {
     return filter_input(INPUT_POST, $name);
