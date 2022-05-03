@@ -70,17 +70,21 @@
                     <? endforeach ?>
                 </ul>
                 <div class="comments">
-                    <form class="comments__form form" action="#" method="post">
+                    <form class="comments__form form" action="/post.php?post_id=<?= esc($post['post_id']) ?>" method="post">
                         <div class="comments__my-avatar">
                             <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
                         </div>
-                        <div class="form__input-section form__input-section--error">
-                            <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
+                        <div class="form__input-section <?= isset($errors['comment_text']) ? 'form__input-section--error' : ''; ?>">
+                            <textarea
+                                class="comments__textarea form__textarea form__input"
+                                placeholder="Ваш комментарий"
+                                name="comment_text"
+                            ><?= isset($new_comment['comment_text']) ? $new_comment['comment_text'] : ''; ?></textarea>
                             <label class="visually-hidden">Ваш комментарий</label>
                             <button class="form__error-button button" type="button">!</button>
                             <div class="form__error-text">
                                 <h3 class="form__error-title">Ошибка валидации</h3>
-                                <p class="form__error-desc">Это поле обязательно к заполнению</p>
+                                <p class="form__error-desc"><?= isset($errors['comment_text']) ? $errors['comment_text'] : ''; ?></p>
                             </div>
                         </div>
                         <button class="comments__submit button button--green" type="submit">Отправить</button>
