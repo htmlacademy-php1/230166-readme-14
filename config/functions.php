@@ -2,9 +2,9 @@
 /**
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
- * @param $input string
- * @param $post_id int
- * @param $limit int
+ * @param string $input
+ * @param int $post_id
+ * @param int $limit
  * @return string
 */
 function crop_text(string $input, $post_id, int $limit = 300):string {
@@ -83,8 +83,8 @@ function get_date_for_title(string $input):string {
 
 /**
  * Получение ошибок для незаполненных обязательных полей
- * @param $post array
- * @param $reqiured array
+ * @param array $post
+ * @param array $reqiured
  * @return array
 */
 function get_required_errors($array, $required) {
@@ -161,7 +161,6 @@ function validate_url($url) {
 /**
  * Функция проверяет доступно ли видео по ссылке на youtube
  * @param string $url ссылка на видео
- *
  * @return string Ошибку если валидация не прошла
  */
 function validate_youtube_url($url) {

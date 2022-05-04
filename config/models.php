@@ -11,7 +11,7 @@ function show_error($error) {
 
 /**
  * Получение данных из массива GET
- * @param $name string
+ * @param string $name
  * @return mixed
 */
 function get_parametr($name) {
@@ -20,7 +20,7 @@ function get_parametr($name) {
 
 /**
  * Получение данных из массива POST
- * @param $name string
+ * @param string $name
  * @return mixed
 */
 function post_parametr($name) {
@@ -29,7 +29,7 @@ function post_parametr($name) {
 
 /**
  * Получение всех типов контента для постов
- * @param $con mysqli Ресурс соединения
+ * @param mysqli $con Ресурс соединения
  * @return array or string
 */
 function get_types($con) {
@@ -45,8 +45,8 @@ function get_types($con) {
 
 /**
  * Получение одного типа контента по id
- * @param $con mysqli Ресурс соединения
- * @param $type_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $type_id
  * @return array
 */
 function get_type($con, $type_id) {
@@ -62,8 +62,8 @@ function get_type($con, $type_id) {
 
 /**
  * популярные посты
- * @param $con mysqli Ресурс соединения
- * @param $type_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $type_id
  * @return array
 */
 function get_popular_posts($con, $type_id) {
@@ -102,8 +102,8 @@ function get_popular_posts($con, $type_id) {
 
 /**
  * Получение поста по id
- * @param $con mysqli Ресурс соединения
- * @param $post_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
  * @return array
 */
 function get_post(object $con, int $post_id) {
@@ -127,8 +127,8 @@ function get_post(object $con, int $post_id) {
 
 /**
  * Комментарии
- * @param $con mysqli Ресурс соединения
- * @param $post_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
  * @return array
 */
 function get_comments($con, $post_id) {
@@ -146,8 +146,8 @@ function get_comments($con, $post_id) {
 
 /**
  * Хэштеги
- * @param $con mysqli Ресурс соединения
- * @param $post_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
  * @return array
 */
 function get_tags($con, $post_id) {
@@ -167,8 +167,8 @@ function get_tags($con, $post_id) {
 
 /**
  * Количество лайков
- * @param $con mysqli Ресурс соединения
- * @param $post_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
  * @return int
 */
 function get_count_favs($con, $post_id) {
@@ -184,8 +184,8 @@ function get_count_favs($con, $post_id) {
 
 /**
  * Количество коментариев
- * @param $con mysqli Ресурс соединения
- * @param $post_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
  * @return int
 */
 function get_count_comments($con, $post_id) {
@@ -201,8 +201,8 @@ function get_count_comments($con, $post_id) {
 
 /**
  * Количество постов пользователя
- * @param $con mysqli Ресурс соединения
- * @param $user_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
  * @return int
 */
 function get_count_posts($con, $user_id) {
@@ -218,8 +218,8 @@ function get_count_posts($con, $user_id) {
 
 /**
  * Количество подписчиков пользователя
- * @param $con mysqli Ресурс соединения
- * @param $user_id int
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
  * @return int
 */
 function get_count_subscribers($con, $user_id) {
