@@ -146,13 +146,26 @@ function fetch_result($result) {
 }
 
 /**
- * Возвращает ошибку если url передан в неправильном формате
+ * Проверяет url и возвращает ошибку, если формат неправильный
  * @param string ссылка
  * @return mixed текст ошибки или null
  */
 function validate_url($url) {
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         return 'Неправильный формат ссылки';
+    }
+
+    return NULL;
+}
+
+/**
+ * Проверяет почту и возвращает ошибку, если формат неправильный
+ * @param string ссылка
+ * @return mixed текст ошибки или null
+ */
+function validate_email ($email) {
+    if (!filter_var($email, FILTER_VALIDATE_URL)) {
+        return 'Неправильный формат почты';
     }
 
     return NULL;
