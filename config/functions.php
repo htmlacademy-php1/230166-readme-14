@@ -2,10 +2,10 @@
 /**
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
- * @param string $input
+ * @param string $input текст поста
  * @param int $post_id
  * @param int $limit
- * @return string
+ * @return string обрезанный текст
 */
 function crop_text(string $input, $post_id, int $limit = 300):string {
     if (mb_strlen($input, 'utf-8') < $limit) {
@@ -31,8 +31,8 @@ function crop_text(string $input, $post_id, int $limit = 300):string {
 
 /**
  * Функция фильтрует текст полученный от пользователя для защиты от XSS
- * @param string
- * @return string
+ * @param string данные от пользователя
+ * @return string безопасные данные от пользователя
 */
 function esc($input):string {
     return htmlspecialchars($input);
@@ -40,8 +40,8 @@ function esc($input):string {
 
 /**
  * Получение относительной даты
- * @param string
- * @return string
+ * @param string дата в Unix формате
+ * @return string дата относительно текущего времени
 */
 function get_relative_date(string $input):string {
     $cur_date = time();
@@ -74,7 +74,7 @@ function get_relative_date(string $input):string {
 
 /**
  * Получение даты в виде дд.мм.гггг чч: мм
- * @param string
+ * @param string дата в Unix формате Timestamp
  * @return string
 */
 function get_date_for_title(string $input):string {
@@ -83,8 +83,8 @@ function get_date_for_title(string $input):string {
 
 /**
  * Получение ошибок для незаполненных обязательных полей
- * @param array $post
- * @param array $reqiured
+ * @param array $array заполненные поля
+ * @param array $reqiured обязательные поля
  * @return array
 */
 function get_required_errors($array, $required) {
@@ -147,8 +147,8 @@ function fetch_result($result) {
 
 /**
  * Возвращает ошибку если url передан в неправильном формате
- * @param string
- * @return mixed
+ * @param string ссылка
+ * @return mixed текст ошибки или null
  */
 function validate_url($url) {
     if (!filter_var($url, FILTER_VALIDATE_URL)) {

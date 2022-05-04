@@ -1,8 +1,8 @@
 <?php
 /**
  * Вывод ошибки в отдельном шаблоне error.php
- * @param string
- * @return string
+ * @param string текст ошибки
+ * @return string шаблон с выводом ошибки
 */
 function show_error($error) {
     $page_content = include_template('error.php', ['error' => $error]);
@@ -47,7 +47,7 @@ function get_types($con) {
  * Получение одного типа контента по id
  * @param mysqli $con Ресурс соединения
  * @param int $type_id
- * @return array
+ * @return array название типа, его id, класс и размеры для иконок
 */
 function get_type($con, $type_id) {
     $sql = "SELECT * FROM type WHERE id = " . (int)$type_id;
