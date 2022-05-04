@@ -1,5 +1,4 @@
 <?php
-define('POST_LIMIT', 300);
 
 $user = [
     'host' => '127.0.0.1',

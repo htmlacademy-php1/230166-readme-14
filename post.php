@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = db_get_prepare_stmt($con, $sql, $new_comment);
         $result = mysqli_stmt_execute($stmt);
 
+        header('Location: post.php?post_id=' . $post_id);
+
         if (!$result) {
             show_error(mysqli_error($con));
         }

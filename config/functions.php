@@ -3,10 +3,11 @@
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
  * @param $input string
+ * @param $post_id int
  * @param $limit int
  * @return string
 */
-function crop_text(string $input, int $limit = 300):string {
+function crop_text(string $input, $post_id, int $limit = 300):string {
     if (mb_strlen($input, 'utf-8') < $limit) {
         return '<p>' . $input . '</p>';
     }
@@ -23,7 +24,7 @@ function crop_text(string $input, int $limit = 300):string {
 
         if ($count > ($limit + 1)) {
             $output = implode(' ', $output);
-            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='#'>Читать далее</a>";
+            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='post.php?post_id=$post_id'>Читать далее</a>";
         }
     }
 }

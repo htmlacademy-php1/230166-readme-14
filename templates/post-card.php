@@ -7,7 +7,7 @@
     <div class="post__main">
         <!--содержимое для поста-текста-->
         <?php if ($post['type_id'] === '1'): ?>
-            <?= crop_text(esc($post['text']), POST_LIMIT) ?>
+            <?= crop_text(esc($post['text']), $post['id'], 300) ?>
 
         <!--содержимое для поста-цитаты-->
         <?php elseif ($post['type_id'] === '2'): ?>
