@@ -15,12 +15,12 @@
                             type="text"
                             name="title"
                             placeholder="Введите заголовок"
-                            value="<?= isset($post['title']) ? $post['title'] : ''; ?>"
+                            value="<?= $post['title'] ?? ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['title']) ? $errors['title'] : ''; ?></p>
+                            <p class="form__error-desc"><?= $errors['title'] ?? ''; ?></p>
                         </div>
                     </div>
                 </div>
@@ -32,11 +32,11 @@
                             id="post-text"
                             placeholder="Введите текст публикации"
                             name="text"
-                        ><?= isset($post['text']) ? $post['text'] : ''; ?></textarea>
+                        ><?= $post['text'] ?? ''; ?></textarea>
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['text']) ? $errors['text'] : ''; ?></p>
+                            <p class="form__error-desc"><?= $errors['text'] ?? ''; ?></p>
                         </div>
                     </div>
                 </div>
@@ -49,12 +49,12 @@
                             type="text"
                             name="tag"
                             placeholder="Введите теги"
-                            value="<?= isset($tag) ? $tag : ''; ?>"
+                            value="<?= $tag ?? ''; ?>"
                         >
                         <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                         <div class="form__error-text">
                             <h3 class="form__error-title">Заголовок сообщения</h3>
-                            <p class="form__error-desc"><?= isset($errors['tag']) ? $errors['tag'] : ''; ?></p>
+                            <p class="form__error-desc"><?= $errors['tag'] ?? ''; ?></p>
                         </div>
                     </div>
                 </div>
