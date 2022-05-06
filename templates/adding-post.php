@@ -23,6 +23,7 @@
                         <? endforeach ?>
                     </ul>
                 </div>
+                <!-- <?= $errors['type'] ?? ''; ?> -->
                 <div class="adding-post__tab-content">
                     <?php foreach($types as $type): ?>
                         <?php if ((int)$type['id'] === $current_type_id): ?>

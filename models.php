@@ -14,7 +14,7 @@ function show_error($error) {
  * @param string $name
  * @return mixed
 */
-function get_parametr($name) {
+function filter_get_parametr($name) {
     return filter_input(INPUT_GET, $name);
 }
 
@@ -23,7 +23,7 @@ function get_parametr($name) {
  * @param string $name
  * @return mixed
 */
-function post_parametr($name) {
+function filter_post_parametr($name) {
     return filter_input(INPUT_POST, $name);
 }
 
@@ -232,3 +232,5 @@ function get_count_subscribers($con, $user_id) {
 
     show_error(mysqli_error($con));
 }
+
+

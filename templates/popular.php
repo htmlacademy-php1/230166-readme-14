@@ -37,13 +37,13 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <?php $classname = is_null(get_parametr('type_id')) ? 'filters__button--active' : ''; ?>
+                        <?php $classname = is_null(filter_get_parametr('type_id')) ? 'filters__button--active' : ''; ?>
                         <a class="filters__button filters__button--ellipse filters__button--all <?= $classname ?>" href="/">
                             <span>Все</span>
                         </a>
                     </li>
                     <?php foreach($types as $type): ?>
-                        <?php $classnames = (int)get_parametr('type_id') === $type['id'] ? 'filters__button--active' : ''; ?>
+                        <?php $classnames = (int)filter_get_parametr('type_id') === $type['id'] ? 'filters__button--active' : ''; ?>
                         <li class="popular__filters-item filters__item">
                             <a
                                 class="filters__button filters__button--<?= $type['class'] ?> button <?= $classnames; ?>"

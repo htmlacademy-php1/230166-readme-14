@@ -3,11 +3,16 @@ require_once 'config/init.php';
 
 $page_title = 'readme: публикация';
 
-$post_id = (int) get_parametr('post_id');
+$post_id = (int) filter_get_parametr('post_id');
+// if (!validate_type()) {
+//
+// }
+
+// сделать проверку для фильтрации типов поста
 $post = get_post($con, $post_id);
 $comments = get_comments($con, $post_id);
 $user_id = (int) $post['user_id'];
-$is_show_comments = get_parametr('is_show_comments');
+$is_show_comments = filter_get_parametr('is_show_comments');
 $new_comment = [];
 $errors = [];
 $required = [
@@ -64,18 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page_header = include_template('header.php', [
+$layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-]);
-
-$page_footer = include_template('footer.php', []);
-
-$layout_content = include_template('layout.php', [
     'page_title' => $page_title,
-    'page_header' => $page_header,
     'page_content' => $page_content,
-    'page_footer' => $page_footer
 ]);
 
 print($layout_content);

@@ -2,13 +2,14 @@
 require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
-$types = get_types($con);
-$current_type_id = (int)get_parametr('type_id');
+
+$current_type_id = (int)filter_get_parametr('type_id');
 $errors = [];
 $post = [];
 $tag = NULL;
 
 // Валидация типа контента
+$types = get_types($con);
 $type_ids = array_column($types, 'id');
 $errors['type'] = validate_type($current_type_id, $type_ids);
 $errors = array_filter($errors);
@@ -35,7 +36,7 @@ $page_content = include_template('adding-post.php', [
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $current_type_id = (int)post_parametr('type_id');
+    $current_type_id = (int)filter_post_parametr('type_id');
     $file_name = $_FILES['img_file']['name'] ?? NULL;
 
     switch ($current_type_id) {
@@ -102,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Получение тегов из массива POST, обрезаем пробелы вначале и в конце, и переводим в безопасные символы
-    $tag = trim(esc(post_parametr('tag')));
+    $tag = trim(filter_post_parametr('tag'));
     // Объединение в один массив данные для поста и тэгов для проверки валидации на обязательные поля
     $all_input = $post;
     $all_input['tag'] = $tag;
@@ -158,18 +159,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page_header = include_template('header.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
-]);
-
-$page_footer = include_template('footer.php', []);
-
 $layout_content = include_template('layout.php', [
+    'is_auth' => $is_auth,
+    'user_name' => $user_name,
     'page_title' => $page_title,
-    'page_header' => $page_header,
     'page_content' => $page_content,
-    'page_footer' => $page_footer
 ]);
 
 print($layout_content);
