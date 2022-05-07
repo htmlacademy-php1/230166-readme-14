@@ -233,4 +233,36 @@ function get_count_subscribers($con, $user_id) {
     show_error(mysqli_error($con));
 }
 
+/**
+ * Проверка на существование пользователя по email
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
+ * @return int
+*/
+function check_user_email($con, $email) {
+    $sql = "SELECT id FROM user WHERE email = '{$email}'";
+    $result = mysqli_query($con, $sql);
 
+    if ($result) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return NULL;
+}
+
+/**
+ * Проверка на существование пользователя по логину
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
+ * @return int
+*/
+function check_user_login($con, $login) {
+    $sql = "SELECT id FROM user WHERE login = '{$login}'";
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return NULL;
+}

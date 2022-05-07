@@ -112,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required_errors = get_required_errors($all_input, $required);
     // Объеденение ошибок, если есть незаполненные обязательные поля, то они перезапишут предыдущие ошибки
     $errors = array_merge($errors, $required_errors);
-
     // Удаление из ошибок пустых значений
     $errors = array_filter($errors);
 
