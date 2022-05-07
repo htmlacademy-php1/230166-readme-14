@@ -3,7 +3,7 @@ require_once 'config/init.php';
 
 $page_title = 'readme: регистрация';
 $errors = [];
-$user = [];
+$form = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = filter_input_array(INPUT_POST, ['login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT], true);
