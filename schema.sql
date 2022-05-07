@@ -11,7 +11,7 @@ CREATE TABLE user (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   email VARCHAR(128) NOT NULL,
   login VARCHAR(255) NOT NULL,
-  password CHAR(6) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   avatar VARCHAR(255) DEFAULT NULL,
 
   UNIQUE INDEX user_email (email),
