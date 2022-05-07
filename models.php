@@ -240,7 +240,8 @@ function get_count_subscribers($con, $user_id) {
  * @return int
 */
 function check_user_email($con, $email) {
-    $sql = "SELECT id FROM user WHERE email = '{$email}'";
+    $email = mysqli_real_escape_string($con, $email);
+    $sql = "SELECT id FROM user WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -257,7 +258,8 @@ function check_user_email($con, $email) {
  * @return int
 */
 function check_user_login($con, $login) {
-    $sql = "SELECT id FROM user WHERE login = '{$login}'";
+    $login = mysqli_real_escape_string($con, $login);
+    $sql = "SELECT id FROM user WHERE login = '$login'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {

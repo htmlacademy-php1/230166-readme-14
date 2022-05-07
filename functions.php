@@ -196,3 +196,31 @@ function validate_youtube_url($url) {
 
     return NULL;
 }
+
+/**
+ * Функция проверяет доступно ли видео по ссылке на youtube
+ * @param string $url ссылка на видео
+ * @return string Ошибку если валидация не прошла
+ */
+function trim_array($array) {
+    $output_array = [];
+
+    foreach($array as $key => $value) {
+        $output_array[$key] = trim($value);
+    }
+
+    return $output_array;
+}
+
+
+/**
+ * Получение названия страницы
+ * @param string $url ссылка на видео
+ * @return string Ошибку если валидация не прошла
+ */
+function get_page_name() {
+    $url = $_SERVER['REQUEST_URI'];
+    $url = explode('?', $url);
+    $url = $url[0];
+    return $url;
+}

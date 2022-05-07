@@ -12,13 +12,9 @@ $required = [
     'password-repeat' => 'Повтор пароля',
 ];
 
-$page_content = include_template('registration.php', [
-    'errors' => $errors,
-    'user' => $user
-]);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT], true);
+    $user = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'password-repeat' => FILTER_DEFAULT], true);
+    $user = trim_array($user);
     $file_name = $_FILES['avatar']['name'] ?? NULL;
 
     $errors = get_required_errors($user, $required);
@@ -44,9 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Проверка на правильность повтора пароля
     if (!isset($errors['password'])) {
-        $repeat_password = filter_post_parametr('password-repeat');
-
-        if ($repeat_password !== $user['password']) {
+        if ($user['password-repeat'] !== $user['password']) {
             $errors['password-repeat'] = "Повтор пароля. Неправильно заполненное поле.";
         }
     }
@@ -77,22 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['avatar'] = 'Вы не загрузили аватарку';
     }
 
-    var_dump($user);
-
     $errors = array_filter($errors);
 
-    if(count($errors)) {
-        $page_content = include_template('registration.php', [
-            'errors' => $errors,
-            'user' => $user
-        ]);
-    } else {
+    if(empty($errors)) {
         $password = password_hash($user['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, login, password, avatar) VALUES (?, ?, ?, ?)";
         $stmt = db_get_prepare_stmt($con, $sql, [$user['email'], $user['login'], $password, $avatar]);
         $result = mysqli_stmt_execute($stmt);
 
-        header('Location: registration.php');
+        header('Location: reg.php');
+        exit();
 
         if (!$result) {
             show_error(mysqli_error($con));
@@ -100,11 +88,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_content = include_template('layout.php', [
+$page_layout = include_template('page-layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'page_title' => $page_title,
-    'page_content' => $page_content,
+    'content' => include_template('reg.php', [
+        'page_title' => $page_title,
+        'errors' => $errors,
+        'user' => $user
+    ])
 ]);
 
-print($layout_content);
+$layout = include_template('layout.php', [
+    'page_layout' => $page_layout,
+    'page_title' => $page_title
+]);
+
+print($layout);

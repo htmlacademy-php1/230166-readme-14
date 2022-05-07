@@ -26,15 +26,6 @@ $required = [
     'video_url' => 'Ссылка youtube'
 ];
 
-$page_content = include_template('adding-post.php', [
-    'types' => $types,
-    'errors' => $errors,
-    'current_type_id' => $current_type_id,
-    'post' => $post,
-    'tag' => $tag
-]);
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_type_id = (int)filter_post_parametr('type_id');
     $file_name = $_FILES['img_file']['name'] ?? NULL;
@@ -115,15 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Удаление из ошибок пустых значений
     $errors = array_filter($errors);
 
-    if(count($errors)) {
-        $page_content = include_template('adding-post.php', [
-            'types' => $types,
-            'errors' => $errors,
-            'current_type_id' => $current_type_id,
-            'post' => $post,
-            'tag' => $tag
-        ]);
-    } else {
+    if(empty($errors)) {
         $stmt = db_get_prepare_stmt($con, $sql, $post);
         $result = mysqli_stmt_execute($stmt);
 
@@ -158,11 +141,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_content = include_template('layout.php', [
+$page_layout = include_template('page-layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'page_title' => $page_title,
-    'page_content' => $page_content,
+    'content' => include_template('adding-post.php', [
+        'types' => $types,
+        'errors' => $errors,
+        'current_type_id' => $current_type_id,
+        'post' => $post,
+        'tag' => $tag
+    ])
+]);
+
+$layout_content = include_template('layout.php', [
+    'page_layout' => $page_layout,
+    'page_title' => $page_title
 ]);
 
 print($layout_content);
