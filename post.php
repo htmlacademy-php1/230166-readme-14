@@ -39,28 +39,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+$page_content = include_template('post-details.php', [
+    'post' => $post,
+    'comments' => $comments,
+    'comments_start' => array_slice($comments, 0, 2),
+    'comments_more' => array_slice($comments, 2),
+    'count_favs' => get_count_favs($con, $post_id),
+    'count_posts' => get_count_posts($con, $user_id),
+    'count_subscribes' => get_count_subscribers($con, $user_id),
+    'count_comments' => count($comments),
+    'tags' => get_tags($con, $post_id),
+    'is_show_comments' => $is_show_comments,
+    'new_comment' => $new_comment,
+    'errors' => $errors
+]);
+
 $page_layout = include_template('page-layout.php', [
+    'page_title' => $page_title,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'content' => include_template('post-details.php', [
-        'post' => $post,
-        'comments' => $comments,
-        'comments_start' => array_slice($comments, 0, 2),
-        'comments_more' => array_slice($comments, 2),
-        'count_favs' => get_count_favs($con, $post_id),
-        'count_posts' => get_count_posts($con, $user_id),
-        'count_subscribes' => get_count_subscribers($con, $user_id),
-        'count_comments' => count($comments),
-        'tags' => get_tags($con, $post_id),
-        'is_show_comments' => $is_show_comments,
-        'new_comment' => $new_comment,
-        'errors' => $errors
-    ])
+    'page_content' => $page_content
 ]);
 
-$layout_content = include_template('layout.php', [
-    'page_layout' => $page_layout,
-    'page_title' => $page_title
-]);
-
-print($layout_content);
+print($page_layout);

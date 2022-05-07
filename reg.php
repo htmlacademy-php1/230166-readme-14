@@ -3,7 +3,7 @@ require_once 'config/init.php';
 
 $page_title = 'readme: регистрация';
 $errors = [];
-$user = [];
+$form = [];
 $required = [
     'email' => 'Электронная почта',
     'login' => 'Логин',
@@ -13,34 +13,35 @@ $required = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'password-repeat' => FILTER_DEFAULT], true);
-    $user = trim_array($user);
+    $form = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'password-repeat' => FILTER_DEFAULT], true);
+    $form = trim_array($form);
     $file_name = $_FILES['avatar']['name'] ?? NULL;
 
-    $errors = get_required_errors($user, $required);
+    // Валидация обязательных полей
+    $errors = get_required_errors($form, $required);
 
     // Валидация формата почты
     if (!isset($errors['email'])) {
-        $errors['email'] = validate_email($user['email']);
+        $errors['email'] = validate_email($form['email']);
     }
 
     // Валидация на существование почты
     if (!isset($errors['email'])) {
-        if (check_user_email($con, $user['email'])) {
+        if (check_user_email($con, $form['email'])) {
             $errors['email'] = "Пользователь с этим email уже зарегистрирован";
         }
     }
 
     // Валидация на существование логина
     if (!isset($errors['login'])) {
-        if (check_user_login($con, $user['login'])) {
+        if (check_user_login($con, $form['login'])) {
             $errors['login'] = "Пользователь с этим логином уже зарегистрирован";
         }
     }
 
     // Проверка на правильность повтора пароля
     if (!isset($errors['password'])) {
-        if ($user['password-repeat'] !== $user['password']) {
+        if ($form['password-repeat'] !== $form['password']) {
             $errors['password-repeat'] = "Повтор пароля. Неправильно заполненное поле.";
         }
     }
@@ -74,9 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
 
     if(empty($errors)) {
-        $password = password_hash($user['password'], PASSWORD_DEFAULT);
+        $password = password_hash($form['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, login, password, avatar) VALUES (?, ?, ?, ?)";
-        $stmt = db_get_prepare_stmt($con, $sql, [$user['email'], $user['login'], $password, $avatar]);
+        $user = [$form['login'], $password, $avatar];
+        $stmt = db_get_prepare_stmt($con, $sql, $user);
         $result = mysqli_stmt_execute($stmt);
 
         header('Location: reg.php');
@@ -88,19 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+$page_content = include_template('reg.php', [
+    'errors' => $errors,
+    'user' => $form
+]);
+
 $page_layout = include_template('page-layout.php', [
+    'page_title' => $page_title,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'content' => include_template('reg.php', [
-        'page_title' => $page_title,
-        'errors' => $errors,
-        'user' => $user
-    ])
+    'page_content' => $page_content
 ]);
 
-$layout = include_template('layout.php', [
-    'page_layout' => $page_layout,
-    'page_title' => $page_title
-]);
-
-print($layout);
+print($page_layout);

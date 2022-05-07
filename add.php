@@ -141,21 +141,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+$page_content = include_template('adding-post.php', [
+    'types' => $types,
+    'errors' => $errors,
+    'current_type_id' => $current_type_id,
+    'post' => $post,
+    'tag' => $tag
+]);
+
 $page_layout = include_template('page-layout.php', [
+    'page_title' => $page_title,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'content' => include_template('adding-post.php', [
-        'types' => $types,
-        'errors' => $errors,
-        'current_type_id' => $current_type_id,
-        'post' => $post,
-        'tag' => $tag
-    ])
+    'page_content' => $page_content
 ]);
 
-$layout_content = include_template('layout.php', [
-    'page_layout' => $page_layout,
-    'page_title' => $page_title
-]);
-
-print($layout_content);
+print($page_layout);
