@@ -1,18 +1,25 @@
 <?php
 /**
  * Вывод ошибки в отдельном шаблоне error.php
- * @param string текст ошибки
+ * @param string $error Текст ошибки
  * @return string шаблон с выводом ошибки
 */
 function show_error($error)
 {
-    $page_content = include_template('error.php', ['error' => $error]);
+    if (http_response_code(404)) {
+        $page_content = include_template('404.php', ['error' => $error]);
+    } elseif (http_response_code(500)) {
+        $page_content = include_template('500.php', ['error' => $error]);
+    } else {
+        $page_content = include_template('error.php', ['error' => $error]);
+    }
+
     exit($page_content);
 }
 
 /**
  * Получение данных из массива GET
- * @param string $name
+ * @param string $name Имя параметра
  * @return mixed
 */
 function filter_get_parametr($name)

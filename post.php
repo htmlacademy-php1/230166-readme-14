@@ -9,7 +9,7 @@ $posts = get_all_posts($con);
 
 // Валидация типа контента
 if (check_id($posts, $post_id)) {
-    show_error("Указан несуществующий пост");
+    show_error("Пост будет написан в ближайшее время.");
 }
 
 $post = get_post($con, $post_id);
