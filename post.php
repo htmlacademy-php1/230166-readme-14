@@ -4,11 +4,14 @@ require_once 'config/init.php';
 $page_title = 'readme: публикация';
 
 $post_id = (int) filter_get_parametr('post_id');
-// if (!validate_type()) {
-//
-// }
 
-// сделать проверку для фильтрации типов поста
+$posts = get_all_posts($con);
+
+// Валидация типа контента
+if (check_id($posts, $post_id)) {
+    show_error("Указан несуществующий пост");
+}
+
 $post = get_post($con, $post_id);
 $comments = get_comments($con, $post_id);
 $user_id = (int) $post['user_id'];

@@ -100,19 +100,6 @@ function get_required_errors($array, $required) {
 }
 
 /**
- * Валидирует поле категории, если такой категории нет в списке
- * возвращает сообщение об этом
- * @param int $id категория, которую ввел пользователь в форму
- * @param array $allowed_list Список существующих категорий
- * @return string Текст сообщения об ошибке
- */
-function validate_type ($id, $allowed_list) {
-    if (!in_array($id, $allowed_list)) {
-        return "Указана несуществующая категория";
-    }
-}
-
-/**
  * Валидирует количество символов в сообщении, максимальное и минимальное значение,
  * возвращает сообщение об ошибке
  * @param int $id категория, которую ввел пользователь в форму
@@ -223,4 +210,21 @@ function get_page_name() {
     $url = explode('?', $url);
     $url = $url[0];
     return $url;
+}
+
+/**
+ *  поле категории, если такой категории нет в списке
+ * возвращает сообщение об этом
+ * @param int $id категория, которую ввел пользователь в форму
+ * @param array $allowed_list Список существующих категорий
+ * @return string Текст сообщения об ошибке
+ */
+function check_id($array, $id) {
+    $ids = array_column($array, 'id');
+
+    if (!in_array($id, $ids)) {
+        return true;
+    }
+
+    return false;
 }

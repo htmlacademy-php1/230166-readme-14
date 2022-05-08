@@ -9,9 +9,16 @@ if (!isset($_SESSION['user'])) {
 $page_title = 'readme: популярное';
 $type_id = filter_get_parametr('type_id');
 
+$types = get_all_types($con);
+
+// Валидация типа контента
+if ($type_id && check_id($types, $type_id)) {
+    show_error("Указана несуществующая категория");
+}
+
 $page_content = include_template('popular.php', [
     'popular_posts' => get_popular_posts($con, $type_id),
-    'types' => get_types($con)
+    'types' => get_all_types($con)
 ]);
 
 $page_layout = include_template('page-layout.php', [

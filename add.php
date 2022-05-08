@@ -3,17 +3,17 @@ require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
 
-$current_type_id = (int)filter_get_parametr('type_id');
+$type_id = (int)filter_get_parametr('type_id');
 $errors = [];
 $post = [];
 $tag = NULL;
 
+$types = get_all_types($con);
+
 // Валидация типа контента
-$types = get_types($con);
-$type_ids = array_column($types, 'id');
-$errors['type'] = validate_type($current_type_id, $type_ids);
-$errors = array_filter($errors);
-// var_dump($errors);
+if (check_id($types, $type_id)) {
+    show_error("Указана несуществующая категория");
+}
 
 // Обязательные поля
 $required = [
@@ -27,10 +27,10 @@ $required = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $current_type_id = (int)filter_post_parametr('type_id');
+    $type_id = (int)filter_post_parametr('type_id');
     $file_name = $_FILES['img_file']['name'] ?? NULL;
 
-    switch ($current_type_id) {
+    switch ($type_id) {
         // Текст
         case 1:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'text' => FILTER_DEFAULT], true);
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $page_content = include_template('adding-post.php', [
     'types' => $types,
     'errors' => $errors,
-    'current_type_id' => $current_type_id,
+    'type_id' => $type_id,
     'post' => $post,
     'tag' => $tag
 ]);

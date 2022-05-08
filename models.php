@@ -32,7 +32,7 @@ function filter_post_parametr($name) {
  * @param mysqli $con Ресурс соединения
  * @return array or string
 */
-function get_types($con) {
+function get_all_types($con) {
     $sql = "SELECT * FROM type";
     $result = mysqli_query($con, $sql);
 
@@ -43,6 +43,7 @@ function get_types($con) {
     show_error(mysqli_error($con));
 }
 
+
 /**
  * Получение одного типа контента по id
  * @param mysqli $con Ресурс соединения
@@ -51,6 +52,23 @@ function get_types($con) {
 */
 function get_type($con, $type_id) {
     $sql = "SELECT * FROM type WHERE id = " . (int)$type_id;
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    show_error(mysqli_error($con));
+}
+
+/**
+ * Получение всех постов
+ * @param mysqli $con Ресурс соединения
+ * @return array
+*/
+function get_all_posts($con) {
+    $sql = "SELECT * FROM post";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -124,6 +142,7 @@ function get_post(object $con, int $post_id) {
 
     show_error(mysqli_error($con));
 }
+
 
 /**
  * Комментарии
