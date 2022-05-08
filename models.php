@@ -245,7 +245,7 @@ function check_user_email($con, $email) {
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        return true;
+        return mysqli_fetch_assoc($result);
     }
 
     return NULL;
@@ -257,18 +257,17 @@ function check_user_email($con, $email) {
  * @param int $user_id
  * @return int
 */
-function get_user_by_mail($con, $email) {
+function get_user_by_email($con, $email) {
     $email = mysqli_real_escape_string($con, $email);
     $sql = "SELECT * FROM user WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        mysqli_fetch_array($res, MYSQLI_ASSOC);
+       return mysqli_fetch_array($result, MYSQLI_ASSOC);
     }
 
     return NULL;
 }
-
 
 /**
  * Проверка на существование пользователя по логину
@@ -282,26 +281,7 @@ function check_user_login($con, $login) {
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        return true;
-    }
-
-    return NULL;
-}
-
-/**
- * Проверка пароля
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
- * @return int
-*/
-function check_user_password($con, $email, $password) {
-    $email = mysqli_real_escape_string($con, $email);
-    $password = mysqli_real_escape_string($con, $password);
-    $sql = "SELECT password FROM user WHERE email = '$email'";
-    $result = mysqli_query($con, $sql);
-
-    if ($result) {
-
+        return mysqli_fetch_assoc($result);
     }
 
     return NULL;

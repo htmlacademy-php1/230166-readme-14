@@ -172,19 +172,6 @@ function validate_email ($email) {
 }
 
 /**
- * Проверяет почту и возвращает ошибку, если формат неправильный
- * @param string ссылка
- * @return mixed текст ошибки или null
- */
-function check_validate_email ($email) {
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return 'Неправильный формат почты';
-    }
-
-    return NULL;
-}
-
-/**
  * Функция проверяет доступно ли видео по ссылке на youtube
  * @param string $url ссылка на видео
  * @return string Ошибку если валидация не прошла

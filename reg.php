@@ -18,11 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $file_name = $_FILES['avatar']['name'] ?? NULL;
 
     // Валидация обязательных полей
-    $errors = get_required_errors($form, $required);
+    // $errors = get_required_errors($form, $required);
 
     // Валидация формата почты
     if (!isset($errors['email'])) {
-        $errors['email'] = validate_email($form['email']);
+        if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Неправильный формат почты';
+        }
     }
 
     // Валидация на существование почты
@@ -77,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(empty($errors)) {
         $password = password_hash($form['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, login, password, avatar) VALUES (?, ?, ?, ?)";
-        $user = [$form['login'], $password, $avatar];
+        $user = [$form['email'], $form['login'], $password, $avatar];
         $stmt = db_get_prepare_stmt($con, $sql, $user);
         $result = mysqli_stmt_execute($stmt);
 
-        header('Location: reg.php');
+        header('Location: index.php');
         exit();
 
         if (!$result) {
@@ -92,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $page_content = include_template('reg.php', [
     'errors' => $errors,
-    'user' => $form
+    'form' => $form
 ]);
 
 $page_layout = include_template('page-layout.php', [

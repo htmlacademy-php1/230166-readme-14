@@ -13,33 +13,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'password' => 'Пароль',
     ];
 
-    $errors = get_required_errors($user, $required);
+    $errors = get_required_errors($form, $required);
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['login'] = 'Неправильный формат почты';
+    if (!isset($errors['login']) && !filter_var($form['login'], FILTER_VALIDATE_EMAIL)) {
+        $errors['login'] = 'Неверный формат email';
     }
 
-    $user = get_user_by_mail($con, $form['login']);
+    $errors = array_filter($errors);
+
+    // Получение юзера или NULL
+    $user = get_user_by_email($con, $form['login']);
+
+    if (empty($errors) and !$user) {
+        $errors['login'] = 'Такой пользователь не найден';
+    }
 
     if (empty($errors) and $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
-            $errors['password'] = "Неверный пароль";
+            $errors['password'] = "Пароли не совпадают";
         }
-    } else {
-        $errors['login'] = 'Такой пользователь не найден';
     }
 
-    $errors = array_filter($errors);
-
-    if(empty($errors)) {
-        header('Location: index.php');
+    if (isset($_SESSION['user'])) {
+        header('Location: feed.php');
         exit();
     }
 }
 
-$main_leyout = include_template('main.php', [
+$main_layout = include_template('main-page.php', [
     'page_title' => $page_title,
     'form' => $form,
     'errors' => $errors

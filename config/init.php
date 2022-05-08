@@ -7,6 +7,8 @@ require_once 'data.php';
 
 session_start();
 
+$user = $_SESSION['user'] ?? NULL;
+
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));
 $db_cfg = require_once 'config/db.php';

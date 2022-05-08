@@ -1,6 +1,11 @@
 <?php
 require_once 'config/init.php';
 
+if (!isset($_SESSION['user'])) {
+    header('Location: index.php');
+    exit();
+}
+
 $page_title = 'readme: популярное';
 $type_id = filter_get_parametr('type_id');
 
@@ -11,8 +16,7 @@ $page_content = include_template('popular.php', [
 
 $page_layout = include_template('page-layout.php', [
     'page_title' => $page_title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
+    'user' => $user,
     'page_content' => $page_content
 ]);
 

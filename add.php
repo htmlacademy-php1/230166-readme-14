@@ -151,8 +151,7 @@ $page_content = include_template('adding-post.php', [
 
 $page_layout = include_template('page-layout.php', [
     'page_title' => $page_title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
+    'user' => $user,
     'page_content' => $page_content
 ]);
 

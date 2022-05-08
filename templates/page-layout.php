@@ -21,7 +21,7 @@
                     micro blogging
                 </p>
             </div>
-            <?php if(get_page_name() !== '/reg.php'): ?>
+            <?php if($user): ?>
                 <form class="header__search-form form" action="#" method="get">
                     <div class="header__search">
                         <label class="visually-hidden">Поиск</label>
@@ -58,10 +58,10 @@
                             <li class="header__profile">
                                 <a class="header__profile-link" href="#">
                                     <div class="header__avatar-wrapper">
-                                        <img class="header__profile-avatar" src="img/userpic-medium.jpg" alt="Аватар профиля">
+                                        <img class="header__profile-avatar" src="<?= $user['avatar'] ?>" alt="Аватар профиля">
                                     </div>
                                     <div class="header__profile-name">
-                                        <span><?= $user_name; ?></span>
+                                        <span><?= $user['login'] ?></span>
                                         <svg class="header__link-arrow" width="10" height="6">
                                             <use xlink:href="#icon-arrow-right-ad"></use>
                                         </svg>
@@ -108,7 +108,7 @@
                     </p>
                     <ul class="header__user-nav">
                         <li>
-                            <a class="header__user-button header__register-button button button--transparent" href="main.php">Вход</a>
+                            <a class="header__user-button header__register-button button button--transparent" href="index.php">Вход</a>
                         </li>
                     </ul>
                 </nav>

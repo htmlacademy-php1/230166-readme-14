@@ -1,19 +1,21 @@
 <?php
 require_once 'config/init.php';
 
+if (!isset($_SESSION['user'])) {
+    header('Location: index.php');
+    exit();
+}
+
 $page_title = 'readme: публикация';
 
+$page_content = include_template('feed.php', [
+
+]);
+
 $page_layout = include_template('page-layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'content' => include_template('feed.php', [
-
-    ])
+    'page_title' => $page_title,
+    'user' => $user,
+    'page_content' => $page_content
 ]);
 
-$layout_content = include_template('layout.php', [
-    'page_layout' => $page_layout,
-    'page_title' => $page_title
-]);
-
-print($layout_content);
+print($page_layout);
