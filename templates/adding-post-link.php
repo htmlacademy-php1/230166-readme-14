@@ -5,7 +5,6 @@
             <div class="form__text-inputs">
                 <!-- скрытое поле для типа контента -->
                 <input type="hidden" type="text" name="type_id" value="<?= $type['id'] ?>">
-
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="link-heading">Заголовок <span class="form__input-required">*</span></label>
                     <div class="form__input-section <?= isset($errors['title']) ? 'form__input-section--error' : ''; ?>">
@@ -61,14 +60,14 @@
                 </div>
             </div>
             <?php if(count($errors)) : ?>
-                <div class="form__invalid-block">
-                    <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                    <ul class="form__invalid-list">
-                        <?php foreach($errors as $key => $value) : ?>
-                            <li class="form__invalid-item"><?= $value ?></li>
-                        <? endforeach ?>
-                    </ul>
-                </div>
+            <div class="form__invalid-block">
+                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                <ul class="form__invalid-list">
+                    <?php foreach($errors as $key => $value) : ?>
+                        <li class="form__invalid-item"><?= $value ?></li>
+                    <? endforeach ?>
+                </ul>
+            </div>
             <? endif ?>
         </div>
         <div class="adding-post__buttons">

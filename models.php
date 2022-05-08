@@ -4,7 +4,8 @@
  * @param string текст ошибки
  * @return string шаблон с выводом ошибки
 */
-function show_error($error) {
+function show_error($error)
+{
     $page_content = include_template('error.php', ['error' => $error]);
     exit($page_content);
 }
@@ -14,7 +15,8 @@ function show_error($error) {
  * @param string $name
  * @return mixed
 */
-function filter_get_parametr($name) {
+function filter_get_parametr($name)
+{
     return filter_input(INPUT_GET, $name);
 }
 
@@ -23,7 +25,8 @@ function filter_get_parametr($name) {
  * @param string $name
  * @return mixed
 */
-function filter_post_parametr($name) {
+function filter_post_parametr($name)
+{
     return filter_input(INPUT_POST, $name);
 }
 
@@ -32,7 +35,8 @@ function filter_post_parametr($name) {
  * @param mysqli $con Ресурс соединения
  * @return array or string
 */
-function get_all_types($con) {
+function get_all_types($con)
+{
     $sql = "SELECT * FROM type";
     $result = mysqli_query($con, $sql);
 
@@ -50,7 +54,8 @@ function get_all_types($con) {
  * @param int $type_id
  * @return array название типа, его id, класс и размеры для иконок
 */
-function get_type($con, $type_id) {
+function get_type($con, $type_id)
+{
     $sql = "SELECT * FROM type WHERE id = " . (int)$type_id;
     $result = mysqli_query($con, $sql);
 
@@ -66,7 +71,8 @@ function get_type($con, $type_id) {
  * @param mysqli $con Ресурс соединения
  * @return array
 */
-function get_all_posts($con) {
+function get_all_posts($con)
+{
     $sql = "SELECT * FROM post";
 
     $result = mysqli_query($con, $sql);
@@ -84,7 +90,8 @@ function get_all_posts($con) {
  * @param int $type_id
  * @return array
 */
-function get_popular_posts($con, $type_id) {
+function get_popular_posts($con, $type_id)
+{
     if ($type_id) {
         $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.quote, p.text, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
             JOIN user u ON p.user_id = u.id
@@ -124,7 +131,8 @@ function get_popular_posts($con, $type_id) {
  * @param int $post_id
  * @return array
 */
-function get_post(object $con, int $post_id) {
+function get_post(object $con, int $post_id)
+{
     $sql = "SELECT p.id post_id, p.created_at post_created_at, p.title, p.text,
                 p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views,
                 u.id user_id, u.created_at user_created_at, u.login, u.avatar,
@@ -150,7 +158,8 @@ function get_post(object $con, int $post_id) {
  * @param int $post_id
  * @return array
 */
-function get_comments($con, $post_id) {
+function get_comments($con, $post_id)
+{
     $sql = "SELECT c.*, u.login author, u.avatar FROM comment c
             JOIN user u ON c.user_id = u.id
             WHERE c.post_id = $post_id";
@@ -169,7 +178,8 @@ function get_comments($con, $post_id) {
  * @param int $post_id
  * @return array
 */
-function get_tags($con, $post_id) {
+function get_tags($con, $post_id)
+{
     $sql = "SELECT h.* FROM tag h
             JOIN post_tag ph ON ph.tag_id = h.id
             JOIN post p ON p.id = ph.post_id
@@ -190,7 +200,8 @@ function get_tags($con, $post_id) {
  * @param int $post_id
  * @return int
 */
-function get_count_favs($con, $post_id) {
+function get_count_favs($con, $post_id)
+{
     $sql = "SELECT COUNT(id) AS count FROM fav WHERE post_id = $post_id";
     $result = mysqli_query($con, $sql);
 
@@ -207,7 +218,8 @@ function get_count_favs($con, $post_id) {
  * @param int $post_id
  * @return int
 */
-function get_count_comments($con, $post_id) {
+function get_count_comments($con, $post_id)
+{
     $sql = "SELECT COUNT(id) AS count FROM comment WHERE post_id = $post_id";
     $result = mysqli_query($con, $sql);
 
@@ -224,7 +236,8 @@ function get_count_comments($con, $post_id) {
  * @param int $user_id
  * @return int
 */
-function get_count_posts($con, $user_id) {
+function get_count_posts($con, $user_id)
+{
     $sql = "SELECT COUNT(id) AS count FROM post WHERE user_id = $user_id";
     $result = mysqli_query($con, $sql);
 
@@ -241,7 +254,8 @@ function get_count_posts($con, $user_id) {
  * @param int $user_id
  * @return int
 */
-function get_count_subscribers($con, $user_id) {
+function get_count_subscribers($con, $user_id)
+{
     $sql = "SELECT COUNT(id) AS count FROM subscribe WHERE user_id_publisher = $user_id";
     $result = mysqli_query($con, $sql);
 
@@ -258,7 +272,8 @@ function get_count_subscribers($con, $user_id) {
  * @param int $user_id
  * @return int
 */
-function check_user_email($con, $email) {
+function check_user_email($con, $email)
+{
     $email = mysqli_real_escape_string($con, $email);
     $sql = "SELECT id FROM user WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
@@ -276,7 +291,8 @@ function check_user_email($con, $email) {
  * @param int $user_id
  * @return int
 */
-function get_user_by_email($con, $email) {
+function get_user_by_email($con, $email)
+{
     $email = mysqli_real_escape_string($con, $email);
     $sql = "SELECT * FROM user WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
@@ -294,7 +310,8 @@ function get_user_by_email($con, $email) {
  * @param int $user_id
  * @return int
 */
-function check_user_login($con, $login) {
+function check_user_login($con, $login)
+{
     $login = mysqli_real_escape_string($con, $login);
     $sql = "SELECT id FROM user WHERE login = '$login'";
     $result = mysqli_query($con, $sql);
@@ -305,4 +322,3 @@ function check_user_login($con, $login) {
 
     return NULL;
 }
-

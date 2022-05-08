@@ -112,9 +112,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="registration__file form__file dropzone-previews">
-
-                </div>
+                <div class="registration__file form__file dropzone-previews"></div>
             </div>
             <button class="registration__submit button button--main" type="submit">Отправить</button>
         </form>

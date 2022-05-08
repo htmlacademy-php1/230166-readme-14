@@ -39,19 +39,19 @@
 
         <!--содержимое для поста-ссылки-->
         <?php elseif ($post['type_id'] === '5') : ?>
-            <div class="post-link__wrapper">
-                <a class="post-link__external" href="<?= esc($post['link_url']) ?>" title="Перейти по ссылке">
-                    <div class="post-link__info-wrapper">
-                        <div class="post-link__icon-wrapper">
-                            <img src="https://www.google.com/s2/favicons?domain=<?= esc($post['link_url']) ?>" alt="Иконка">
-                        </div>
-                        <div class="post-link__info">
-                            <h3><?= esc($post['title']) ?></h3>
-                        </div>
+        <div class="post-link__wrapper">
+            <a class="post-link__external" href="<?= esc($post['link_url']) ?>" title="Перейти по ссылке">
+                <div class="post-link__info-wrapper">
+                    <div class="post-link__icon-wrapper">
+                        <img src="https://www.google.com/s2/favicons?domain=<?= esc($post['link_url']) ?>" alt="Иконка">
                     </div>
-                    <span><?= esc($post['link_url']) ?></span>
-                </a>
-            </div>
+                    <div class="post-link__info">
+                        <h3><?= esc($post['title']) ?></h3>
+                    </div>
+                </div>
+                <span><?= esc($post['link_url']) ?></span>
+            </a>
+        </div>
         <? endif; ?>
     </div>
     <footer class="post__footer">

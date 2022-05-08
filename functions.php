@@ -158,7 +158,7 @@ function validate_url($url)
  * @param string ссылка
  * @return mixed текст ошибки или null
  */
-function validate_email ($email)
+function validate_email($email)
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Неправильный формат почты';

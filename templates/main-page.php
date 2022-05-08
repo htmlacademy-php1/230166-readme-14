@@ -74,7 +74,7 @@
                             <label class="visually-hidden">Логин</label>
                         </div>
                         <?php if (isset($errors['login'])) : ?>
-                            <span class="form__error-label form__error-label--login"><?= $errors['login'] ?></span>
+                        <span class="form__error-label form__error-label--login"><?= $errors['login'] ?></span>
                         <? endif; ?>
                     </div>
                     <div class="authorization__input-wrapper form__input-wrapper">
@@ -92,7 +92,7 @@
                             <label class="visually-hidden">Пароль</label>
                         </div>
                         <?php if (isset($errors['password'])) : ?>
-                            <span class="form__error-label"><?= $errors['password'] ?></span>
+                        <span class="form__error-label"><?= $errors['password'] ?></span>
                         <? endif ?>
                     </div>
                     <a class="authorization__recovery" href="#">Восстановить пароль</a>
