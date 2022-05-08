@@ -7,7 +7,8 @@
  * @param int $limit
  * @return string обрезанный текст
 */
-function crop_text(string $input, $post_id, int $limit = 300):string {
+function crop_text(string $input, $post_id, int $limit = 300): string
+{
     if (mb_strlen($input, 'utf-8') < $limit) {
         return '<p>' . $input . '</p>';
     }
@@ -34,7 +35,8 @@ function crop_text(string $input, $post_id, int $limit = 300):string {
  * @param string данные от пользователя
  * @return string безопасные данные от пользователя
 */
-function esc($input):string {
+function esc($input): string
+{
     return htmlspecialchars($input);
 }
 
@@ -43,7 +45,8 @@ function esc($input):string {
  * @param string дата в Unix формате
  * @return string дата относительно текущего времени
 */
-function get_relative_date(string $input):string {
+function get_relative_date(string $input): string
+{
     $cur_date = time();
     $post_date = strtotime($input);
     $dif_date = $cur_date - $post_date;
@@ -77,7 +80,8 @@ function get_relative_date(string $input):string {
  * @param string дата в Unix формате Timestamp
  * @return string
 */
-function get_date_for_title(string $input):string {
+function get_date_for_title(string $input):string
+{
     return date('d.m.Y H:i', strtotime($input));
 }
 
@@ -87,7 +91,8 @@ function get_date_for_title(string $input):string {
  * @param array $reqiured обязательные поля
  * @return array
 */
-function get_required_errors($array, $required) {
+function get_required_errors($array, $required)
+{
     $errors = [];
 
     foreach ($array as $key => $value) {
@@ -106,7 +111,8 @@ function get_required_errors($array, $required) {
  * @param array $allowed_list Список существующих категорий
  * @return string Текст сообщения об ошибке
  */
-function validate_length($value, $min, $max) {
+function validate_length($value, $min, $max)
+{
     if ($value) {
         $len = strlen($value);
         if ($len < $min or $len > $max) {
@@ -122,7 +128,8 @@ function validate_length($value, $min, $max) {
  * @param object $result_query mysqli Результат запроса к базе данных
  * @return array
  */
-function fetch_result($result) {
+function fetch_result($result)
+{
     $row = mysqli_num_rows($result);
 
     if ($row === 1) {
@@ -137,7 +144,8 @@ function fetch_result($result) {
  * @param string ссылка
  * @return mixed текст ошибки или null
  */
-function validate_url($url) {
+function validate_url($url)
+{
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         return 'Неправильный формат ссылки';
     }
@@ -150,7 +158,8 @@ function validate_url($url) {
  * @param string ссылка
  * @return mixed текст ошибки или null
  */
-function validate_email ($email) {
+function validate_email ($email)
+{
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Неправильный формат почты';
     }
@@ -163,8 +172,8 @@ function validate_email ($email) {
  * @param string $url ссылка на видео
  * @return string Ошибку если валидация не прошла
  */
-function validate_youtube_url($url) {
-
+function validate_youtube_url($url)
+{
     $id = extract_youtube_id($url);
 
     set_error_handler(function () {}, E_WARNING);
@@ -189,7 +198,8 @@ function validate_youtube_url($url) {
  * @param string $url ссылка на видео
  * @return string Ошибку если валидация не прошла
  */
-function trim_array($array) {
+function trim_array($array)
+{
     $output_array = [];
 
     foreach($array as $key => $value) {
@@ -205,7 +215,8 @@ function trim_array($array) {
  * @param string $url ссылка на видео
  * @return string Ошибку если валидация не прошла
  */
-function get_page_name() {
+function get_page_name()
+{
     $url = $_SERVER['REQUEST_URI'];
     $url = explode('?', $url);
     $url = $url[0];
@@ -219,7 +230,8 @@ function get_page_name() {
  * @param array $allowed_list Список существующих категорий
  * @return string Текст сообщения об ошибке
  */
-function check_id($array, $id) {
+function check_id($array, $id)
+{
     $ids = array_column($array, 'id');
 
     if (!in_array($id, $ids)) {

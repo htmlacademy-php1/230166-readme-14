@@ -5,28 +5,28 @@
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper <?= $post['type_class']; ?>">
                 <div class="post-details__main-block post post--details">
-                    <?php if ($post['type_id'] === '1'): ?>
+                    <?php if ($post['type_id'] === '1') : ?>
                         <?= include_template('post-text.php', [
                                 'text' => $post['text']
                             ]);
                         ?>
-                    <?php elseif($post['type_id'] === '2'): ?>
+                    <?php elseif($post['type_id'] === '2') : ?>
                         <?= include_template('post-quote.php', [
                                 'quote' => $post['quote'],
                                 'author' => $post['caption']
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '3'): ?>
+                    <?php elseif ($post['type_id'] === '3') : ?>
                         <?= include_template('post-photo.php', [
                                 'photo_url' => $post['photo_url'],
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '4'): ?>
+                    <?php elseif ($post['type_id'] === '4') : ?>
                         <?= include_template('post-video.php', [
                                 'video_url' => $post['video_url'],
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '5'): ?>
+                    <?php elseif ($post['type_id'] === '5') : ?>
                         <?= include_template('post-link.php', [
                                 'link_url' => $post['link_url'],
                                 'title' => $post['title'],
@@ -65,7 +65,7 @@
                     </span>
                 </div>
                 <ul class="post__tags">
-                    <?php foreach ($tags as $tag): ?>
+                    <?php foreach ($tags as $tag) : ?>
                         <li><a href="#"><?= $tag['text'] ?></a></li>
                     <? endforeach ?>
                 </ul>
@@ -91,9 +91,9 @@
                     </form>
 
                     <div class="comments__list-wrapper">
-                        <?php if ($comments): ?>
+                        <?php if ($comments) : ?>
                             <ul class="comments__list">
-                                <?php foreach($comments_start as $comment): ?>
+                                <?php foreach($comments_start as $comment) : ?>
                                     <li class="comments__item user">
                                         <div class="comments__avatar">
                                             <a class="user__avatar-link" href="#">
@@ -116,8 +116,8 @@
                                         </div>
                                     </li>
                                 <? endforeach; ?>
-                                <?php if($is_show_comments): ?>
-                                    <?php foreach($comments_more as $comment): ?>
+                                <?php if($is_show_comments) : ?>
+                                    <?php foreach($comments_more as $comment) : ?>
                                         <li class="comments__item user">
                                             <div class="comments__avatar">
                                                 <a class="user__avatar-link" href="#">
@@ -142,7 +142,7 @@
                                     <? endforeach; ?>
                                 <? endif; ?>
                             </ul>
-                            <?php if ($count_comments > 2 && !$is_show_comments): ?>
+                            <?php if ($count_comments > 2 && !$is_show_comments) : ?>
                                 <a class="comments__more-link" href="/post.php?post_id=<?= $post['post_id']; ?>&is_show_comments=true">
                                     <span>Показать все комментарии</span>
                                     <sup class="comments__amount"><?= $count_comments; ?></sup>

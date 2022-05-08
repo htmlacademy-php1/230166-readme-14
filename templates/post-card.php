@@ -6,24 +6,24 @@
     </header>
     <div class="post__main">
         <!--содержимое для поста-текста-->
-        <?php if ($post['type_id'] === '1'): ?>
+        <?php if ($post['type_id'] === '1') : ?>
             <?= crop_text(esc($post['text']), $post['id'], 300) ?>
 
         <!--содержимое для поста-цитаты-->
-        <?php elseif ($post['type_id'] === '2'): ?>
+        <?php elseif ($post['type_id'] === '2') : ?>
             <blockquote>
                 <p><?= esc($post['quote']) ?></p>
                 <cite><?= esc($post['caption']) ?></cite>
             </blockquote>
 
         <!--содержимое для поста-фото-->
-        <?php elseif ($post['type_id'] === '3'): ?>
+        <?php elseif ($post['type_id'] === '3') : ?>
             <div class="post-photo__image-wrapper">
                 <img src="<?= esc($post['photo_url']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
 
         <!--содержимое для поста-видео-->
-        <?php elseif ($post['type_id'] === '4'): ?>
+        <?php elseif ($post['type_id'] === '4') : ?>
             <div class="post-video__block">
                 <div class="post-video__preview">
                     <?=embed_youtube_cover(esc($post['video_url'])); ?>
@@ -38,7 +38,7 @@
             </div>
 
         <!--содержимое для поста-ссылки-->
-        <?php elseif ($post['type_id'] === '5'): ?>
+        <?php elseif ($post['type_id'] === '5') : ?>
             <div class="post-link__wrapper">
                 <a class="post-link__external" href="<?= esc($post['link_url']) ?>" title="Перейти по ссылке">
                     <div class="post-link__info-wrapper">

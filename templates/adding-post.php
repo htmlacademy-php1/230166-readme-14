@@ -7,7 +7,7 @@
             <div class="adding-post__tabs-wrapper tabs">
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
-                        <?php foreach($types as $type): ?>
+                        <?php foreach($types as $type) : ?>
                             <?php $classnames = $type_id === (int)$type['id'] ? 'filters__button--active tabs__item tabs__item--active' : ''; ?>
                             <li class="adding-post__tabs-item filters__item">
                                 <a
@@ -25,8 +25,8 @@
                 </div>
                 <!-- <?= $errors['type'] ?? ''; ?> -->
                 <div class="adding-post__tab-content">
-                    <?php foreach($types as $type): ?>
-                        <?php if ((int)$type['id'] === $type_id): ?>
+                    <?php foreach($types as $type) : ?>
+                        <?php if ((int)$type['id'] === $type_id) : ?>
                             <?= include_template("adding-post-{$type['class']}.php", [
                                     'type' => $type,
                                     'errors' => $errors,

@@ -42,7 +42,7 @@
                             <span>Все</span>
                         </a>
                     </li>
-                    <?php foreach($types as $type): ?>
+                    <?php foreach($types as $type) : ?>
                         <?php $classnames = (int)filter_get_parametr('type_id') === $type['id'] ? 'filters__button--active' : ''; ?>
                         <li class="popular__filters-item filters__item">
                             <a
@@ -61,7 +61,7 @@
         </div>
 
         <div class="popular__posts">
-            <?php foreach($popular_posts as $post): ?>
+            <?php foreach($popular_posts as $post) : ?>
                 <?= include_template('post-card.php', [
                         'post' => $post,
                     ]);

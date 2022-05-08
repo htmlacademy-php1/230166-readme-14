@@ -21,7 +21,7 @@
                     micro blogging
                 </p>
             </div>
-            <?php if($user): ?>
+            <?php if($user) : ?>
                 <form class="header__search-form form" action="#" method="get">
                     <div class="header__search">
                         <label class="visually-hidden">Поиск</label>

@@ -73,7 +73,7 @@
                             </svg>
                             <label class="visually-hidden">Логин</label>
                         </div>
-                        <?php if (isset($errors['login'])): ?>
+                        <?php if (isset($errors['login'])) : ?>
                             <span class="form__error-label form__error-label--login"><?= $errors['login'] ?></span>
                         <? endif; ?>
                     </div>
@@ -91,7 +91,7 @@
                             </svg>
                             <label class="visually-hidden">Пароль</label>
                         </div>
-                        <?php if (isset($errors['password'])): ?>
+                        <?php if (isset($errors['password'])) : ?>
                             <span class="form__error-label"><?= $errors['password'] ?></span>
                         <? endif ?>
                     </div>
