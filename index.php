@@ -39,14 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page_content = include_template('main.php', [
+$main_leyout = include_template('main.php', [
+    'page_title' => $page_title,
     'form' => $form,
     'errors' => $errors
-]);
-
-$main_leyout = include_template('main-layout.php', [
-    'page_title' => $page_title,
-    'page_content' => $page_content,
 ]);
 
 print($main_layout);
