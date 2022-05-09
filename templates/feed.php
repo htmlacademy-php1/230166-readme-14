@@ -29,17 +29,17 @@
                             <div class="post__buttons">
                             <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
-                                <use xlink:href="#icon-heart"></use>
+                                <   use xlink:href="#icon-heart"></use>
                                 </svg>
                                 <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                                <use xlink:href="#icon-heart-active"></use>
+                                    <use xlink:href="#icon-heart-active"></use>
                                 </svg>
                                 <span>250</span>
                                 <span class="visually-hidden">количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                                 <svg class="post__indicator-icon" width="19" height="17">
-                                <use xlink:href="#icon-comment"></use>
+                                    <use xlink:href="#icon-comment"></use>
                                 </svg>
                                 <span>25</span>
                                 <span class="visually-hidden">количество комментариев</span>
@@ -280,51 +280,23 @@
                 </div>
             </div>
             <ul class="feed__filters filters">
+                <?php $classname = is_null(filter_input(INPUT_GET, 'type_id')) ? 'filters__button--active' : ''; ?>
                 <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--active" href="#">
+                    <a class="filters__button <?= $classnames; ?>" href="#">
                         <span>Все</span>
                     </a>
                 </li>
+                <?php foreach($types as $type) : ?>
+                <?php $classnames = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT) === $type['id'] ? 'filters__button--active' : ''; ?>
                 <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--photo button" href="#">
-                        <span class="visually-hidden">Фото</span>
-                        <svg class="filters__icon" width="22" height="18">
-                            <use xlink:href="#icon-filter-photo"></use>
+                    <a class="filters__button filters__button--photo button <?= $classnames; ?>" href="?type_id=<?= $type['id']; ?>">
+                        <span class="visually-hidden"><?= $type['name']; ?></span>
+                        <svg class="filters__icon" width="<?= $type['icon_width'] ?>" height="<?= $type['icon_height']; ?>">
+                            <use xlink:href="#icon-filter-<?= $type['class']; ?>"></use>
                         </svg>
                     </a>
                 </li>
-                <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--video button" href="#">
-                        <span class="visually-hidden">Видео</span>
-                        <svg class="filters__icon" width="24" height="16">
-                            <use xlink:href="#icon-filter-video"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--text button" href="#">
-                        <span class="visually-hidden">Текст</span>
-                        <svg class="filters__icon" width="20" height="21">
-                            <use xlink:href="#icon-filter-text"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--quote button" href="#">
-                        <span class="visually-hidden">Цитата</span>
-                        <svg class="filters__icon" width="21" height="20">
-                            <use xlink:href="#icon-filter-quote"></use>
-                        </svg>
-                    </a>
-                </li>
-                <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--link button" href="#">
-                        <span class="visually-hidden">Ссылка</span>
-                        <svg class="filters__icon" width="21" height="18">
-                            <use xlink:href="#icon-filter-link"></use>
-                        </svg>
-                    </a>
-                </li>
+                <? endforeach; ?>
             </ul>
         </section>
         <aside class="promo">

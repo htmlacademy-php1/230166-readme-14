@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config/init.php';
 
 if (!isset($_SESSION['user'])) {
@@ -11,7 +12,7 @@ $type_id = filter_get_parametr('type_id');
 
 $types = get_all_types($con);
 
-// Валидация типа контента
+// Валидация на отстутствие типа контента
 if ($type_id && check_id($types, $type_id)) {
     show_error("Такая категория пока не создана.");
 }

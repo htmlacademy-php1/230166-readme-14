@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config/init.php';
 
 $page_title = 'readme: публикация';

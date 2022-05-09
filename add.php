@@ -1,9 +1,10 @@
 <?php
+
 require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
 
-$type_id = (int)filter_get_parametr('type_id');
+$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
 $errors = [];
 $post = [];
 $tag = NULL;

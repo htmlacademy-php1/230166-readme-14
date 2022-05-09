@@ -31,10 +31,10 @@ CREATE TABLE post (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id INT,
   type_id INT,
-  title VARCHAR(256) NOT NULL,
+  title TEXT NOT NULL,
   text TEXT DEFAULT NULL,
   quote TEXT DEFAULT NULL,
-  caption VARCHAR(256) DEFAULT NULL,
+  caption TEXT DEFAULT NULL,
   photo_url VARCHAR(256) DEFAULT NULL,
   video_url VARCHAR(256) DEFAULT NULL,
   link_url VARCHAR(256) DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE comment (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id INT,
   post_id INT,
-  text MEDIUMTEXT NOT NULL,
+  text TEXT NOT NULL,
 
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (post_id) REFERENCES post(id)
@@ -80,7 +80,7 @@ CREATE TABLE message (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id_sender INT,
   user_id_recipient INT,
-  content MEDIUMTEXT NOT NULL,
+  content TEXT NOT NULL,
 
   FOREIGN KEY (user_id_sender) REFERENCES user(id),
   FOREIGN KEY (user_id_recipient) REFERENCES user(id)
@@ -88,7 +88,7 @@ CREATE TABLE message (
 
 CREATE TABLE tag (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  text VARCHAR(255)
+  text TINYTEXT NOT NULL
 );
 
 CREATE TABLE post_tag (
