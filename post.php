@@ -4,19 +4,19 @@ require_once 'config/init.php';
 
 $page_title = 'readme: публикация';
 
-$post_id = (int) filter_get_parametr('post_id');
+$post_id = filter_input(INPUT_GET, 'post_id', FILTER_SANITIZE_NUMBER_INT);
 
-$posts = get_all_posts($con);
+$post_ids = get_post_ids($con);
 
 // Валидация типа контента
-if (check_id($posts, $post_id)) {
+if (check_id($post_ids, $post_id)) {
     show_error("Пост будет написан в ближайшее время.");
 }
 
 $post = get_post($con, $post_id);
 $comments = get_comments($con, $post_id);
 $user_id = (int) $post['user_id'];
-$is_show_comments = filter_get_parametr('is_show_comments');
+$is_show_comments = filter_input(INPUT_GET, 'is_show_comments');
 $new_comment = [];
 $errors = [];
 $required = [
@@ -48,10 +48,8 @@ $page_content = include_template('post-details.php', [
     'comments' => $comments,
     'comments_start' => array_slice($comments, 0, 2),
     'comments_more' => array_slice($comments, 2),
-    'count_favs' => get_count_favs($con, $post_id),
-    'count_posts' => get_count_posts($con, $user_id),
-    'count_subscribes' => get_count_subscribers($con, $user_id),
-    'count_comments' => count($comments),
+    'user_count_posts' => get_count_posts($con, $user_id),
+    'user_count_subscribes' => get_count_subscribers($con, $user_id),
     'tags' => get_tags($con, $post_id),
     'is_show_comments' => $is_show_comments,
     'new_comment' => $new_comment,

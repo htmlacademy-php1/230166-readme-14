@@ -4,15 +4,16 @@ require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
 
-$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
+$type_id = (int) filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
+
 $errors = [];
 $post = [];
 $tag = NULL;
 
 $types = get_all_types($con);
 
-// Валидация типа контента
-if (check_id($types, $type_id)) {
+// Проверяем есть ли текущий id в категориях
+if ($type_id && check_id($types, $type_id)) {
     show_error("Такая категория пока не создана.");
 }
 
@@ -28,7 +29,7 @@ $required = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $type_id = (int)filter_post_parametr('type_id');
+    $type_id = filter_input(INPUT_POST, 'type_id', FILTER_SANITIZE_NUMBER_INT);
     $file_name = $_FILES['img_file']['name'] ?? NULL;
 
     switch ($type_id) {
@@ -46,14 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 3:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'photo_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES (1, ?, ?, ?)";
-            // Валидация записи типа «Картинка»
             $errors['photo_url'] = !$file_name && !$post['photo_url'] ? 'Вы не загрузили файл' : NULL;
             break;
         // Видео
         case 4:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'video_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES (1, ?, ?, ?)";
-            // Валидация записи типа «Видео
             $video_url = $post['video_url'];
             $errors['video_url'] = validate_url($video_url);
             if (!$errors['video_url']) {
@@ -64,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 5:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'link_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, link_url) VALUES (1, ?, ?, ?)";
-            // Валидация поля «Ссылка из интернета»
             $link_url = $post['link_url'];
             $errors['link_url'] = validate_url($link_url);
             break;
@@ -76,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
-        // Валидация поля «Выбор файла» на допустимые форматы
         if ($file_type === 'image/jpeg') {
             $ext = '.jpg';
         } elseif ($file_type === 'image/png') {
@@ -94,17 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // Получение тегов из массива POST, обрезаем пробелы вначале и в конце, и переводим в безопасные символы
-    $tag = trim(filter_post_parametr('tag'));
-    // Объединение в один массив данные для поста и тэгов для проверки валидации на обязательные поля
+    $tag = trim(filter_input(INPUT_POST, 'tag'));
     $all_input = $post;
     $all_input['tag'] = $tag;
 
-    // Получение ошибок для всех обязательных полей
     $required_errors = get_required_errors($all_input, $required);
-    // Объеденение ошибок, если есть незаполненные обязательные поля, то они перезапишут предыдущие ошибки
     $errors = array_merge($errors, $required_errors);
-    // Удаление из ошибок пустых значений
     $errors = array_filter($errors);
 
     if(empty($errors)) {

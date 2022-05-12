@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $page_title = 'readme: популярное';
-$type_id = filter_get_parametr('type_id');
+$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
 
 $types = get_all_types($con);
 
@@ -18,7 +18,7 @@ if ($type_id && check_id($types, $type_id)) {
 }
 
 $page_content = include_template('popular.php', [
-    'popular_posts' => get_popular_posts($con, $type_id),
+    'popular_posts' => get_all_posts($con, $type_id),
     'types' => get_all_types($con)
 ]);
 

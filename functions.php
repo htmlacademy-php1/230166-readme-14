@@ -213,8 +213,8 @@ function trim_array($array)
 
 /**
  * Получение названия страницы
- * @param string $url ссылка на видео
- * @return string Ошибку если валидация не прошла
+ * @param string $url
+ * @return string
  */
 function get_page_name()
 {

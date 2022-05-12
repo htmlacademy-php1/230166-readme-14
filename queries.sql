@@ -113,7 +113,7 @@ INSERT INTO comment
 INSERT INTO fav (user_id, post_id) VALUES (1, 1), (1, 2), (2, 1), (3, 1);
 
 -- подписки
-INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (1, 2), (2, 1), (3, 1), (4, 1);
+INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (1, 2), (2, 1), (3, 1), (4, 1), (1, 3), (1, 4);
 
 -- хэштеги
 INSERT INTO tag (text) VALUES ('#nature'), ('#globe'), ('#photooftheday'), ('#canon'), ('#landscape'), ('#щикарныйвид');
@@ -137,5 +137,3 @@ SELECT c.created_at, c.text, u.login FROM comment c
   JOIN post p ON c.post_id = p.id
   JOIN user u ON c.user_id = u.id
   WHERE p.id = 2;
-
-

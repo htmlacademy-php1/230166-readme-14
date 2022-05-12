@@ -8,16 +8,23 @@ if (!isset($_SESSION['user'])) {
 }
 
 $page_title = 'readme: публикация';
-$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
+$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT) ?? NULL;
 $types = get_all_types($con);
 
+
 // Валидация типа контента
-if (check_id($types, $type_id)) {
+if ($type_id && check_id($types, $type_id)) {
     show_error("Такая категория пока не создана.");
 }
 
+$publishers = get_user_id_publishers($con, 1);
+$publisher_ids = array_column($publishers, 'user_id_publisher');
+$feed_posts = get_feed_posts($con, $publisher_ids);
+
 $page_content = include_template('feed.php', [
+    'type_id' => $type_id,
     'types' => $types,
+    'posts' => $feed_posts
 ]);
 
 $page_layout = include_template('page-layout.php', [

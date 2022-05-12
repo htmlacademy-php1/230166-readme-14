@@ -5,28 +5,28 @@
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper <?= $post['type_class']; ?>">
                 <div class="post-details__main-block post post--details">
-                    <?php if ($post['type_id'] === '1') : ?>
+                    <?php if ((int)$post['type_id'] === 1) : ?>
                         <?= include_template('post-text.php', [
                                 'text' => $post['text']
                             ]);
                         ?>
-                    <?php elseif($post['type_id'] === '2') : ?>
+                    <?php elseif((int)$post['type_id'] === 2) : ?>
                         <?= include_template('post-quote.php', [
                                 'quote' => $post['quote'],
                                 'author' => $post['caption']
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '3') : ?>
+                    <?php elseif ((int)$post['type_id'] === 3) : ?>
                         <?= include_template('post-photo.php', [
                                 'photo_url' => $post['photo_url'],
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '4') : ?>
+                    <?php elseif ((int)$post['type_id'] === 4) : ?>
                         <?= include_template('post-video.php', [
                                 'video_url' => $post['video_url'],
                             ]);
                         ?>
-                    <?php elseif ($post['type_id'] === '5') : ?>
+                    <?php elseif ((int)$post['type_id'] === 5) : ?>
                         <?= include_template('post-link.php', [
                                 'link_url' => $post['link_url'],
                                 'title' => $post['title'],
@@ -42,14 +42,14 @@
                         <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                             <use xlink:href="#icon-heart-active"></use>
                         </svg>
-                        <span><?= $count_favs; ?></span>
+                        <span><?= $post['count_favs']; ?></span>
                         <span class="visually-hidden">количество лайков</span>
                     </a>
                     <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                         <svg class="post__indicator-icon" width="19" height="17">
                             <use xlink:href="#icon-comment"></use>
                         </svg>
-                        <span><?= $count_comments; ?></span>
+                        <span><?= $post['count_comments']; ?></span>
                         <span class="visually-hidden">количество комментариев</span>
                     </a>
                     <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
@@ -142,10 +142,10 @@
                                     <? endforeach; ?>
                                 <? endif; ?>
                             </ul>
-                            <?php if ($count_comments > 2 && !$is_show_comments) : ?>
+                            <?php if ($post['count_comments'] > 2 && !$is_show_comments) : ?>
                                 <a class="comments__more-link" href="/post.php?post_id=<?= $post['post_id']; ?>&is_show_comments=true">
                                     <span>Показать все комментарии</span>
-                                    <sup class="comments__amount"><?= $count_comments; ?></sup>
+                                    <sup class="comments__amount"><?= $post['count_comments']; ?></sup>
                                 </a>
                             <? endif; ?>
                         <? endif; ?>
@@ -171,12 +171,12 @@
                     </div>
                     <div class="post-details__rating user__rating">
                         <p class="post-details__rating-item user__rating-item user__rating-item--subscribers">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $count_subscribes; ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($count_subscribes, 'подписчик', 'подписчика', 'подписчиков'); ?></span>
+                            <span class="post-details__rating-amount user__rating-amount"><?= $user_count_subscribes; ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user_count_subscribes, 'подписчик', 'подписчика', 'подписчиков'); ?></span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $count_posts; ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($count_posts, 'публикация', 'публикации', 'публикаций'); ?></span>
+                            <span class="post-details__rating-amount user__rating-amount"><?= $user_count_posts; ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user_count_posts, 'публикация', 'публикации', 'публикаций'); ?></span>
                         </p>
                     </div>
                     <div class="post-details__user-buttons user__buttons">

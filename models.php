@@ -19,26 +19,6 @@ function show_error($error)
 }
 
 /**
- * Получение данных из массива GET
- * @param string $name Имя параметра
- * @return mixed
-*/
-function filter_get_parametr($name)
-{
-    return filter_input(INPUT_GET, $name);
-}
-
-/**
- * Получение данных из массива POST
- * @param string $name
- * @return mixed
-*/
-function filter_post_parametr($name)
-{
-    return filter_input(INPUT_POST, $name);
-}
-
-/**
  * Получение всех типов контента для постов
  * @param mysqli $con Ресурс соединения
  * @return array or string
@@ -54,7 +34,6 @@ function get_all_types($con)
 
     show_error(mysqli_error($con));
 }
-
 
 /**
  * Получение одного типа контента по id
@@ -79,9 +58,9 @@ function get_type($con, $type_id)
  * @param mysqli $con Ресурс соединения
  * @return array
 */
-function get_all_posts($con)
+function get_post_ids($con)
 {
-    $sql = "SELECT * FROM post";
+    $sql = "SELECT * FROM post ORDER BY created_at";
 
     $result = mysqli_query($con, $sql);
 
@@ -98,36 +77,36 @@ function get_all_posts($con)
  * @param int $type_id
  * @return array
 */
-function get_popular_posts($con, $type_id)
+function get_all_posts($con, $type_id = NULL)
 {
-    if ($type_id) {
+    if (!$type_id) {
+        $sql = "SELECT p.id, p.created_at, p.user_id, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
+            JOIN user u ON p.user_id = u.id
+            JOIN type t ON p.type_id = t.id
+            ORDER BY p.created_at";
+
+    } else {
         $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.quote, p.text, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
             WHERE type_id =" . (int)$type_id .
-            " ORDER BY p.created_at DESC LIMIT 6";
-    }
-    else {
-        $sql = "SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
-            JOIN user u ON p.user_id = u.id
-            JOIN type t ON p.type_id = t.id
-            ORDER BY p.created_at DESC LIMIT 6";
+            " ORDER BY p.created_at";
     }
 
     $result = mysqli_query($con, $sql);
 
     if ($result) {
         $arr = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $popular_posts = [];
+        $posts = [];
 
         foreach($arr as $post) {
             $post_id = $post['id'];
             $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
-            $popular_posts[] = $post;
+            $posts[] = $post;
         }
 
-        return $popular_posts;
+        return $posts;
     }
 
     show_error(mysqli_error($con));
@@ -153,7 +132,11 @@ function get_post(object $con, int $post_id)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        return mysqli_fetch_assoc($result);
+        $post =  mysqli_fetch_assoc($result);
+        $post['count_favs'] = get_count_favs($con, $post_id);
+        $post['count_comments'] = get_count_comments($con, $post_id);
+
+        return $post;
     }
 
     show_error(mysqli_error($con));
@@ -174,7 +157,7 @@ function get_comments($con, $post_id)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);;
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
     show_error(mysqli_error($con));
@@ -306,7 +289,7 @@ function get_user_by_email($con, $email)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-       return mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return mysqli_fetch_assoc($result);
     }
 
     return NULL;
@@ -315,7 +298,7 @@ function get_user_by_email($con, $email)
 /**
  * Проверка на существование пользователя по логину
  * @param mysqli $con Ресурс соединения
- * @param int $user_id
+ * @param int $login
  * @return int
 */
 function check_user_login($con, $login)
@@ -329,4 +312,71 @@ function check_user_login($con, $login)
     }
 
     return NULL;
+}
+
+/**
+ * Получение id юзеров на каторый подписан залогиненный пользователь
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
+ * @return int
+*/
+function get_user_id_publishers($con, $user_id)
+{
+    $user_id = mysqli_real_escape_string($con, $user_id);
+    $sql = "SELECT user_id_publisher FROM subscribe WHERE user_id_subscriber = $user_id";
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    show_error(mysqli_error($con));
+}
+
+
+/**
+ * Получение постов на которые подписан юзер
+ * @param mysqli $con Ресурс соединения
+ * @param array $publishers id юзеров на которые подписан пользователь
+ * @return int
+*/
+function get_feed_posts($con, $publishers)
+{
+    $posts = get_all_posts($con);
+    $feed_posts = [];
+
+    foreach($posts as $key => $post) {
+        foreach($publishers as $publisher) {
+            if ($post['user_id'] === $publisher) {
+                $feed_posts[] = $post;
+            }
+        }
+    }
+
+    return $feed_posts;
+}
+
+/**
+ * Получение постов для результатов поиска
+ * @param mysqli $con Ресурс соединения
+ * @param array $publishers id юзеров на которые подписан пользователь
+ * @return int
+*/
+function get_search_results($con, $search)
+{
+    $sql = "SELECT p.id, p.created_at, p.user_id, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p
+            JOIN user u ON p.user_id = u.id
+            JOIN type t ON p.type_id = t.id
+            WHERE MATCH(p.title, p.text) AGAINST(?)
+            ORDER BY p.created_at";
+
+    $stmt = db_get_prepare_stmt($con, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    show_error(mysqli_error($con));
 }
