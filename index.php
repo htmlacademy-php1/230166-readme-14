@@ -21,17 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $errors = array_filter($errors);
+    $current_user = get_user_by_email($con, $form['login']);
 
-    // Получение юзера или NULL
-    $user = get_user_by_email($con, $form['login']);
-
-    if (empty($errors) and !$user) {
+    if (empty($errors) and !$current_user) {
         $errors['login'] = 'Такой пользователь не найден';
     }
 
-    if (empty($errors) and $user) {
-        if (password_verify($form['password'], $user['password'])) {
-            $_SESSION['user'] = $user;
+    if (empty($errors) and $current_user) {
+        if (password_verify($form['password'], $current_user['password'])) {
+            $_SESSION['current_user'] = $current_user;
         } else {
             $errors['password'] = "Пароли не совпадают";
         }

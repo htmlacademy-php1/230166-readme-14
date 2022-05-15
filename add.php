@@ -4,15 +4,14 @@ require_once 'config/init.php';
 
 $page_title = 'readme: добавление публикации';
 
-$type_id = (int) filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT);
+$type_id = intval(filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT));
 
 $errors = [];
 $post = [];
-$tag = NULL;
+$tags = '';
 
 $types = get_all_types($con);
 
-// Проверяем есть ли текущий id в категориях
 if ($type_id && check_id($types, $type_id)) {
     show_error("Такая категория пока не создана.");
 }
@@ -21,7 +20,7 @@ if ($type_id && check_id($types, $type_id)) {
 $required = [
     'title' => 'Заголовок',
     'text' => 'Текст поста',
-    'tag' => 'Тэги',
+    'tags' => 'Тэги',
     'link_url' => 'Ссылка',
     'quote' => 'Текст цитаты',
     'caption' => 'Автор',
@@ -29,7 +28,6 @@ $required = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $type_id = filter_input(INPUT_POST, 'type_id', FILTER_SANITIZE_NUMBER_INT);
     $file_name = $_FILES['img_file']['name'] ?? NULL;
 
     switch ($type_id) {
@@ -91,13 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    $tag = trim(filter_input(INPUT_POST, 'tag'));
+    $tags = trim(filter_input(INPUT_POST, 'tags'));
+
     $all_input = $post;
-    $all_input['tag'] = $tag;
+    $all_input['tags'] = $tags;
 
     $required_errors = get_required_errors($all_input, $required);
     $errors = array_merge($errors, $required_errors);
     $errors = array_filter($errors);
+    var_dump($errors);
 
     if(empty($errors)) {
         $stmt = db_get_prepare_stmt($con, $sql, $post);
@@ -106,8 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result) {
             $post_id = mysqli_insert_id($con);
 
-            // Привязка тегов к публикации
-            $tags = explode(' ', $tag);
+            $tags = insert_first_sign($tags, '#');
 
             foreach ($tags as $tag) {
                 $sql = "SELECT * FROM tag WHERE text = '{$tag}'";
@@ -139,12 +138,12 @@ $page_content = include_template('adding-post.php', [
     'errors' => $errors,
     'type_id' => $type_id,
     'post' => $post,
-    'tag' => $tag
+    'tags' => $tags
 ]);
 
 $page_layout = include_template('page-layout.php', [
     'page_title' => $page_title,
-    'user' => $user,
+    'current_user' => $current_user,
     'page_content' => $page_content
 ]);
 

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $file_name = $_FILES['avatar']['name'] ?? NULL;
 
     // Валидация обязательных полей
-    // $errors = get_required_errors($form, $required);
+    $errors = get_required_errors($form, $required);
 
     // Валидация формата почты
     if (!isset($errors['email'])) {
@@ -55,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
-        // Валидация поля «Выбор файла» на допустимые форматы
         if ($file_type === 'image/jpeg') {
             $ext = '.jpg';
         } elseif ($file_type === 'image/png') {
@@ -100,8 +99,6 @@ $page_content = include_template('reg.php', [
 
 $page_layout = include_template('page-layout.php', [
     'page_title' => $page_title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'page_content' => $page_content
 ]);
 

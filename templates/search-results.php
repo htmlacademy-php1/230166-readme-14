@@ -30,28 +30,28 @@
                         <div class="post__main">
                             <h2><a href="post.php?post_id=<?= $post['id'] ?>"><?= $post['title']; ?></a></h2>
 
-                            <?php if ($post['type_id'] === 1) : ?>
+                            <?php if ((int)$post['type_id'] === 1) : ?>
                                 <?= include_template('post-text.php', [
                                         'text' => $post['text']
                                     ]);
                                 ?>
-                            <?php elseif($post['type_id'] === 2) : ?>
+                            <?php elseif((int)$post['type_id'] === 2) : ?>
                                 <?= include_template('post-quote.php', [
                                         'quote' => $post['quote'],
                                         'author' => $post['caption']
                                     ]);
                                 ?>
-                            <?php elseif ($post['type_id'] === 3) : ?>
+                            <?php elseif ((int)$post['type_id'] === 3) : ?>
                                 <?= include_template('post-photo.php', [
                                         'photo_url' => $post['photo_url'],
                                     ]);
                                 ?>
-                            <?php elseif ($post['type_id'] === 4) : ?>
+                            <?php elseif ((int)$post['type_id'] === 4) : ?>
                                 <?= include_template('post-video.php', [
                                         'video_url' => $post['video_url'],
                                     ]);
                                 ?>
-                            <?php elseif ($post['type_id'] === 5) : ?>
+                            <?php elseif ((int)$post['type_id'] === 5) : ?>
                                 <?= include_template('post-link.php', [
                                         'link_url' => $post['link_url'],
                                         'title' => $post['title'],

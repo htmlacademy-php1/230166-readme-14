@@ -7,31 +7,31 @@ INSERT INTO user
   SET email = 'elvira@mail.com',
       login = 'Эльвира Хайпулинова',
       password = '111111',
-      avatar = 'userpic-elvira.jpg';
+      avatar = 'img/userpic-elvira.jpg';
 
 INSERT INTO user
   SET email = 'tanya@mail.com',
       login = 'Таня Фирсова',
       password = '222222',
-      avatar = 'userpic-tanya.jpg';
+      avatar = 'img/userpic-tanya.jpg';
 
 INSERT INTO user
   SET email = 'petro@mail.com',
       login = 'Петр Демин',
       password = '333333',
-      avatar = 'userpic-petro.jpg';
+      avatar = 'img/userpic-petro.jpg';
 
 INSERT INTO user
   SET email = 'mark@mail.com',
       login = 'Марк Смолов',
       password = '444444',
-      avatar = 'userpic-mark.jpg';
+      avatar = 'img/userpic-mark.jpg';
 
 INSERT INTO user
   SET email = 'larisa@mail.com',
       login = 'Лариса Роговая',
       password = '555555',
-      avatar = 'userpic-larisa.jpg';
+      avatar = 'img/userpic-larisa.jpg';
 
 -- posts
 INSERT INTO post
@@ -118,7 +118,7 @@ INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (1, 2), (2,
 -- хэштеги
 INSERT INTO tag (text) VALUES ('#nature'), ('#globe'), ('#photooftheday'), ('#canon'), ('#landscape'), ('#щикарныйвид');
 
-INSERT INTO post_tag (post_id, tag_id) VALUES (1, 1), (1, 1), (1, 2), (1, 3), (1, 3), (1, 4), (2, 3), (3, 3), (3, 4);
+INSERT INTO post_tag (post_id, tag_id) VALUES (1, 1), (6, 1), (5, 1), (5, 2), (3, 1), (1, 2), (1, 3), (1, 3), (1, 4), (2, 3), (3, 3), (3, 4);
 
 -- получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента;
 SELECT p.id, p.created_at, u.login, u.avatar, t.id type_id, t.name, t.class, p.title, p.text, p.caption, p.photo_url, p.video_url, p.link_url, p.views FROM post p

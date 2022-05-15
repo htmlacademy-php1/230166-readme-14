@@ -21,7 +21,7 @@
                     micro blogging
                 </p>
             </div>
-            <?php if($user) : ?>
+            <?php if($current_user) : ?>
             <form class="header__search-form form" action="search.php" method="get">
                 <div class="header__search">
                     <label class="visually-hidden">Поиск</label>
@@ -42,17 +42,28 @@
                 <nav class="header__nav">
                     <ul class="header__my-nav">
                         <li class="header__my-page header__my-page--popular">
-                            <a class="header__page-link header__page-link--active" href="popular.php" title="Популярный контент">
+                            <a
+                                class="header__page-link <?= get_page_url($_SERVER['REQUEST_URI']) === '/popular.php' ? 'header__page-link--active' : '' ?>"
+                                href="popular.php"
+                                title="Популярный контент"
+                            >
                                 <span class="visually-hidden">Популярный контент</span>
                             </a>
                         </li>
                         <li class="header__my-page header__my-page--feed">
-                            <a class="header__page-link" href="feed.php" title="Моя лента">
+                            <a class="header__page-link <?= get_page_url($_SERVER['REQUEST_URI']) === '/feed.php' ? 'header__page-link--active' : '' ?>"
+                                href="feed.php"
+                                title="Моя лента"
+                            >
                                 <span class="visually-hidden">Моя лента</span>
                             </a>
                         </li>
                         <li class="header__my-page header__my-page--messages">
-                            <a class="header__page-link" href="messages.php" title="Личные сообщения">
+                            <a
+                                class="header__page-link <?= get_page_url($_SERVER['REQUEST_URI']) === '/messages.php' ? 'header__page-link--active' : '' ?>"
+                                href="messages.php"
+                                title="Личные сообщения"
+                            >
                                 <span class="visually-hidden">Личные сообщения</span>
                             </a>
                         </li>
@@ -62,10 +73,10 @@
                         <li class="header__profile">
                             <a class="header__profile-link" href="#">
                                 <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="<?= $user['avatar'] ?>" alt="Аватар профиля">
+                                    <img class="header__profile-avatar" src="<?= $current_user['avatar'] ?>" alt="Аватар профиля">
                                 </div>
                                 <div class="header__profile-name">
-                                    <span><?= $user['login'] ?></span>
+                                    <span><?= $current_user['login'] ?></span>
                                     <svg class="header__link-arrow" width="10" height="6">
                                         <use xlink:href="#icon-arrow-right-ad"></use>
                                     </svg>
@@ -75,7 +86,7 @@
                                 <div class="header__profile-tooltip">
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="profile.php?user_id=<?= $current_user['id'] ?>">
                                                 <span class="header__profile-nav-text">
                                                     Мой профиль
                                                 </span>

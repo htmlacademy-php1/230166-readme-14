@@ -4,10 +4,11 @@ require_once 'config/init.php';
 $page_title = 'readme: результаты поиска';
 $current_page = $_SERVER['HTTP_REFERER'];
 $search = trim(filter_input(INPUT_GET, 'search')) ?? '';
-var_dump($search);
+
 $search_results = [];
 
 if ($search) {
+
     $search_results = get_search_results($con, $search);
 
     if ($search_results) {
@@ -24,7 +25,7 @@ if ($search) {
 
     $page_layout = include_template('page-layout.php', [
         'page_title' => $page_title,
-        'user' => $user,
+        'current_user' => $current_user,
         'page_content' => $page_content
     ]);
 

@@ -54,7 +54,7 @@ function get_relative_date(string $input): string
 
     if ($dif_date < 3600) {
         $minuts = floor($dif_date / 60);
-        return $minuts . ' ' . get_noun_plural_form($minuts, 'минута', 'минуты', 'минут') . ' назад';
+        return $minuts . ' ' . get_noun_plural_form($minuts, 'минуту', 'минуты', 'минут') . ' назад';
     }
 
     if ($dif_date < 86400) {
@@ -216,9 +216,8 @@ function trim_array($array)
  * @param string $url
  * @return string
  */
-function get_page_name()
+function get_page_url($url)
 {
-    $url = $_SERVER['REQUEST_URI'];
     $url = explode('?', $url);
     $url = $url[0];
     return $url;
@@ -240,4 +239,25 @@ function check_id($array, $id)
     }
 
     return false;
+}
+
+/**
+ * Проверяет стоит ли вначале переданный символ, если нет то подставляет его
+ * @param array $tags массив с тэгами
+ * @return array  массив с обрешеченными тэгами
+ */
+function insert_first_sign($array, $sign)
+{
+    $array = is_array($array) ? $array : explode(' ', $array);
+    $result = [];
+
+    foreach($array as $item) {
+        if (mb_substr($item, 0, 1) === $sign) {
+            $result[] = $item;
+        } else {
+            $result[] = $sign . $item;
+        }
+    }
+
+    return $result;
 }

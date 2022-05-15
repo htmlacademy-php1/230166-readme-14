@@ -7,7 +7,12 @@ require_once 'data.php';
 
 session_start();
 
-$user = $_SESSION['user'] ?? NULL;
+$current_user = $_SESSION['current_user'] ?? NULL;
+
+if (!$current_user && get_page_url($_SERVER['REQUEST_URI']) !== '/index.php') {
+    header('Location: index.php');
+    exit();
+}
 
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));

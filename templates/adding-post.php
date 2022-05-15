@@ -23,7 +23,7 @@
                         <? endforeach ?>
                     </ul>
                 </div>
-                <!-- <?= $errors['type'] ?? ''; ?> -->
+
                 <div class="adding-post__tab-content">
                     <?php foreach($types as $type) : ?>
                         <?php if ((int)$type['id'] === $type_id) : ?>
@@ -31,7 +31,7 @@
                                     'type' => $type,
                                     'errors' => $errors,
                                     'post' => $post,
-                                    'tag' => $tag
+                                    'tags' => $tags
                                 ]);
                             ?>
                         <? endif; ?>

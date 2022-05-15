@@ -33,101 +33,83 @@
                             ]);
                         ?>
                     <? endif; ?>
-                <div class="post__indicators">
-                    <div class="post__buttons">
-                    <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                        <svg class="post__indicator-icon" width="20" height="17">
-                            <use xlink:href="#icon-heart"></use>
-                        </svg>
-                        <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                            <use xlink:href="#icon-heart-active"></use>
-                        </svg>
-                        <span><?= $post['count_favs']; ?></span>
-                        <span class="visually-hidden">количество лайков</span>
-                    </a>
-                    <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
-                        <svg class="post__indicator-icon" width="19" height="17">
-                            <use xlink:href="#icon-comment"></use>
-                        </svg>
-                        <span><?= $post['count_comments']; ?></span>
-                        <span class="visually-hidden">количество комментариев</span>
-                    </a>
-                    <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                        <svg class="post__indicator-icon" width="19" height="17">
-                            <use xlink:href="#icon-repost"></use>
-                        </svg>
-                        <span>5</span>
-                        <span class="visually-hidden">количество репостов</span>
-                    </a>
+                    <div class="post__indicators">
+                        <div class="post__buttons">
+                        <a
+                            class="post__indicator post__indicator--likes button <?= $post['is_fav'] ? 'post__indicator--likes-active' : ''; ?>"
+                            href="addfav.php?post_id=<?= esc($post['id']) ?>"
+                            title="Лайк"
+                        >
+                            <svg class="post__indicator-icon" width="20" height="17">
+                                <use xlink:href="#icon-heart"></use>
+                            </svg>
+                            <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                                <use xlink:href="#icon-heart-active"></use>
+                            </svg>
+                            <span>
+                                <?= $post['count_favs']; ?>
+                            </span>
+                            <span class="visually-hidden">количество лайков</span>
+                        </a>
+                        <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
+                            <svg class="post__indicator-icon" width="19" height="17">
+                                <use xlink:href="#icon-comment"></use>
+                            </svg>
+                            <span><?= $post['count_comments']; ?></span>
+                            <span class="visually-hidden">количество комментариев</span>
+                        </a>
+                        <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                            <svg class="post__indicator-icon" width="19" height="17">
+                                <use xlink:href="#icon-repost"></use>
+                            </svg>
+                            <span>5</span>
+                            <span class="visually-hidden">количество репостов</span>
+                        </a>
+                        </div>
+                        <span class="post__view">
+                            <?= $post['views'] . " " . get_noun_plural_form($post['views'], 'просмотр', 'просмотра', 'просмотров'); ?>
+                        </span>
                     </div>
-                    <span class="post__view">
-                        <?= $post['views'] . " " . get_noun_plural_form($post['views'], 'просмотр', 'просмотра', 'просмотров'); ?>
-                    </span>
-                </div>
-                <ul class="post__tags">
-                    <?php foreach ($tags as $tag) : ?>
-                    <li><a href="#"><?= $tag['text'] ?></a></li>
-                    <? endforeach ?>
-                </ul>
-                <div class="comments">
-                    <form class="comments__form form" action="/post.php?post_id=<?= esc($post['post_id']) ?>" method="post">
-                        <div class="comments__my-avatar">
-                            <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
-                        </div>
-                        <div class="form__input-section <?= isset($errors['comment_text']) ? 'form__input-section--error' : ''; ?>">
-                            <textarea
-                                class="comments__textarea form__textarea form__input"
-                                placeholder="Ваш комментарий"
-                                name="comment_text"
-                            ><?= isset($new_comment['comment_text']) ? $new_comment['comment_text'] : ''; ?></textarea>
-                            <label class="visually-hidden">Ваш комментарий</label>
-                            <button class="form__error-button button" type="button">!</button>
-                            <div class="form__error-text">
-                                <h3 class="form__error-title">Ошибка валидации</h3>
-                                <p class="form__error-desc"><?= isset($errors['comment_text']) ? $errors['comment_text'] : ''; ?></p>
+                    <ul class="post__tags">
+                        <?php foreach ($tags as $tag) : ?>
+                        <li><a href="#"><?= $tag['text'] ?></a></li>
+                        <? endforeach ?>
+                    </ul>
+                    <div class="comments">
+                        <form class="comments__form form" action="/post.php?post_id=<?= esc($post['id']) ?>" method="post">
+                            <div class="comments__my-avatar">
+                                <img class="comments__picture" src="<?= $current_user['avatar'] ?>" alt="Аватар пользователя">
                             </div>
-                        </div>
-                        <button class="comments__submit button button--green" type="submit">Отправить</button>
-                    </form>
+                            <div class="form__input-section <?= isset($errors['comment_text']) ? 'form__input-section--error' : ''; ?>">
+                                <textarea
+                                    class="comments__textarea form__textarea form__input"
+                                    placeholder="Ваш комментарий"
+                                    name="comment_text"
+                                ><?= isset($new_comment['comment_text']) ? $new_comment['comment_text'] : ''; ?></textarea>
+                                <label class="visually-hidden">Ваш комментарий</label>
+                                <button class="form__error-button button" type="button">!</button>
+                                <div class="form__error-text">
+                                    <h3 class="form__error-title">Ошибка валидации</h3>
+                                    <p class="form__error-desc"><?= isset($errors['comment_text']) ? $errors['comment_text'] : ''; ?></p>
+                                </div>
+                            </div>
+                            <button class="comments__submit button button--green" type="submit">Отправить</button>
+                        </form>
 
-                    <div class="comments__list-wrapper">
-                        <?php if ($comments) : ?>
-                            <ul class="comments__list">
-                                <?php foreach($comments_start as $comment) : ?>
-                                    <li class="comments__item user">
-                                        <div class="comments__avatar">
-                                            <a class="user__avatar-link" href="#">
-                                                <img class="comments__picture" src="img/<?= $comment['avatar']; ?>" alt="Аватар пользователя">
-                                            </a>
-                                        </div>
-                                        <div class="comments__info">
-                                            <div class="comments__name-wrapper">
-                                                <a class="comments__user-name" href="#">
-                                                    <span><?= $comment['author']; ?></span>
-                                                </a>
-                                                <time class="comments__time"
-                                                    datetime="<?= $comment['created_at']; ?>"
-                                                    title="<?= get_date_for_title($comment['created_at']); ?>"
-                                                ><?= get_relative_date($comment['created_at']); ?></time>
-                                            </div>
-                                            <p class="comments__text">
-                                                <?= $comment['text']; ?>
-                                            </p>
-                                        </div>
-                                    </li>
-                                <? endforeach; ?>
-                                <?php if($is_show_comments) : ?>
-                                    <?php foreach($comments_more as $comment) : ?>
+                        <div class="comments__list-wrapper">
+                            <?php if ($comments) : ?>
+                                <ul class="comments__list">
+                                    <?php foreach($comments_start as $comment) : ?>
                                         <li class="comments__item user">
                                             <div class="comments__avatar">
-                                                <a class="user__avatar-link" href="#">
-                                                    <img class="comments__picture" src="img/<?= $comment['avatar']; ?>" alt="Аватар пользователя">
+                                                <a class="user__avatar-link" href="profile.php?user_id=<?= $comment['user_id'] ?>">
+                                                    <img class="comments__picture" src="<?= esc($comment['avatar']); ?>" alt="Аватар пользователя">
                                                 </a>
                                             </div>
                                             <div class="comments__info">
                                                 <div class="comments__name-wrapper">
-                                                    <a class="comments__user-name" href="#">
-                                                        <span><?= $comment['author']; ?></span>
+                                                    <a class="comments__user-name" href="profile.php?user_id=<?= $comment['user_id']; ?>">
+                                                        <span><?= esc($comment['login']); ?></span>
                                                     </a>
                                                     <time class="comments__time"
                                                         datetime="<?= $comment['created_at']; ?>"
@@ -135,28 +117,52 @@
                                                     ><?= get_relative_date($comment['created_at']); ?></time>
                                                 </div>
                                                 <p class="comments__text">
-                                                    <?= $comment['text'] ?>
+                                                    <?= esc($comment['text']); ?>
                                                 </p>
                                             </div>
                                         </li>
                                     <? endforeach; ?>
+                                    <?php if($is_show_comments) : ?>
+                                        <?php foreach($comments_more as $comment) : ?>
+                                            <li class="comments__item user">
+                                                <div class="comments__avatar">
+                                                    <a class="user__avatar-link" href="#">
+                                                        <img class="comments__picture" src="<?= esc($comment['avatar']); ?>" alt="Аватар пользователя">
+                                                    </a>
+                                                </div>
+                                                <div class="comments__info">
+                                                    <div class="comments__name-wrapper">
+                                                        <a class="comments__user-name" href="#">
+                                                            <span><?= esc($comment['login']); ?></span>
+                                                        </a>
+                                                        <time class="comments__time"
+                                                            datetime="<?= $comment['created_at']; ?>"
+                                                            title="<?= get_date_for_title($comment['created_at']); ?>"
+                                                        ><?= get_relative_date($comment['created_at']); ?></time>
+                                                    </div>
+                                                    <p class="comments__text">
+                                                        <?= esc($comment['text']) ?>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        <? endforeach; ?>
+                                    <? endif; ?>
+                                </ul>
+                                <?php if ($post['count_comments'] > 2 && !$is_show_comments) : ?>
+                                    <a class="comments__more-link" href="post.php?post_id=<?= esc($post['id']); ?>&is_show_comments=true">
+                                        <span>Показать все комментарии</span>
+                                        <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
+                                    </a>
                                 <? endif; ?>
-                            </ul>
-                            <?php if ($post['count_comments'] > 2 && !$is_show_comments) : ?>
-                                <a class="comments__more-link" href="/post.php?post_id=<?= $post['post_id']; ?>&is_show_comments=true">
-                                    <span>Показать все комментарии</span>
-                                    <sup class="comments__amount"><?= $post['count_comments']; ?></sup>
-                                </a>
                             <? endif; ?>
-                        <? endif; ?>
-                    </div>
+                        </div>
                     </div>
                 </div>
                 <div class="post-details__user user">
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
-                            <a class="post-details__avatar-link user__avatar-link" href="#">
-                                <img class="post-details__picture user__picture" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
+                            <a class="post-details__avatar-link user__avatar-link" href="profile.php?user_id=<?= $post['user_id'] ?>">
+                                <img class="post-details__picture user__picture" src="<?= esc($post['avatar']); ?>" alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
@@ -171,12 +177,12 @@
                     </div>
                     <div class="post-details__rating user__rating">
                         <p class="post-details__rating-item user__rating-item user__rating-item--subscribers">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $user_count_subscribes; ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user_count_subscribes, 'подписчик', 'подписчика', 'подписчиков'); ?></span>
+                            <span class="post-details__rating-amount user__rating-amount"><?= esc($user['count_subscribes']); ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user['count_subscribes'], 'подписчик', 'подписчика', 'подписчиков'); ?></span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $user_count_posts; ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user_count_posts, 'публикация', 'публикации', 'публикаций'); ?></span>
+                            <span class="post-details__rating-amount user__rating-amount"><?= esc($user['count_posts']); ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($user['count_posts'], 'публикация', 'публикации', 'публикаций'); ?></span>
                         </p>
                     </div>
                     <div class="post-details__user-buttons user__buttons">
