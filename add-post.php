@@ -5,7 +5,7 @@ require_once 'config/init.php';
 $page_title = 'readme: добавление публикации';
 
 $type_id = intval(filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT));
-
+$current_user_id = (int)$current_user['id'];
 $errors = [];
 $post = [];
 $tags = '';
@@ -34,23 +34,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Текст
         case 1:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'text' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, text) VALUES (1, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, text) VALUES ($current_user_id, ?, ?, ?)";
             break;
         // Цитата
         case 2:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'quote' => FILTER_DEFAULT, 'caption' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, quote, caption) VALUES (1, ?, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, quote, caption) VALUES ($current_user_id, ?, ?, ?, ?)";
             break;
         // Фото
         case 3:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'photo_url' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES (1, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES ($current_user_id, ?, ?, ?)";
             $errors['photo_url'] = !$file_name && !$post['photo_url'] ? 'Вы не загрузили файл' : NULL;
             break;
         // Видео
         case 4:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'video_url' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES (1, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, video_url) VALUES ($current_user_id, ?, ?, ?)";
             $video_url = $post['video_url'];
             $errors['video_url'] = validate_url($video_url);
             if (!$errors['video_url']) {
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Ссылка
         case 5:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'link_url' => FILTER_DEFAULT], true);
-            $sql = "INSERT INTO post (user_id, type_id, title, link_url) VALUES (1, ?, ?, ?)";
+            $sql = "INSERT INTO post (user_id, type_id, title, link_url) VALUES ($current_user_id, ?, ?, ?)";
             $link_url = $post['link_url'];
             $errors['link_url'] = validate_url($link_url);
             break;
@@ -97,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required_errors = get_required_errors($all_input, $required);
     $errors = array_merge($errors, $required_errors);
     $errors = array_filter($errors);
-    var_dump($errors);
 
     if(empty($errors)) {
         $stmt = db_get_prepare_stmt($con, $sql, $post);

@@ -12,7 +12,7 @@
                             <li class="adding-post__tabs-item filters__item">
                                 <a
                                     class="adding-post__tabs-link filters__button filters__button--<?= $type['class']; ?> <?= $classnames; ?> button"
-                                    href="add.php?type_id=<?= $type['id']; ?>"
+                                    href="add-post.php?type_id=<?= $type['id']; ?>"
                                 >
                                     <svg class="filters__icon" width="<?= $type['icon_width'] ?>" height="<?= $type['icon_height']; ?>">
                                         <use xlink:href="#icon-filter-<?= $type['class']; ?>"></use>

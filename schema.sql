@@ -49,8 +49,8 @@ CREATE TABLE post (
 CREATE TABLE comment (
   id INT AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  user_id INT,
   post_id INT,
+  user_id INT,
   text TEXT NOT NULL,
 
   FOREIGN KEY (user_id) REFERENCES user(id),
@@ -59,8 +59,8 @@ CREATE TABLE comment (
 
 CREATE TABLE fav (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
   post_id INT,
+  user_id INT,
 
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (post_id) REFERENCES post(id)
@@ -68,8 +68,8 @@ CREATE TABLE fav (
 
 CREATE TABLE subscribe (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id_subscriber INT,
   user_id_publisher INT,
+  user_id_subscriber INT,
 
   FOREIGN KEY (user_id_subscriber) REFERENCES user(id),
   FOREIGN KEY (user_id_publisher) REFERENCES user(id)

@@ -24,13 +24,14 @@ function show_error($error)
 // Получение записей из БД
 
 // _Пользователи
+
 /**
  * Получение пользователя по email
  * @param mysqli $con Ресурс соединения
  * @param string $email почта пользователя
  * @return int
 */
-function get_user_by_email($con, $email)
+function get_сurrent_user($con, $email)
 {
     $email = mysqli_real_escape_string($con, $email);
     $sql = "SELECT * FROM user WHERE email = '$email'";
@@ -44,16 +45,17 @@ function get_user_by_email($con, $email)
         return $user;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_сurrent_user ' . mysqli_error($con));
 }
 
 /**
  * Получение пользователя по id
  * @param mysqli $con Ресурс соединения
  * @param int $user_id
- * @return int или NULL
+ * @param int $current_user_id для проверки подписан ли на него текущий пользователь
+ * @return array
 */
-function get_user_by_id($con, $user_id)
+function get_user_by_id($con, $user_id, $current_user_id)
 {
     $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT * FROM user WHERE id = $user_id";
@@ -61,17 +63,18 @@ function get_user_by_id($con, $user_id)
 
     if ($result) {
         $user = mysqli_fetch_assoc($result);
-        $user['count_posts'] = get_count_user_posts($con, $user['id']);
-        $user['count_subscribes'] = get_count_subscribers($con, $user['id']);
+        $user['count_posts'] = get_count_user_posts($con, $user_id);
+        $user['count_subscribes'] = get_count_subscribers($con, $user_id);
+        $user['is_subscribe'] = check_subscribe($con, $user_id, $current_user_id);
 
         return $user;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_user_by_id ' . mysqli_error($con));
 }
 
 /**
- * Получение id юзеров на каторый подписан залогиненный пользователь
+ * Получение id юзеров на каторый подписан пользователь
  * @param mysqli $con Ресурс соединения
  * @param int $user_id
  * @return int
@@ -86,7 +89,7 @@ function get_user_id_publishers($con, $user_id)
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_user_id_publishers' . mysqli_error($con));
 }
 
 
@@ -105,7 +108,7 @@ function get_all_types($con)
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_all_types ' . mysqli_error($con));
 }
 
 /**
@@ -123,7 +126,7 @@ function get_type($con, $type_id)
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_type ' . mysqli_error($con));
 }
 
 
@@ -161,13 +164,15 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
             $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
             $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
+            $post['tags'] = get_tags($con, $post_id);
+            $post['comments'] = get_comments($con, $post_id);
             $posts[] = $post;
         }
 
         return $posts;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_all_posts ' . mysqli_error($con));
 }
 
 /**
@@ -218,7 +223,7 @@ function get_popular_posts($con, $page_items, $offset, $current_user_id, $type_i
         return $posts;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_popular_posts' . mysqli_error($con));
 }
 
 /**
@@ -246,11 +251,13 @@ function get_post_by_id($con, $post_id, $current_user_id)
         $post['count_favs'] = get_count_favs($con, $post_id);
         $post['count_comments'] = get_count_comments($con, $post_id);
         $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
+        $post['tags'] = get_tags($con, $post_id);
+        $post['comments'] = get_comments($con, $post_id);
 
         return $post;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_post_by_id ' . mysqli_error($con));
 }
 
 /**
@@ -281,13 +288,15 @@ function get_user_posts($con, $user_id, $current_user_id)
             $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
             $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
+            $post['tags'] = get_tags($con, $post_id);
+            $post['comments'] = get_comments($con, $post_id);
             $posts[] = $post;
         }
 
         return $posts;
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_user_posts ' . mysqli_error($con));
 }
 
 /**
@@ -372,7 +381,7 @@ function get_comments($con, $post_id)
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_comments ' . mysqli_error($con));
 }
 
 
@@ -396,7 +405,7 @@ function get_tags($con, $post_id)
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_tags ' . mysqli_error($con));
 }
 
 /**
@@ -442,7 +451,7 @@ function check_user_email($con, $email)
         return false;
     }
 
-    show_error(mysqli_error($con));
+    show_error('check_user_email ' . mysqli_error($con));
 }
 
 /**
@@ -466,7 +475,7 @@ function check_user_login($con, $login)
         return false;
     }
 
-    show_error(mysqli_error($con));
+    show_error('check_user_login ' . mysqli_error($con));
 }
 
 /**
@@ -490,7 +499,7 @@ function check_user_id($con, $user_id)
         return false;
     }
 
-    show_error(mysqli_error($con));
+    show_error('check_user_id ' . mysqli_error($con));
 }
 
 /**
@@ -514,7 +523,7 @@ function check_post_id($con, $post_id)
         return false;
     }
 
-    show_error(mysqli_error($con));
+    show_error('check_post_id ' . mysqli_error($con));
 }
 
 /**
@@ -536,7 +545,31 @@ function check_is_fav($con, $post_id, $user_id)
         return false;
     }
 
-    show_error(mysqli_error($con));
+    show_error('check_is_fav ' . mysqli_error($con));
+}
+
+/**
+ * Проверка. Есть ли подписка
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id - id паблишера
+ * @param int $curren_user_id - id подписчика
+ * @return bool
+*/
+function check_subscribe($con, $user_id, $current_user_id)
+{
+    $sql = "SELECT id FROM subscribe WHERE user_id_publisher = $user_id AND user_id_subscriber = $current_user_id";
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        $subscribe = mysqli_fetch_assoc($result);
+
+        if ($subscribe) {
+            return true;
+        }
+        return false;
+    }
+
+    show_error('check_subscribe ' . mysqli_error($con));
 }
 
 
@@ -556,7 +589,7 @@ function get_count_all_posts($con)
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_count_all_posts' . mysqli_error($con));
 }
 
 /**
@@ -574,7 +607,7 @@ function get_count_subscribers($con, $user_id)
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_count_subscribers ' . mysqli_error($con));
 }
 
 /**
@@ -592,7 +625,7 @@ function get_count_favs($con, $post_id)
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_count_favs ' . mysqli_error($con));
 }
 
 /**
@@ -610,7 +643,7 @@ function get_count_comments($con, $post_id)
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_count_comments ' . mysqli_error($con));
 }
 
 /**
@@ -628,24 +661,117 @@ function get_count_user_posts($con, $user_id)
         return mysqli_fetch_assoc($result)['count'];
     }
 
-    show_error(mysqli_error($con));
+    show_error('get_count_user_posts ' . mysqli_error($con));
 }
 
 
 // Добавление новой записи в БД
 
 /**
+ * Добавление комментария
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id
+ * @return string если ошибка
+*/
+function add_comment($con, $post_id, $current_user_id, $comment)
+{
+    $sql = "INSERT INTO comment (post_id, user_id, text) VALUES (?, ?, ?)";
+    $stmt = db_get_prepare_stmt($con, $sql, [$post_id, $current_user_id, $comment]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('add_comment ' . mysqli_error($con));
+    }
+}
+
+/**
  * Добавление просмотра поста
  * @param mysqli $con Ресурс соединения
  * @param int $post_id
- * @return string если ошибка, а так ничего не возвращает
+ * @return string если ошибка
 */
-function increase_views($con, $post_id)
+function add_views($con, $post_id)
 {
-    $sql = "UPDATE post SET views = views + 1 WHERE id = $post_id";
-    $result = mysqli_query($con, $sql);
+    $sql = "UPDATE post SET views = views + 1 WHERE id = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$post_id]);
+    $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {
-        show_error(mysqli_error($con));
+        show_error('add_views ' . mysqli_error($con));
+    }
+}
+
+/**
+ * Добавление подписки
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
+ * @param int $user_id
+ * @return string если ошибка
+*/
+function add_subscribe($con, $user_id, $current_user_id)
+{
+    $sql = "INSERT INTO subscribe SET user_id_publisher = ?, user_id_subscriber = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $current_user_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('add_subscribe ' . mysqli_error($con));
+    }
+}
+
+/**
+ * Добавление поста в избранное
+ * @param mysqli $con Ресурс соединения
+ * @param int $user_id
+ * @param int $user_id
+ * @return string если ошибка
+*/
+function add_fav($con, $post_id, $current_user_id)
+{
+    $sql = "INSERT INTO fav (post_id, user_id) VALUES (?, ?)";
+    $stmt = db_get_prepare_stmt($con, $sql, [$post_id, $current_user_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('add_fav' . mysqli_error($con));
+    }
+}
+
+
+// Удаление записи из БД
+
+/**
+ * Удаление поста из избранного
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id - id поста
+ * @param int $current_user_id - id пользователя
+ * @return string если ошибка
+*/
+function remove_fav($con, $post_id, $current_user_id)
+{
+    $sql = "DELETE FROM fav WHERE post_id = ? AND user_id = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$post_id, $current_user_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('remove_fav ' . mysqli_error($con));
+    }
+}
+
+/**
+ * Удаление подписки
+ * @param mysqli $con Ресурс соединения
+ * @param int $post_id - id поста
+ * @param int $current_user_id - id пользователя
+ * @return string если ошибка
+*/
+function remove_subcribe($con, $user_id, $current_user_id)
+{
+    $sql = "DELETE FROM subscribe WHERE user_id_publisher = ? AND user_id_subscriber = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $current_user_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('remove_subcribe ' . mysqli_error($con));
     }
 }

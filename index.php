@@ -14,28 +14,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'password' => 'Пароль',
     ];
 
+    $email = $form['login'];
+    $password = $form['password'];
+
     $errors = get_required_errors($form, $required);
 
-    if (!isset($errors['login']) && !filter_var($form['login'], FILTER_VALIDATE_EMAIL)) {
+    if (!isset($errors['login']) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['login'] = 'Неверный формат email';
     }
 
+    if (!isset($errors['login']) and !check_user_email($con, $email)) {
+        $errors['login'] = 'Такой пользователь не найден';
+    }
+
     $errors = array_filter($errors);
-    $current_user = get_user_by_email($con, $form['login']);
+
+    $current_user = get_сurrent_user($con, $email);
 
     if (empty($errors) and !$current_user) {
         $errors['login'] = 'Такой пользователь не найден';
     }
 
     if (empty($errors) and $current_user) {
-        if (password_verify($form['password'], $current_user['password'])) {
+        if (password_verify($password, $current_user['password'])) {
             $_SESSION['current_user'] = $current_user;
         } else {
             $errors['password'] = "Пароли не совпадают";
         }
     }
 
-    if (isset($_SESSION['user'])) {
+    if (isset($_SESSION['current_user'])) {
         header('Location: feed.php');
         exit();
     }

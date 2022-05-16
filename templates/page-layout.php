@@ -112,12 +112,15 @@
                             </div>
                         </li>
                         <li>
-                            <a class="header__post-button button button--transparent" href="add.php?type_id=1">Пост</a>
+                            <a
+                                class="header__post-button button button--transparent"
+                                href="add-post.php?type_id=1"
+                            >Пост</a>
                         </li>
                     </ul>
                 </nav>
             </div>
-            <? else: ?>
+            <? else : ?>
             <nav class="header__nav">
                 <p class="header__register-slogan">
                 </p>

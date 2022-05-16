@@ -59,7 +59,7 @@
                             <div class="post__buttons">
                             <a
                                 class="post__indicator post__indicator--likes button <?= $post['is_fav'] ? 'post__indicator--likes-active' : ''; ?>"
-                                href="addfav.php?post_id=<?= esc($post['id']) ?>"
+                                href="add-fav.php?post_id=<?= esc($post['id']) ?>"
                                 title="Лайк"
                             >
                                 <svg class="post__indicator-icon" width="20" height="17">
