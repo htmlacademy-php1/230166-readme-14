@@ -149,7 +149,7 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
     if (!$type_id) {
         $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
                         p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views,
-                        p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
+                        p.repost_count, (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -158,7 +158,7 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
         $type_id = mysqli_real_escape_string($con, $type_id);
         $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
                         p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views,
-                        p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
+                        p.repost_count, (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -253,8 +253,8 @@ function get_post_by_id($con, $post_id, $current_user_id)
 {
     $post_id = mysqli_real_escape_string($con, $post_id);
     $sql = "SELECT u.created_at user_created_at, u.login, u.avatar, t.class, t.name, p.id, p.created_at post_created_at, p.user_id, p.type_id,
-                    p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                    p.views, p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
+                    p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count,
+                    (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -287,7 +287,7 @@ function get_user_posts($con, $user_id, $current_user_id)
     $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title, p.text,
                     p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count,
-                    (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
+                    (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
