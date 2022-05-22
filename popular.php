@@ -22,9 +22,14 @@ $items_count = get_count_all_posts($con);
 $pages_count = ceil($items_count / $page_items);
 $offset = ($current_page - 1) * $page_items;
 $pages = range(1, $pages_count);
-$posts_new = [];
 
-$posts = get_popular_posts($con, $page_items, $offset, $current_user['id'], $type_id);
+$sorting = filter_input(INPUT_GET, 'sorting');
+
+if (!in_array($sorting, ['views', 'count_favs', 'created_at'])) {
+    $sorting = 'views';
+}
+
+$posts = get_popular_posts($con, $page_items, $offset, $current_user['id'], $sorting, $type_id);
 
 $page_content = include_template('popular.php', [
     'posts' => $posts,
@@ -32,6 +37,7 @@ $page_content = include_template('popular.php', [
     'type_id' => $type_id,
     'current_page' => $current_page,
     'pages_count' => $pages_count,
+    'sorting' => $sorting
 ]);
 
 $page_layout = include_template('page-layout.php', [

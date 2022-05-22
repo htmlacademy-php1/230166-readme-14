@@ -36,18 +36,16 @@ if ($user_id && !check_user_id($con, $user_id)) {
 
 $users = get_all_communicate_users($con, $current_user_id);
 
-
-
 if (!$user_id && $users) {
     $user_id = $users[0]['id'];
 
     $all_user_ids = array_column($users, 'id');
 
     if (!in_array($user_id, $all_user_ids)) {
-        $start_user = get_start_user($con, $user_id);
+        $start_user = get_communicate_user($con, $user_id);
     }
 } elseif ($user_id && !$users) {
-    $start_user = get_start_user($con, $user_id);
+    $start_user = get_communicate_user($con, $user_id);
 }
 
 if ($user_id) {

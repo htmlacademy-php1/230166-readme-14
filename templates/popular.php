@@ -8,7 +8,10 @@
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
                     <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--active" href="#">
+                        <a
+                            class="sorting__link <?= $sorting === 'views' ? 'sorting__link--active' : '' ?>"
+                            href="?type_id=<?= $type_id; ?>&sorting=views"
+                        >
                             <span>Популярность</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -16,7 +19,10 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a
+                            class="sorting__link <?= $sorting === 'count_favs' ? 'sorting__link--active' : '' ?>"
+                            href="?type_id=<?= $type_id; ?>&sorting=count_favs"
+                        >
                             <span>Лайки</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -24,7 +30,10 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a
+                            class="sorting__link <?= $sorting === 'created_at' ? 'sorting__link--active' : '' ?>"
+                            href="?type_id=<?= $type_id; ?>&sorting=created_at"
+                        >
                             <span>Дата</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -38,7 +47,7 @@
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
                         <?php $classname = $type_id ? '' : 'filters__button--active'; ?>
-                        <a class="filters__button filters__button--ellipse filters__button--all <?= $classname ?>" href="popular.php">
+                        <a class="filters__button filters__button--ellipse filters__button--all <?= $classname ?>" href="popular.php?sorting=<?= $sorting ?>">
                             <span>Все</span>
                         </a>
                     </li>
@@ -47,7 +56,7 @@
                     <li class="popular__filters-item filters__item">
                         <a
                             class="filters__button filters__button--<?= $type['class'] ?> button <?= $classnames; ?>"
-                            href="?type_id=<?= $type['id']; ?>"
+                            href="?type_id=<?= $type['id']; ?>&sorting=<?= $sorting ?>"
                         >
                             <span class="visually-hidden"><?= $type['name']; ?></span>
                             <svg class="filters__icon" width="<?= $type['icon_width'] ?>" height="<?= $type['icon_height']; ?>">
@@ -71,11 +80,11 @@
         <div class="popular__page-links">
             <a
                 class="popular__page-link popular__page-link--prev button button--gray"
-                href="?type_id=<?= $type_id; ?>&page=<?= $current_page > 1 ? $current_page - 1 : 1; ?>"
+                href="?type_id=<?= $type_id; ?>&page=<?= $current_page > 1 ? $current_page - 1 : 1; ?>&sorting=<?= $sorting ?>"
             >Предыдущая страница</a>
             <a
                 class="popular__page-link popular__page-link--next button button--gray"
-                href="?type_id=<?= $type_id; ?>&page=<?= $current_page < $pages_count ? $current_page + 1 : $pages_count; ?>"
+                href="?type_id=<?= $type_id; ?>&page=<?= $current_page < $pages_count ? $current_page + 1 : $pages_count; ?>&sorting=<?= $sorting ?>"
             >Следующая страница</a>
         </div>
     </div>

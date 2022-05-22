@@ -147,18 +147,18 @@ function get_type($con, $type_id)
 function get_all_posts($con, $current_user_id, $type_id = NULL)
 {
     if (!$type_id) {
-        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at,
-                        p.user_id, p.type_id, p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                        p.views, p.repost_count
+        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
+                        p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views,
+                        p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
             ORDER BY p.created_at";
     } else {
         $type_id = mysqli_real_escape_string($con, $type_id);
-        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at,
-                        p.user_id, p.type_id, p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                        p.views, p.repost_count
+        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
+                        p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views,
+                        p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -174,7 +174,6 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
 
         foreach($arr as $post) {
             $post_id = $post['id'];
-            $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
             $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
             $post['tags'] = get_tags($con, $post_id);
@@ -195,29 +194,31 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
  * @param int $type_id категория
  * @return array
 */
-function get_popular_posts($con, $page_items, $offset, $current_user_id, $type_id = NULL)
+function get_popular_posts($con, $page_items, $offset, $current_user_id, $sorting, $type_id = NULL)
 {
     $page_items = mysqli_real_escape_string($con, $page_items);
     $offset = mysqli_real_escape_string($con, $offset);
 
     if (!$type_id) {
-        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title, p.text,
-                        p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views
+        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title,
+                        p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count,
+                        (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
                 FROM post p
                 JOIN user u ON p.user_id = u.id
                 JOIN type t ON p.type_id = t.id
-                ORDER BY p.views DESC
+                ORDER BY $sorting DESC
                 LIMIT $page_items
                 OFFSET $offset";
     } else {
         $type_id = mysqli_real_escape_string($con, $type_id);
-        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title, p.text,
-                        p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views
+        $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title,
+                        p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count,
+                        (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
                 FROM post p
                 JOIN user u ON p.user_id = u.id
                 JOIN type t ON p.type_id = t.id
                 WHERE type_id = $type_id
-                ORDER BY p.views DESC
+                ORDER BY $sorting DESC
                 LIMIT $page_items
                 OFFSET $offset";
     }
@@ -230,7 +231,6 @@ function get_popular_posts($con, $page_items, $offset, $current_user_id, $type_i
 
         foreach($arr as $post) {
             $post_id = $post['id'];
-            $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
             $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
             $posts[] = $post;
@@ -254,7 +254,7 @@ function get_post_by_id($con, $post_id, $current_user_id)
     $post_id = mysqli_real_escape_string($con, $post_id);
     $sql = "SELECT u.created_at user_created_at, u.login, u.avatar, t.class, t.name, p.id, p.created_at post_created_at, p.user_id, p.type_id,
                     p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                    p.views, p.repost_count
+                    p.views, p.repost_count, (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -264,7 +264,6 @@ function get_post_by_id($con, $post_id, $current_user_id)
 
     if ($result) {
         $post =  mysqli_fetch_assoc($result);
-        $post['count_favs'] = get_count_favs($con, $post_id);
         $post['count_comments'] = get_count_comments($con, $post_id);
         $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
         $post['tags'] = get_tags($con, $post_id);
@@ -287,7 +286,8 @@ function get_user_posts($con, $user_id, $current_user_id)
 {
     $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id, p.title, p.text,
-                    p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count
+                    p.quote, p.caption, p.photo_url, p.video_url, p.link_url, p.views, p.repost_count,
+                    (SELECT COUNT(id) AS count_favs FROM fav WHERE post_id = p.id)
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -302,7 +302,6 @@ function get_user_posts($con, $user_id, $current_user_id)
 
         foreach($arr as $post) {
             $post_id = $post['id'];
-            $post['count_favs'] = get_count_favs($con, $post_id);
             $post['count_comments'] = get_count_comments($con, $post_id);
             $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
             $post['tags'] = get_tags($con, $post_id);
@@ -503,8 +502,12 @@ function get_comments($con, $post_id)
 
 // Сообщения
 
+
 /**
- *
+ * Получение id пользователей которым были отправлены сообщения
+ * @param  mixed $con
+ * @param  mixed $current_user_id
+ * @return array
  */
 function get_ids_recipient($con, $current_user_id) {
     $current_user_id = mysqli_real_escape_string($con, $current_user_id);
@@ -520,8 +523,12 @@ function get_ids_recipient($con, $current_user_id) {
     show_error('get_ids_recipient ' . mysqli_error($con));
 }
 
+
 /**
- *
+ * Получение id пользователей которые отправили сообщения
+ * @param  mixed $con
+ * @param  mixed $current_user_id
+ * @return array
  */
 function get_ids_sender($con, $current_user_id) {
     $current_user_id = mysqli_real_escape_string($con, $current_user_id);
@@ -538,7 +545,11 @@ function get_ids_sender($con, $current_user_id) {
 }
 
 /**
- *
+ * Получение последнего сообщения для превью в описании пользователя в сообщениях
+ * @param  mixed $con
+ * @param  mixed $user_id_sender
+ * @param  mixed $user_id_recipient
+ * @return void
  */
 function get_last_message($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
@@ -558,12 +569,14 @@ function get_last_message($con, $user_id_sender, $user_id_recipient) {
 }
 
 /**
- *
+ * Получение одного пользователя по id для сообщений
+ * @param  mixed $con
+ * @param  mixed $user_id
+ * @return array
  */
 function get_communicate_user($con, $user_id) {
     $user_id = mysqli_real_escape_string($con, $user_id);
-    $sql = "SELECT id, login, avatar FROM user
-            WHERE id = {$user_id}";
+    $sql = "SELECT id, login, avatar FROM user WHERE id = $user_id";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -574,7 +587,10 @@ function get_communicate_user($con, $user_id) {
 }
 
 /**
- *
+ * Получение всех пользователей для страницы сообщений, и сортировка их по дате, по убыванию
+ * @param  mysqly $con
+ * @param  int $current_user_id
+ * @return array
  */
 function get_all_communicate_users($con, $current_user_id) {
     $senders = array_column(get_ids_sender($con, $current_user_id), 'user_id_sender');
@@ -586,7 +602,6 @@ function get_all_communicate_users($con, $current_user_id) {
     foreach($ids as $id) {
         $user = get_communicate_user($con, $id);
         $last_messages = get_last_message($con, $id, $current_user_id);
-
         $user['last_message'] = $last_messages;
 
         $users[] = $user;
@@ -602,7 +617,12 @@ function get_all_communicate_users($con, $current_user_id) {
 }
 
 /**
+ * Получение сообщений с одним пользователем
  *
+ * @param  mysqli $con
+ * @param  int $user_id_sender
+ * @param  int $user_id_recipient
+ * @return void
  */
 function get_messages($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
@@ -621,22 +641,6 @@ function get_messages($con, $user_id_sender, $user_id_recipient) {
     }
 
     show_error('get_messages ' . mysqli_error($con));
-}
-
-/**
- *
- */
-function get_start_user($con, $user_id)
-{
-    $user_id = mysqli_real_escape_string($con, $user_id);
-    $sql = "SELECT id, login, avatar FROM user WHERE id = $user_id";
-    $result= mysqli_query($con, $sql);
-
-    if ($result) {
-        return mysqli_fetch_assoc($result);
-    }
-
-    show_error('get_start_user ' . mysqli_error($con));
 }
 
 // _Хэштэги
@@ -723,25 +727,6 @@ function get_count_subscribers($con, $user_id)
 }
 
 /**
- * Количество лайков
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
- * @return int
-*/
-function get_count_favs($con, $post_id)
-{
-    $post_id = mysqli_real_escape_string($con, $post_id);
-    $sql = "SELECT COUNT(id) AS count FROM fav WHERE post_id = $post_id";
-    $result = mysqli_query($con, $sql);
-
-    if ($result) {
-        return mysqli_fetch_assoc($result)['count'];
-    }
-
-    show_error('get_count_favs ' . mysqli_error($con));
-}
-
-/**
  * Количество коментариев
  * @param mysqli $con Ресурс соединения
  * @param int $post_id
@@ -777,25 +762,6 @@ function get_count_user_posts($con, $user_id)
 
     show_error('get_count_user_posts ' . mysqli_error($con));
 }
-
-/**
- * Количество репостов
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
- * @return int
-*/
-// function get_count_user_posts($con, $user_id)
-// {
-//     $sql = "SELECT COUNT(id) AS count FROM post WHERE user_id = $user_id";
-//     $result = mysqli_query($con, $sql);
-
-//     if ($result) {
-//         return mysqli_fetch_assoc($result)['count'];
-//     }
-
-//     show_error('get_count_user_posts ' . mysqli_error($con));
-// }
-
 
 // Проверки
 
