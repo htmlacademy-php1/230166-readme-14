@@ -28,7 +28,7 @@
 
                             <?php if ($post['type_id'] === '1') : ?>
                                 <?= include_template('post-text.php', [
-                                        'text' => $post['text']
+                                        'text' => esc($post['text'])
                                     ]);
                                 ?>
                             <?php elseif($post['type_id'] === '2') : ?>
@@ -78,7 +78,7 @@
                                 <span><?= $post['count_comments'] ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
-                            <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                            <a class="post__indicator post__indicator--repost button" href="add-repost.php?post_id=<?= $post['id'] ?>" title="Репост">
                                 <svg class="post__indicator-icon" width="19" height="17">
                                 <use xlink:href="#icon-repost"></use>
                                 </svg>

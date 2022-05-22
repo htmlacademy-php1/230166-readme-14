@@ -99,7 +99,8 @@ $page_content = include_template('reg.php', [
 
 $page_layout = include_template('page-layout.php', [
     'page_title' => $page_title,
-    'page_content' => $page_content
+    'page_content' => $page_content,
+    'current_user' => $current_user
 ]);
 
 print($page_layout);

@@ -2,6 +2,11 @@
 
 require_once 'config/init.php';
 
+if (!$current_user || !check_user_id($con, $current_user['id'])) {
+    header('Location: index.php');
+    exit();
+}
+
 $page_title = 'readme: добавление публикации';
 
 $type_id = intval(filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT));

@@ -5,6 +5,7 @@
         </header>
         <article class="gif-list">
             <p class="error"><?= $error; ?></p>
+            <p><a href="popular.php">Популярные посты</a></p>
         </article>
     </div>
 </main>

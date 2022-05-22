@@ -1,6 +1,11 @@
 -- types
 INSERT INTO type (name, class, icon_width, icon_height)
-  VALUES ('Текст', 'text', 20, 21), ('Цитата', 'quote', 21, 20), ('Картинка', 'photo',  22, 18), ('Видео', 'video', 24, 16), ('Ссылка', 'link', 21, 18);
+  VALUES
+  ('Текст', 'text', 20, 21),
+  ('Цитата', 'quote', 21, 20),
+  ('Картинка', 'photo',  22, 18),
+  ('Видео', 'video', 24, 16),
+  ('Ссылка', 'link', 21, 18);
 
 -- users
 INSERT INTO user
@@ -109,8 +114,34 @@ INSERT INTO comment
       post_id = 3,
       text = 'Красота!!!3!';
 
+-- Сообщения
+INSERT INTO message
+  SET user_id_sender = 1,
+      user_id_recipient = 2,
+      text = 'Красота!!!1!';
+
+INSERT INTO message
+  SET user_id_sender = 2,
+      user_id_recipient = 1,
+      text = 'Красота!!!2!';
+
+INSERT INTO message
+  SET user_id_sender = 3,
+      user_id_recipient = 1,
+      text = 'Красота!!!3!';
+
+INSERT INTO message
+  SET user_id_sender = 3,
+      user_id_recipient = 2,
+      text = 'Красота!!!4!';
+
+INSERT INTO message
+  SET user_id_sender = 3,
+      user_id_recipient = 1,
+      text = 'Красота!!!5!';
+
 -- лайки
-INSERT INTO fav (user_id, post_id) VALUES (1, 1), (1, 2), (2, 1), (3, 1);
+INSERT INTO fav (user_id, post_id) VALUES (1, 3), (2, 1), (3, 1), (4, 1), (5, 1), (2, 5), (2, 6);
 
 -- подписки
 INSERT INTO subscribe (user_id_subscriber, user_id_publisher) VALUES (1, 2), (2, 1), (3, 1), (4, 1), (1, 3), (1, 4);

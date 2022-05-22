@@ -2,12 +2,16 @@
 
 require_once 'config/init.php';
 
+if (!$current_user || !check_user_id($con, $current_user['id'])) {
+    header('Location: index.php');
+    exit();
+}
+
 $page_title = 'readme: популярное';
 
 $type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT) ?? NULL;
 $types = get_all_types($con);
 
-// Валидация на отстутствие типа контента
 if ($type_id && check_id($types, $type_id)) {
     show_error("Такая категория пока не создана.");
 }

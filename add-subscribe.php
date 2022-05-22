@@ -11,7 +11,6 @@ if (!$user_id || !check_user_id($con, $user_id)) {
 
 if (!check_subscribe($con, $user_id, $current_user_id)) {
     add_subscribe($con, $user_id, $current_user_id);
-    var_dump('sdfdf');
 } else {
     remove_subcribe($con, $user_id, $current_user_id);
 }

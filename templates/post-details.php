@@ -3,11 +3,11 @@
         <h1 class="page__title page__title--publication"><?= esc($post['title']); ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
-            <div class="post-details__wrapper <?= $post['type_class']; ?>">
+            <div class="post-details__wrapper <?= $post['class']; ?>">
                 <div class="post-details__main-block post post--details">
                     <?php if ((int)$post['type_id'] === 1) : ?>
                         <?= include_template('post-text.php', [
-                                'text' => $post['text']
+                                'text' => esc($post['text'])
                             ]);
                         ?>
                     <?php elseif((int)$post['type_id'] === 2) : ?>
@@ -58,11 +58,11 @@
                             <span><?= $post['count_comments']; ?></span>
                             <span class="visually-hidden">количество комментариев</span>
                         </a>
-                        <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                        <a class="post__indicator post__indicator--repost button" href="add-repost.php?post_id=<?= $post['id'] ?>" title="Репост">
                             <svg class="post__indicator-icon" width="19" height="17">
                                 <use xlink:href="#icon-repost"></use>
                             </svg>
-                            <span>5</span>
+                            <span><?= $post['repost_count'] ?></span>
                             <span class="visually-hidden">количество репостов</span>
                         </a>
                         </div>
@@ -80,7 +80,7 @@
                             <div class="comments__my-avatar">
                                 <img class="comments__picture" src="<?= $current_user['avatar'] ?>" alt="Аватар пользователя">
                             </div>
-                            <div class="form__input-section <?= isset($errors['comment']) ? 'form__input-section--error' : ''; ?>">
+                            <div class="form__input-section <?= $error ? 'form__input-section--error' : ''; ?>">
                                 <textarea
                                     class="comments__textarea form__textarea form__input"
                                     placeholder="Ваш комментарий"
@@ -88,10 +88,12 @@
                                 ><?= $comment ?? ''; ?></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <button class="form__error-button button" type="button">!</button>
-                                <div class="form__error-text">
-                                    <h3 class="form__error-title">Ошибка валидации</h3>
-                                    <p class="form__error-desc"><?= $errors['comment'] ?? ''; ?></p>
-                                </div>
+                                <?php if ($error) : ?>
+                                    <div class="form__error-text">
+                                        <h3 class="form__error-title">Ошибка валидации</h3>
+                                        <p class="form__error-desc"><?= $error ?? ''; ?></p>
+                                    </div>
+                                <? endif; ?>
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
@@ -199,7 +201,7 @@
                         <div class="post-details__user-buttons user__buttons">
                             <a
                                 class="profile__user-button user__button user__button--subscription button button--main"
-                                href="add_subscribe.php?user_id=<?= $user['id']; ?>"
+                                href="add-subscribe.php?user_id=<?= $user['id']; ?>"
                             >
                                 <?= ($user['is_subscribe']) ? 'Отписаться' : 'Подписаться'; ?>
                             </a>

@@ -39,6 +39,8 @@ CREATE TABLE post (
   video_url VARCHAR(255) DEFAULT NULL,
   link_url VARCHAR(255) DEFAULT NULL,
   views INT UNSIGNED DEFAULT 0,
+  repost_count INT UNSIGNED DEFAULT 0,
+  repost_post_id INT DEFAULT NULL,
 
   FULLTEXT INDEX post_text (title, text),
 
@@ -59,6 +61,7 @@ CREATE TABLE comment (
 
 CREATE TABLE fav (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   post_id INT,
   user_id INT,
 
@@ -68,6 +71,7 @@ CREATE TABLE fav (
 
 CREATE TABLE subscribe (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id_publisher INT,
   user_id_subscriber INT,
 
@@ -80,7 +84,7 @@ CREATE TABLE message (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id_sender INT,
   user_id_recipient INT,
-  content TEXT NOT NULL,
+  text TEXT NOT NULL,
 
   FOREIGN KEY (user_id_sender) REFERENCES user(id),
   FOREIGN KEY (user_id_recipient) REFERENCES user(id)
