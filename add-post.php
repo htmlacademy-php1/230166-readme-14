@@ -71,6 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
     }
 
+    // Валидация заголовка на количество символов
+    if (!isset($errors['title']) && !check_length($post['title'], 2, 255)) {
+        $errors['email'] = "Заголовок. Значение должно быть от 2 до 255 символов";
+    }
+
     if ($file_name) {
         $tmp_name = $_FILES['img_file']['tmp_name'];
 

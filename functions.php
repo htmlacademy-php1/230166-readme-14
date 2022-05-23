@@ -112,12 +112,12 @@ function get_required_errors($array, $required)
  * @param array $allowed_list Список существующих категорий
  * @return string Текст сообщения об ошибке
  */
-function validate_length($value, $min, $max)
+function check_length($value, $min, $max)
 {
     if ($value) {
         $len = strlen($value);
-        if ($len < $min or $len > $max) {
-            return "Значение Должно быть от $min до $max символов";
+        if ($len >= $min or $len <= $max) {
+            return true;
         }
     }
 
@@ -209,7 +209,6 @@ function trim_array($array)
 
     return $output_array;
 }
-
 
 /**
  * Получение названия страницы

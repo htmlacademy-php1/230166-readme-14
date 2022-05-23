@@ -22,24 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = get_required_errors($form, $required);
 
     // Валидация формата почты
-    if (!isset($errors['email'])) {
-        if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Неправильный формат почты';
-        }
+    if (!isset($errors['email']) && !filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Неправильный формат почты';
+    }
+
+    // Валидация почты на количество символов
+    if (!isset($errors['email']) && !check_length($form['email'], 5, 128)) {
+        $errors['email'] = "Электронная почта. Значение должно быть от 5 до 128 символов";
     }
 
     // Валидация на существование почты
-    if (!isset($errors['email'])) {
-        if (check_user_email($con, $form['email'])) {
-            $errors['email'] = "Пользователь с этим email уже зарегистрирован";
-        }
+    if (!isset($errors['email']) && check_user_email($con, $form['email'])) {
+        $errors['email'] = "Электронная почта. Пользователь с этим email уже зарегистрирован";
+    }
+
+    // Валидация логина на количество символов
+    if (!isset($errors['login']) && !check_length($form['login'], 2, 255)) {
+        $errors['login'] = "Логин. Значение должно быть от 2 до 255 символов";
     }
 
     // Валидация на существование логина
-    if (!isset($errors['login'])) {
-        if (check_user_login($con, $form['login'])) {
-            $errors['login'] = "Пользователь с этим логином уже зарегистрирован";
-        }
+    if (!isset($errors['login']) && check_user_login($con, $form['login'])) {
+        $errors['login'] = "Логин. Пользователь с этим логином уже зарегистрирован";
+    }
+
+    // Валидация пароля на количество символов
+    if (!isset($errors['password']) && !check_length($form['password'], 6, 6)) {
+        $errors['password'] = "Пароль. Пароль должен состоять из 6 символов";
     }
 
     // Проверка на правильность повтора пароля
