@@ -125,22 +125,6 @@ function check_length($value, $min, $max)
 }
 
 /**
- * Возвращает массив из объекта результата запроса
- * @param object $result_query mysqli Результат запроса к базе данных
- * @return array
- */
-function fetch_result($result)
-{
-    $row = mysqli_num_rows($result);
-
-    if ($row === 1) {
-        return mysqli_fetch_assoc($result);
-    }
-
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
-
-/**
  * Проверяет url и возвращает ошибку, если формат неправильный
  * @param string ссылка
  * @return mixed текст ошибки или null
