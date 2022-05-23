@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -10,7 +11,6 @@
  * is_date_valid('10/10/2010'); // false
  *
  * @param string $date Дата в виде строки
- *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
 function is_date_valid(string $date): bool

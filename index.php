@@ -1,50 +1,56 @@
 <?php
+
 require_once 'config/init.php';
 
-$page_title = 'readme: популярное';
+$page_title = 'readme: регистрация';
+$errors = [];
+$form = [];
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    $page_content = include_template('error.php', ['error' => $error]);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $form = filter_input_array(INPUT_POST, ['login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT], true);
+    $form = trim_array($form);
+    $required = [
+        'login' => 'Логин',
+        'password' => 'Пароль',
+    ];
+
+    $email = $form['login'];
+    $password = $form['password'];
+
+    $errors = get_required_errors($form, $required);
+
+    var_dump($errors);
+
+    if (!isset($errors['login']) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['login'] = 'Неверный формат email';
+    }
+
+    if (!isset($errors['login']) and !check_user_email($con, $email)) {
+        $errors['login'] = 'Такой пользователь не найден';
+    }
+
+    $errors = array_filter($errors);
+
+    $current_user = get_сurrent_user($con, $email);
+
+    if (empty($errors) && $current_user) {
+        if (password_verify($password, $current_user['password'])) {
+            $_SESSION['current_user'] = $current_user;
+        } else {
+            $errors['password'] = "Пароли не совпадают";
+        }
+    }
+
+    if (isset($_SESSION['current_user'])) {
+        header('Location: feed.php');
+        exit();
+    }
 }
-else {
-    $sql = "SELECT id, name, class FROM type";
-    $result = mysqli_query($link, $sql);
 
-    if ($result) {
-        $types = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
-        $error = mysqli_error($link);
-        $page_content = include_template('error.php', ['error' => $error]);
-    }
-
-    $sql = "SELECT p.created_at, u.login, u.avatar, t.name, t.class, p.title, p.text, p.caption, p.img, p.video, p.link, p.views FROM post p JOIN user u ON p.user_id = u.id JOIN type t ON p.type_id = t.id ORDER BY p.views DESC";
-    $result = mysqli_query($link, $sql);
-
-    if ($result) {
-        $popular_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $page_content = include_template('main.php', [
-            'popular_posts' => $popular_posts,
-        ]);
-    }
-    else {
-        $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
-    }
-}
-
-$page_header = include_template('header.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-]);
-
-$page_footer = include_template('footer.php', []);
-
-$layout_content = include_template('layout.php', [
+$main_layout = include_template('main-page.php', [
     'page_title' => $page_title,
-    'page_header' => $page_header,
-    'page_content' => $page_content,
-    'page_footer' => $page_footer
+    'form' => $form,
+    'errors' => $errors
 ]);
 
-print($layout_content);
+print($main_layout);
