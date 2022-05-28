@@ -16,7 +16,7 @@
                                 type="text"
                                 name="email"
                                 placeholder="Укажите эл.почту"
-                                value="<?= $form['email'] ?? ''; ?>"
+                                value="<?= isset($form['email']) ? esc($form['email']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -34,7 +34,7 @@
                                 type="text"
                                 name="login"
                                 placeholder="Укажите логин"
-                                value="<?= $form['login'] ?? ''; ?>"
+                                value="<?= isset($form['login']) ? esc($form['login']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -52,7 +52,7 @@
                                 type="password"
                                 name="password"
                                 placeholder="Придумайте пароль"
-                                value="<?= $form['password'] ?? ''; ?>"
+                                value="<?= isset($form['password']) ? esc($form['password']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -70,7 +70,7 @@
                                 type="password"
                                 name="password-repeat"
                                 placeholder="Повторите пароль"
-                                value="<?= $form['password-repeat'] ?? ''; ?>"
+                                value=""
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -86,10 +86,10 @@
                         <ul class="form__invalid-list">
                             <?php foreach($errors as $key => $value) : ?>
                                 <li class="form__invalid-item"><?= $value ?></li>
-                            <? endforeach ?>
+                            <?php endforeach ?>
                         </ul>
                     </div>
-                <? endif ?>
+                <?php endif ?>
             </div>
             <div class="registration__input-file-container form__input-container form__input-container--file">
                 <div class="registration__input-file-wrapper form__input-file-wrapper">

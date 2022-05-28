@@ -7,40 +7,40 @@ CREATE DATABASE readme
 USE readme;
 
 CREATE TABLE user (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   email VARCHAR(128) NOT NULL,
   login VARCHAR(255) NOT NULL,
   password CHAR(255) NOT NULL,
-  avatar VARCHAR(255) DEFAULT NULL,
+  avatar VARCHAR(255) NULL DEFAULT NULL,
 
   UNIQUE INDEX user_email (email),
   UNIQUE INDEX user_login (login)
 );
 
 CREATE TABLE type (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  class VARCHAR(255) DEFAULT NULL,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  class VARCHAR(255) NULL DEFAULT NULL,
   icon_width TINYINT,
   icon_height TINYINT
 );
 
 CREATE TABLE post (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  user_id INT,
-  type_id INT,
+  user_id INT(11),
+  type_id INT(11),
   title TEXT NOT NULL,
-  text TEXT DEFAULT NULL,
-  quote TEXT DEFAULT NULL,
-  caption TEXT DEFAULT NULL,
-  photo_url VARCHAR DEFAULT NULL,
-  video_url VARCHAR DEFAULT NULL,
-  link_url VARCHAR DEFAULT NULL,
-  views INT UNSIGNED DEFAULT 0,
-  repost_count INT UNSIGNED DEFAULT 0,
-  repost_post_id INT DEFAULT NULL,
+  text TEXT NULL DEFAULT NULL,
+  quote TEXT NULL DEFAULT NULL,
+  caption TEXT NULL DEFAULT NULL,
+  photo_url VARCHAR(500) NULL DEFAULT NULL,
+  video_url VARCHAR(500) NULL DEFAULT NULL,
+  link_url VARCHAR(500) NULL DEFAULT NULL,
+  views INT UNSIGNED NULL DEFAULT 0,
+  repost_count INT UNSIGNED NULL DEFAULT 0,
+  repost_post_id INT(11) NULL DEFAULT NULL,
 
   FULLTEXT INDEX post_text (title, text),
 
@@ -49,10 +49,10 @@ CREATE TABLE post (
 );
 
 CREATE TABLE comment (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  post_id INT,
-  user_id INT,
+  post_id INT(11),
+  user_id INT(11),
   text TEXT NOT NULL,
 
   FOREIGN KEY (user_id) REFERENCES user(id),
@@ -60,30 +60,31 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE fav (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  post_id INT,
-  user_id INT,
+  post_id INT(11),
+  user_id INT(11),
 
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (post_id) REFERENCES post(id)
 );
 
 CREATE TABLE subscribe (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  user_id_publisher INT,
-  user_id_subscriber INT,
+  user_id_publisher INT(11),
+  user_id_subscriber INT(11),
 
   FOREIGN KEY (user_id_subscriber) REFERENCES user(id),
   FOREIGN KEY (user_id_publisher) REFERENCES user(id)
 );
 
 CREATE TABLE message (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  user_id_sender INT,
-  user_id_recipient INT,
+  user_id_sender INT(11),
+  user_id_recipient INT(11),
+  is_new TINYINT(1) DEFAULT 0,
   text TEXT NOT NULL,
 
   FOREIGN KEY (user_id_sender) REFERENCES user(id),
@@ -91,14 +92,14 @@ CREATE TABLE message (
 );
 
 CREATE TABLE tag (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
   text TINYTEXT NOT NULL
 );
 
 CREATE TABLE post_tag (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  post_id INT,
-  tag_id INT,
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  post_id INT(11),
+  tag_id INT(11),
 
   FOREIGN KEY (post_id) REFERENCES post(id),
   FOREIGN KEY (tag_id) REFERENCES tag(id)

@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Вывод ошибки в отдельном шаблоне error.php
- * @param string $error Текст ошибки
- * @return string шаблон с выводом ошибки
+ * Функция проверяет код состояния ответа, и возвращает один из
+ * трёх шаблонов с текстом ошибки, для 404, для 500 и для остальных
+ *
+ * @param  string - текст ошибки
+ * @return string
 */
 function show_error($error)
 {
@@ -24,10 +26,12 @@ function show_error($error)
 // _Пользователи
 
 /**
- * Получение пользователя по email
- * @param mysqli $con Ресурс соединения
- * @param string $email почта пользователя
- * @return int
+ * Функция принимает email пользователя и возвращает запись
+ * пользователя из БД
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  string - почта
+ * @return array
 */
 function get_сurrent_user($con, $email)
 {
@@ -44,7 +48,7 @@ function get_сurrent_user($con, $email)
 
             return $user;
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -53,12 +57,13 @@ function get_сurrent_user($con, $email)
 
 /**
  * Получение пользователя по id
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
- * @param int $current_user_id для проверки подписан ли на него текущий пользователь
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id - id пользователя
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
 */
-function get_user_by_id($con, $user_id, $current_user_id)
+function get_all_user_data($con, $user_id, $current_user_id)
 {
     $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT * FROM user WHERE id = $user_id";
@@ -73,13 +78,15 @@ function get_user_by_id($con, $user_id, $current_user_id)
         return $user;
     }
 
-    show_error('get_user_by_id ' . mysqli_error($con));
+    show_error('get_all_user_data ' . mysqli_error($con));
 }
 
 /**
- * Получение id юзеров на каторый подписан пользователь
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
+ * Функция принимает id пользователя и возвращает список id пользователей
+ * на которые он подписан
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int - id пользователя
  * @return int
 */
 function get_user_id_publishers($con, $user_id)
@@ -95,12 +102,14 @@ function get_user_id_publishers($con, $user_id)
     show_error('get_user_id_publishers' . mysqli_error($con));
 }
 
+
 // _Категории
 
 /**
  * Получение всех категорий
- * @param mysqli $con Ресурс соединения
- * @return array or string
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @return array
 */
 function get_all_types($con)
 {
@@ -115,10 +124,11 @@ function get_all_types($con)
 }
 
 /**
- * Получение категории по id
- * @param mysqli $con Ресурс соединения
- * @param int $type_id
- * @return array название типа, его id, класс и размеры для иконок
+ * Получение определенной категории из БД по id
+ *
+ * @param mysqli $con - ресурс соединения
+ * @param int - id категории
+ * @return array - запись из БД
 */
 function get_type($con, $type_id)
 {
@@ -137,12 +147,16 @@ function get_type($con, $type_id)
 // _Посты
 
 /**
- * получение всех постов или из одной категории
- * @param mysqli $con Ресурс соединения
- * @param int $type_id по типу
+ * Получение всех постов или только для одной категории,
+ * если был получен id категории
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $current_user_id - id текущего пользователя для получения дополнительных
+ *            данных, например добавлен ли пост в избранное
+ * @param  int $type_id - id категории, по умолчанию ровен null
  * @return array
 */
-function get_all_posts($con, $current_user_id, $type_id = NULL)
+function get_all_posts($con, $current_user_id, $type_id = null)
 {
     if (!$type_id) {
         $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
@@ -187,12 +201,18 @@ function get_all_posts($con, $current_user_id, $type_id = NULL)
 }
 
 /**
- * получение всех популярных постов или одной категории
- * @param mysqli $con Ресурс соединения
- * @param int $type_id категория
+ * Получение постранично отсортированных всех популярных постов или постов
+ * только для одной категории, если был передан id категории
+ *
+ * @param mysqli $con - ресурс соединения
+ * @param int $page_items - количество страниц
+ * @param int $offset - количество постов на одной странице
+ * @param int $current_user_id - id текущего пользователя
+ * @param string $sorting - сортировка, по количеству просмотров, по количеству лайков или по дате
+ * @param int $type_id - id категории, по умолчанию ровен null
  * @return array
 */
-function get_popular_posts($con, $page_items, $offset, $current_user_id, $sorting, $type_id = NULL)
+function get_popular_posts($con, $page_items, $offset, $current_user_id, $sorting, $type_id = null)
 {
     $page_items = mysqli_real_escape_string($con, $page_items);
     $offset = mysqli_real_escape_string($con, $offset);
@@ -241,10 +261,11 @@ function get_popular_posts($con, $page_items, $offset, $current_user_id, $sortin
 }
 
 /**
- * Получение одного поста по id поста
- * @param mysqli $con Ресурс соединения
- * @param int $post_id для получения поста
- * @param int $user_id для добавления поля добавлен ли этот пост в избранное текущего пользователя
+ * Получение одного поста по id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
 */
 function get_post_by_id($con, $post_id, $current_user_id)
@@ -275,9 +296,11 @@ function get_post_by_id($con, $post_id, $current_user_id)
 }
 
 /**
- * Получение постов одного пользователя по id пользователя
- * @param mysqli $con Ресурс соединения
- * @param int $user_id id пользователя
+ * Получение постов определенного пользователя по id пользователя
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id id пользователя
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
 */
 function get_user_posts($con, $user_id, $current_user_id)
@@ -315,10 +338,13 @@ function get_user_posts($con, $user_id, $current_user_id)
 }
 
 /**
- * Получение постов на которые подписан юзер
- * @param mysqli $con Ресурс соединения
- * @param array $publishers id юзеров на которые подписан пользователь
- * @return int
+ * Получение постов на которые подписан пользователь
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  array $publishers - id пользователей на которые подписан пользователь
+ * @param  int $current_user_id - id текущего пользователя
+ * @param  int $type_id - id категории
+ * @return array
 */
 function get_feed_posts($con, $publishers, $current_user_id, $type_id)
 {
@@ -337,10 +363,11 @@ function get_feed_posts($con, $publishers, $current_user_id, $type_id)
 }
 
 /**
- * Получение постов для результатов поиска по хэштэгу и строке
- * @param mysqli $con Ресурс соединения
- * @param string $search хэштег или строка поиска
- * @return array, null
+ * Получение результатов поиска, по хэштэгу или строке
+ *
+ * @param  mysqli $con - Ресурс соединения
+ * @param  string $search - хэштег или строка поиска
+ * @return array
 */
 function get_search_results($con, $search)
 {
@@ -371,7 +398,7 @@ function get_search_results($con, $search)
 
             $result = mysqli_query($con, $sql);
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -383,7 +410,12 @@ function get_search_results($con, $search)
 }
 
 /**
+ * Функция принимает id поста, находит id исходного поста, если этот пост
+ * был репостнут и возвращает автора исходного поста
  *
+ * @param  mysqli $con - Ресурс соединения
+ * @param  int - id поста
+ * @return array
  */
 function get_repost($con, $post_id) {
     $post_id = mysqli_real_escape_string($con, $post_id);
@@ -405,7 +437,7 @@ function get_repost($con, $post_id) {
 
             show_error('get_repost_ ' . mysqli_error($con));
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -415,9 +447,11 @@ function get_repost($con, $post_id) {
 // Лайки
 
 /**
- * Получение лайков для текущего пользователя, включая пользователя типа контента и превью поста
- * @param mysqli $con Ресурс соединения
- * @param int $current_user_id текущий полльзователь
+ * Получение лайков пользователя, пользователя, категории,
+ * и ссылок на материала поста для превьюшки
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int - id пользователя
  * @return array
  */
 function get_favs($con, $user_id) {
@@ -441,10 +475,10 @@ function get_favs($con, $user_id) {
 
 /**
  * Получение списка подписанных пользователей,
- * Список состоит из id, логина, аватарки, количества публикаций и количества подписчиков
- * для каждого подписанного пользователя
- * @param mysqli $con - ресурс соединения
- * @param int $current_user_id - id текущего пользователя
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id id пользователя
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
  */
 function get_subscrubers($con, $user_id, $current_user_id)
@@ -478,8 +512,9 @@ function get_subscrubers($con, $user_id, $current_user_id)
 
 /**
  * Получение комментариев к посту
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int - id поста
  * @return array
 */
 function get_comments($con, $post_id)
@@ -498,13 +533,13 @@ function get_comments($con, $post_id)
     show_error('get_comments ' . mysqli_error($con));
 }
 
-// Сообщения
-
+// _Сообщения
 
 /**
  * Получение id пользователей которым были отправлены сообщения
- * @param  mixed $con
- * @param  mixed $current_user_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
  */
 function get_ids_recipient($con, $current_user_id) {
@@ -524,8 +559,9 @@ function get_ids_recipient($con, $current_user_id) {
 
 /**
  * Получение id пользователей которые отправили сообщения
- * @param  mixed $con
- * @param  mixed $current_user_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $current_user_id - id текущего пользователя
  * @return array
  */
 function get_ids_sender($con, $current_user_id) {
@@ -543,20 +579,23 @@ function get_ids_sender($con, $current_user_id) {
 }
 
 /**
- * Получение последнего сообщения для превью в описании пользователя в сообщениях
- * @param  mixed $con
- * @param  mixed $user_id_sender
- * @param  mixed $user_id_recipient
- * @return void
+ * Получение последнего сообщения для превью в сообщениях
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender
+ * @param  int $user_id_recipient
+ * @return array
  */
 function get_last_message($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
     $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
     $sql = "SELECT m.created_at, u.id, u.login, m.text FROM message m
             JOIN user u ON m.user_id_sender = u.id
             WHERE (m.user_id_sender = $user_id_sender AND m.user_id_recipient = $user_id_recipient)
             OR (m.user_id_sender = $user_id_recipient AND m.user_id_recipient = $user_id_sender)
             ORDER BY m.created_at DESC LIMIT 1";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -568,25 +607,28 @@ function get_last_message($con, $user_id_sender, $user_id_recipient) {
 
 /**
  * Получение одного пользователя по id для сообщений
- * @param  mixed $con
- * @param  mixed $user_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int - id пользователя
  * @return array
  */
-function get_communicate_user($con, $user_id) {
+function get_user($con, $user_id) {
     $user_id = mysqli_real_escape_string($con, $user_id);
-    $sql = "SELECT id, login, avatar FROM user WHERE id = $user_id";
+    $sql = "SELECT id, login, email, avatar FROM user WHERE id = $user_id";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
         return mysqli_fetch_assoc($result);
     }
 
-    show_error('get_communicate_user ' . mysqli_error($con));
+    show_error('get_user ' . mysqli_error($con));
 }
 
 /**
- * Получение всех пользователей для страницы сообщений, и сортировка их по дате, по убыванию
- * @param  mysqly $con
+ * Получение всех пользователей для страницы сообщений для текущего пользователя,
+ * и сортировка их по дате по убыванию
+ *
+ * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id
  * @return array
  */
@@ -598,14 +640,16 @@ function get_all_communicate_users($con, $current_user_id) {
     $last_message = [];
 
     foreach($ids as $id) {
-        $user = get_communicate_user($con, $id);
+        $user = get_user($con, $id);
         $last_messages = get_last_message($con, $id, $current_user_id);
         $user['last_message'] = $last_messages;
+        $user['count_new_messages'] = get_count_new_messages($con, $id, $current_user_id);
 
         $users[] = $user;
     }
 
     $dates = [];
+
     foreach($users as $key => $value){
         $dates[$key] = $value['last_message']['created_at'];
     }
@@ -617,21 +661,25 @@ function get_all_communicate_users($con, $current_user_id) {
 /**
  * Получение сообщений с одним пользователем
  *
- * @param  mysqli $con
+ * @param  mysqli $con - ресурс соединения
  * @param  int $user_id_sender
  * @param  int $user_id_recipient
- * @return void
+ * @return array
  */
 function get_messages($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
     $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
 
-    $sql = "SELECT u.id user_id, u.login, u.avatar, m.created_at, m.text FROM message m
+    remove_new_messages($con, $user_id_sender, $user_id_recipient);
+
+    $sql = "SELECT u.id user_id, u.login, u.avatar, m.created_at, m.text
+            FROM message m
             JOIN user u ON m.user_id_sender = u.id
             WHERE
                 (m.user_id_sender = $user_id_sender AND m.user_id_recipient = $user_id_recipient) OR
                 (m.user_id_sender = $user_id_recipient AND m.user_id_recipient = $user_id_sender)
             ORDER BY m.created_at";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -645,18 +693,21 @@ function get_messages($con, $user_id_sender, $user_id_recipient) {
 
 /**
  * Получение хэштегов для поста
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
  * @return array
 */
 function get_tags($con, $post_id)
 {
     $post_id = mysqli_real_escape_string($con, $post_id);
+
     $sql = "SELECT h.* FROM tag h
             JOIN post_tag ph ON ph.tag_id = h.id
             JOIN post p ON p.id = ph.post_id
             WHERE ph.post_id = $post_id
             GROUP BY ph.tag_id";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -667,9 +718,10 @@ function get_tags($con, $post_id)
 }
 
 /**
- * Получение id хэштега по тексту
- * @param mysqli $con Ресурс соединения
- * @param string текст хэштега
+ * Получение id хэштега
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  string $tag - хэштег
  * @return int
 */
 function get_tag_id($con, $tag)
@@ -682,7 +734,7 @@ function get_tag_id($con, $tag)
         return mysqli_fetch_assoc($result)['id'];
     }
 
-    return NULL;
+    return null;
 }
 
 
@@ -690,7 +742,8 @@ function get_tag_id($con, $tag)
 
 /**
  * Количество всех постов в БД
- * @param mysqli $con Ресурс соединения
+ *
+ * @param  mysqli - ресурс соединения
  * @return int
 */
 function get_count_all_posts($con)
@@ -707,8 +760,9 @@ function get_count_all_posts($con)
 
 /**
  * Количество подписчиков пользователя
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id - id пользователя
  * @return int
 */
 function get_count_subscribers($con, $user_id)
@@ -726,8 +780,9 @@ function get_count_subscribers($con, $user_id)
 
 /**
  * Количество коментариев
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
  * @return int
 */
 function get_count_comments($con, $post_id)
@@ -745,12 +800,14 @@ function get_count_comments($con, $post_id)
 
 /**
  * Количество постов пользователя
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id - id пользователя
  * @return int
 */
 function get_count_user_posts($con, $user_id)
 {
+    $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT COUNT(id) AS count FROM post WHERE user_id = $user_id";
     $result = mysqli_query($con, $sql);
 
@@ -761,13 +818,41 @@ function get_count_user_posts($con, $user_id)
     show_error('get_count_user_posts ' . mysqli_error($con));
 }
 
+/**
+ * Количество новых непрочитанных сообщений
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender - id отправителя
+ * @param  int $user_id_recipient - id получателя
+ * @return int
+ */
+function get_count_new_messages($con, $user_id_sender, $user_id_recipient)
+{
+    $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
+    $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
+    $sql = "SELECT COUNT(is_new) as count FROM message
+                WHERE user_id_sender = $user_id_sender
+                AND user_id_recipient = $user_id_recipient
+                AND is_new = 1";
+
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        return mysqli_fetch_assoc($result)['count'];
+    }
+
+    show_error('get_count_new_messages ' . mysqli_error($con));
+}
+
 // Проверки
 
 /**
- * Проверка email пользователя
- * @param mysqli $con Ресурс соединения
- * @param string $email почта пользователя
- * @return int
+ * Проверка на существование пользователя по email
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  string $email - почта пользователя
+ * @return bool
 */
 function check_user_email($con, $email)
 {
@@ -776,22 +861,18 @@ function check_user_email($con, $email)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $email = mysqli_fetch_assoc($result);
-
-        if ($email) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_user_email ' . mysqli_error($con));
 }
 
 /**
- * Проверка логина пользователя
- * @param mysqli $con Ресурс соединения
- * @param int $login
- * @return int
+ * Проверка на существование пользователя по логину
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $login - логин пользователя
+ * @return bool
 */
 function check_user_login($con, $login)
 {
@@ -800,22 +881,18 @@ function check_user_login($con, $login)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $login = mysqli_fetch_assoc($result);
-
-        if ($login) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_user_login ' . mysqli_error($con));
 }
 
 /**
- * Проверка id пользователя
- * @param mysqli $con Ресурс соединения
- * @param int $user_id id пользователя
- * @return int или NULL
+ * Проверка на существование пользователя по id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id - id пользователя
+ * @return bool
 */
 function check_user_id($con, $user_id)
 {
@@ -824,22 +901,18 @@ function check_user_id($con, $user_id)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $user_id = mysqli_fetch_assoc($result);
-
-        if ($user_id) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_user_id ' . mysqli_error($con));
 }
 
 /**
- * Проверка id поста
- * @param mysqli $con Ресурс соединения
- * @param int $post_id id поста
- * @return int или NULL
+ * Проверка на существование поста по id
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @return bool
 */
 function check_post_id($con, $post_id)
 {
@@ -848,20 +921,18 @@ function check_post_id($con, $post_id)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $post_id = mysqli_fetch_assoc($result);
-
-        if ($post_id) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_post_id ' . mysqli_error($con));
 }
 
 /**
- * Проверка. Добавлен ли пост в избранное
- * @param mysqli $con Ресурс соединения
+ * Проверка. Добавлен ли пост в избранное пользователя
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $user_id - id пользователя
  * @return bool
 */
 function check_is_fav($con, $post_id, $user_id)
@@ -872,38 +943,29 @@ function check_is_fav($con, $post_id, $user_id)
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $fav = mysqli_fetch_assoc($result);
-
-        if ($fav) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_is_fav ' . mysqli_error($con));
 }
 
 /**
- * Проверка. Есть ли подписка
- * @param mysqli $con Ресурс соединения
- * @param int $user_id - id паблишера
- * @param int $curren_user_id - id подписчика
+ * Проверка. Есть ли подписка на пользователя
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_publisher - id автора
+ * @param  int $user_id_subscriber - id подписчика
  * @return bool
 */
-function check_subscribe($con, $user_id, $current_user_id)
+function check_subscribe($con, $user_id_publisher, $user_id_subscriber)
 {
-    $user_id = mysqli_real_escape_string($con, $user_id);
-    $current_user_id = mysqli_real_escape_string($con, $current_user_id);
-    $sql = "SELECT id FROM subscribe WHERE user_id_publisher = $user_id AND user_id_subscriber = $current_user_id";
+    $user_id_publisher = mysqli_real_escape_string($con, $user_id_publisher);
+    $user_id_subscriber = mysqli_real_escape_string($con, $user_id_subscriber);
+    $sql = "SELECT id FROM subscribe WHERE user_id_publisher = $user_id_publisher AND user_id_subscriber = $user_id_subscriber";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
-        $subscribe = mysqli_fetch_assoc($result);
-
-        if ($subscribe) {
-            return true;
-        }
-        return false;
+        return (bool) mysqli_fetch_assoc($result);
     }
 
     show_error('check_subscribe ' . mysqli_error($con));
@@ -914,9 +976,12 @@ function check_subscribe($con, $user_id, $current_user_id)
 
 /**
  * Добавление комментария
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id текущего пользователя
+ * @param  string $comment - текст комментария
+ * @return void
 */
 function add_comment($con, $post_id, $current_user_id, $comment)
 {
@@ -931,9 +996,10 @@ function add_comment($con, $post_id, $current_user_id, $comment)
 
 /**
  * Добавление просмотра поста
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @return void
 */
 function add_views($con, $post_id)
 {
@@ -947,10 +1013,12 @@ function add_views($con, $post_id)
 }
 
 /**
- * Добавление просмотра поста
- * @param mysqli $con Ресурс соединения
- * @param int $post_id
- * @return string если ошибка
+ * Добавление репоста поста
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id пользователя
+ * @return void
 */
 function add_repost($con, $post_id, $current_user_id)
 {
@@ -992,10 +1060,11 @@ function add_repost($con, $post_id, $current_user_id)
 
 /**
  * Добавление подписки
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
- * @param int $user_id
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id пользователя
+ * @return void
 */
 function add_subscribe($con, $user_id, $current_user_id)
 {
@@ -1010,10 +1079,11 @@ function add_subscribe($con, $user_id, $current_user_id)
 
 /**
  * Добавление поста в избранное
- * @param mysqli $con Ресурс соединения
- * @param int $user_id
- * @param int $user_id
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id пользователя
+ * @return void
 */
 function add_fav($con, $post_id, $current_user_id)
 {
@@ -1028,14 +1098,16 @@ function add_fav($con, $post_id, $current_user_id)
 
 /**
  * Добавление сообщения
- * @param mysqli $con Ресурс соединения
- * @param int $user_id_sender
- * @param int $user_id_recipient
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender - id отправителя
+ * @param  int $user_id_recipient - id получателя
+ * @param  int $message - текст сообщения
+ * @return void
 */
 function add_message($con, $user_id_sender, $user_id_recipient, $message)
 {
-    $sql = "INSERT INTO message (user_id_sender, user_id_recipient, text) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO message (user_id_sender, user_id_recipient, text, is_new) VALUES (?, ?, ?, 1)";
     $stmt = db_get_prepare_stmt($con, $sql, [$user_id_sender, $user_id_recipient, $message]);
     $result = mysqli_stmt_execute($stmt);
 
@@ -1049,10 +1121,11 @@ function add_message($con, $user_id_sender, $user_id_recipient, $message)
 
 /**
  * Удаление поста из избранного
- * @param mysqli $con Ресурс соединения
- * @param int $post_id - id поста
- * @param int $current_user_id - id пользователя
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $post_id - id поста
+ * @param  int $current_user_id - id пользователя
+ * @return void
 */
 function remove_fav($con, $post_id, $current_user_id)
 {
@@ -1067,18 +1140,43 @@ function remove_fav($con, $post_id, $current_user_id)
 
 /**
  * Удаление подписки
- * @param mysqli $con Ресурс соединения
- * @param int $post_id - id поста
- * @param int $current_user_id - id пользователя
- * @return string если ошибка
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_publisher - id автора
+ * @param  int $user_id_subscriber - id подписчика
+ * @return void
 */
-function remove_subcribe($con, $user_id, $current_user_id)
+function remove_subcribe($con, $user_id_publisher, $user_id_subscriber)
 {
     $sql = "DELETE FROM subscribe WHERE user_id_publisher = ? AND user_id_subscriber = ?";
-    $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $current_user_id]);
+    $stmt = db_get_prepare_stmt($con, $sql, [$user_id_publisher, $user_id_subscriber]);
     $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {
         show_error('remove_subcribe ' . mysqli_error($con));
+    }
+}
+
+/**
+ * Обнуление поля что сообщение новое
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender - id отправителя
+ * @param  int $user_id_recipient - id получателя
+ * @return void
+ */
+function remove_new_messages($con, $user_id_sender, $user_id_recipient)
+{
+    $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
+    $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
+    $sql = "UPDATE message SET is_new = 0
+                WHERE user_id_sender = $user_id_sender
+                AND user_id_recipient = $user_id_recipient";
+
+    $result = mysqli_query($con, $sql);
+
+    if (!$result) {
+        show_error('get_count_user_posts ' . mysqli_error($con));
     }
 }

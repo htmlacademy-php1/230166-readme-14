@@ -1,4 +1,11 @@
 <?php
+
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
+require_once 'vendor/autoload.php';
+
 require_once 'config/config.php';
 require_once 'helpers.php';
 require_once 'models.php';
@@ -7,7 +14,7 @@ require_once 'data.php';
 
 session_start();
 
-$current_user = $_SESSION['current_user'] ?? NULL;
+$current_user = $_SESSION['current_user'] ?? null;
 
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));

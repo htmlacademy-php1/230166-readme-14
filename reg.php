@@ -16,7 +16,7 @@ $required = [
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'login' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'password-repeat' => FILTER_DEFAULT], true);
     $form = trim_array($form);
-    $file_name = $_FILES['avatar']['name'] ?? NULL;
+    $file_name = $_FILES['avatar']['name'] ?? null;
 
     // Валидация обязательных полей
     $errors = get_required_errors($form, $required);
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Валидация почты на количество символов
-    if (!isset($errors['email']) && !check_length($form['email'], 5, 128)) {
+    if (!isset($errors['email']) && !check_length_of_string($form['email'], 5, 128)) {
         $errors['email'] = "Электронная почта. Значение должно быть от 5 до 128 символов";
     }
 
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Валидация логина на количество символов
-    if (!isset($errors['login']) && !check_length($form['login'], 2, 255)) {
+    if (!isset($errors['login']) && !check_length_of_string($form['login'], 2, 255)) {
         $errors['login'] = "Логин. Значение должно быть от 2 до 255 символов";
     }
 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Валидация пароля на количество символов
-    if (!isset($errors['password']) && !check_length($form['password'], 6, 6)) {
+    if (!isset($errors['password']) && !check_length_of_string($form['password'], 6, 6)) {
         $errors['password'] = "Пароль. Пароль должен состоять из 6 символов";
     }
 
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
-    if(empty($errors)) {
+    if (empty($errors)) {
         $password = password_hash($form['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, login, password, avatar) VALUES (?, ?, ?, ?)";
         $user = [$form['email'], $form['login'], $password, $avatar];

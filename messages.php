@@ -7,8 +7,10 @@ if (!$current_user || !check_user_id($con, $current_user['id'])) {
     exit();
 }
 
-$page_title = 'readme: личные сообщения';
 $current_user_id = (int)$current_user['id'];
+$is_new = (int)filter_input(INPUT_GET, 'is_new');
+$error = '';
+$users = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $comment = trim(filter_input(INPUT_POST, 'comment'));
@@ -35,6 +37,7 @@ if ($user_id && !check_user_id($con, $user_id)) {
 }
 
 $users = get_all_communicate_users($con, $current_user_id);
+$sum_new_messages = sum_all_new_messages($users);
 
 if (!$user_id && $users) {
     $user_id = $users[0]['id'];
@@ -42,10 +45,10 @@ if (!$user_id && $users) {
     $all_user_ids = array_column($users, 'id');
 
     if (!in_array($user_id, $all_user_ids)) {
-        $start_user = get_communicate_user($con, $user_id);
+        $start_user = get_user($con, $user_id);
     }
 } elseif ($user_id && !$users) {
-    $start_user = get_communicate_user($con, $user_id);
+    $start_user = get_user($con, $user_id);
 }
 
 if ($user_id) {
@@ -54,16 +57,16 @@ if ($user_id) {
 
 $page_content = include_template('messages.php', [
     'current_user' => $current_user,
-    'user_id' => $user_id ?? NULL,
+    'user_id' => $user_id ?? null,
     'messages' => $messages ?? [],
-    'users' => $users ?? [],
-    'error' => $error ?? NULL,
-    'start_user' => $start_user ?? NULL,
-    'comment' => $comment ?? NULL
+    'users' => $users,
+    'error' => $error,
+    'start_user' => $start_user ?? null,
+    'comment' => $comment ?? null
 ]);
 
 $page_layout = include_template('page-layout.php', [
-    'page_title' => $page_title,
+    'page_title' => 'readme: личные сообщения',
     'current_user' => $current_user,
     'page_content' => $page_content
 ]);

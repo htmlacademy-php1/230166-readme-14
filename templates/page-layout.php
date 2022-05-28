@@ -96,7 +96,7 @@
                                             <a class="header__profile-nav-link" href="messages.php">
                                                 <span class="header__profile-nav-text">
                                                     Сообщения
-                                                    <i class="header__profile-indicator">2</i>
+                                                    <!-- <i class="header__profile-indicator">2</i> -->
                                                 </span>
                                             </a>
                                         </li>
@@ -120,7 +120,7 @@
                     </ul>
                 </nav>
             </div>
-            <? else : ?>
+            <?php else : ?>
             <nav class="header__nav">
                 <p class="header__register-slogan">
                 </p>
@@ -130,7 +130,7 @@
                     </li>
                 </ul>
             </nav>
-            <? endif; ?>
+            <?php endif; ?>
         </div>
     </header>
 

@@ -20,7 +20,7 @@
                                     <span><?= $type['name']; ?></span>
                                 </a>
                             </li>
-                        <? endforeach ?>
+                        <?php endforeach ?>
                     </ul>
                 </div>
 
@@ -34,8 +34,8 @@
                                     'tags' => $tags
                                 ]);
                             ?>
-                        <? endif; ?>
-                    <? endforeach; ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

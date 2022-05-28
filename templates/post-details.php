@@ -32,7 +32,7 @@
                                 'title' => $post['title'],
                             ]);
                         ?>
-                    <? endif; ?>
+                    <?php endif; ?>
                     <div class="post__indicators">
                         <div class="post__buttons">
                         <a
@@ -73,7 +73,7 @@
                     <ul class="post__tags">
                         <?php foreach ($post['tags'] as $tag) : ?>
                             <li><a href="#"><?= $tag['text'] ?></a></li>
-                        <? endforeach; ?>
+                        <?php endforeach; ?>
                     </ul>
                     <div class="comments">
                         <form class="comments__form form" action="add-comment.php?post_id=<?= esc($post['id']) ?>" method="post">
@@ -93,7 +93,7 @@
                                         <h3 class="form__error-title">Ошибка валидации</h3>
                                         <p class="form__error-desc"><?= $error ?? ''; ?></p>
                                     </div>
-                                <? endif; ?>
+                                <?php endif; ?>
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
@@ -123,7 +123,7 @@
                                                 </p>
                                             </div>
                                         </li>
-                                    <? endforeach; ?>
+                                    <?php endforeach; ?>
                                     <?php if($is_show_comments) : ?>
                                         <?php foreach(array_slice($post['comments'], 2) as $comment) : ?>
                                             <li class="comments__item user">
@@ -147,16 +147,16 @@
                                                     </p>
                                                 </div>
                                             </li>
-                                        <? endforeach; ?>
-                                    <? endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </ul>
                                 <?php if ($post['count_comments'] > 2 && !$is_show_comments) : ?>
                                     <a class="comments__more-link" href="post.php?post_id=<?= esc($post['id']); ?>&is_show_comments=true">
                                         <span>Показать все комментарии</span>
                                         <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
                                     </a>
-                                <? endif; ?>
-                            <? endif; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -205,9 +205,12 @@
                             >
                                 <?= ($user['is_subscribe']) ? 'Отписаться' : 'Подписаться'; ?>
                             </a>
-                            <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
+                            <a
+                                class="user__button user__button--writing button button--green"
+                                href="messages.php?user_id=<?= $user['id']; ?>"
+                            >Сообщение</a>
                         </div>
-                    <? endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

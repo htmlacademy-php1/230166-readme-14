@@ -28,21 +28,21 @@
                             <use xlink:href="#icon-filter-text"></use>
                         </svg>
                     </a>
-                <? elseif ((int)$fav['type_id'] === 2) : ?>
+                <?php elseif ((int)$fav['type_id'] === 2) : ?>
                     <a class="post-mini__link" href="post.php?post_id=<?= $fav['post_id'] ?>" title="Перейти на публикацию">
                         <span class="visually-hidden">Цитата</span>
                         <svg class="post-mini__preview-icon" width="21" height="20">
                             <use xlink:href="#icon-filter-quote"></use>
                         </svg>
                     </a>
-                <? elseif ((int)$fav['type_id'] === 3) : ?>
+                <?php elseif ((int)$fav['type_id'] === 3) : ?>
                     <a class="post-mini__link" href="post.php?post_id=<?= $fav['post_id'] ?>" title="Перейти на публикацию">
                         <div class="post-mini__image-wrapper">
                             <img class="post-mini__image" src="<?= $fav['photo_url']; ?>" width="109" height="109" alt="Превью публикации">
                         </div>
                         <span class="visually-hidden">Фото</span>
                     </a>
-                <? elseif ((int)$fav['type_id'] === 4) : ?>
+                <?php elseif ((int)$fav['type_id'] === 4) : ?>
                     <a class="post-mini__link" href="post.php?post_id=<?= $fav['post_id'] ?>" title="Перейти на публикацию">
                         <div class="post-mini__image-wrapper">
                             <?php embed_youtube_cover(esc($fav['photo_url'])); ?>
@@ -54,15 +54,15 @@
                         </div>
                         <span class="visually-hidden">Видео</span>
                     </a>
-                <? elseif ((int)$fav['type_id'] === 5) : ?>
+                <?php elseif ((int)$fav['type_id'] === 5) : ?>
                     <a class="post-mini__link" href="post.php?post_id=<?= $fav['post_id'] ?>" title="Перейти на публикацию">
                         <span class="visually-hidden">Ссылка</span>
                         <svg class="post-mini__preview-icon" width="21" height="18">
                             <use xlink:href="#icon-filter-link"></use>
                         </svg>
                     </a>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
         </li>
-    <? endforeach; ?>
+    <?php endforeach; ?>
 </ul>

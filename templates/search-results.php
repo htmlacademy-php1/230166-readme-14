@@ -57,7 +57,7 @@
                                         'title' => $post['title'],
                                     ]);
                                 ?>
-                            <? endif; ?>
+                            <?php endif; ?>
                         </div>
                         <footer class="post__footer post__indicators">
                             <div class="post__buttons">
@@ -92,7 +92,7 @@
                             </div>
                         </footer>
                     </article>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

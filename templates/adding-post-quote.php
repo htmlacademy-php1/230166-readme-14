@@ -81,10 +81,10 @@
                 <ul class="form__invalid-list">
                     <?php foreach($errors as $key => $value) : ?>
                         <li class="form__invalid-item"><?= $value ?></li>
-                    <? endforeach ?>
+                    <?php endforeach ?>
                 </ul>
             </div>
-            <? endif ?>
+            <?php endif ?>
         </div>
         <div class="adding-post__buttons">
             <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>

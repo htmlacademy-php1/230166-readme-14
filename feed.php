@@ -8,7 +8,7 @@ if (!$current_user || !check_user_id($con, $current_user['id'])) {
 }
 
 $page_title = 'readme: публикация';
-$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT) ?? NULL;
+$type_id = filter_input(INPUT_GET, 'type_id', FILTER_SANITIZE_NUMBER_INT) ?? null;
 $types = get_all_types($con);
 
 if ($type_id && check_id($types, $type_id)) {

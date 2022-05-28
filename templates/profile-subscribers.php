@@ -48,5 +48,5 @@
                 </a>
             </div>
         </li>
-    <? endforeach; ?>
+    <?php endforeach; ?>
 </ul>

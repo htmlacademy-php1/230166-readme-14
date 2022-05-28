@@ -5,15 +5,15 @@
             <div class="profile__user user container">
                 <div class="profile__user-info user__info">
                     <div class="profile__avatar user__avatar">
-                        <img class="profile__picture user__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                        <img class="profile__picture user__picture" src="<?= esc($user['avatar']) ?>" alt="Аватар пользователя">
                     </div>
                     <div class="profile__name-wrapper user__name-wrapper">
-                        <span class="profile__name user__name"><?= $user['login'] ?></span>
+                        <span class="profile__name user__name"><?= esc($user['login']) ?></span>
                         <time
                             class="profile__user-time user__time"
-                            datetime="<?= $user['created_at'] ?>"
-                            title="<?= get_date_for_title($user['created_at']) ?>"
-                        ><?= get_relative_date($user['created_at']) ?></time>
+                            datetime="<?= esc($user['created_at']) ?>"
+                            title="<?= get_date_for_title(esc($user['created_at'])) ?>"
+                        ><?= get_relative_date(esc($user['created_at'])) ?></time>
                     </div>
                 </div>
                 <div class="profile__rating user__rating">
@@ -22,7 +22,7 @@
                             <?= esc($user['count_posts']); ?>
                         </span>
                         <span class="profile__rating-text user__rating-text">
-                            <?= get_noun_plural_form($user['count_posts'], 'публикация', 'публикации', 'публикаций'); ?>
+                            <?= get_noun_plural_form(esc($user['count_posts']), 'публикация', 'публикации', 'публикаций'); ?>
                         </span>
                     </p>
                     <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
@@ -30,22 +30,22 @@
                             <?= esc($user['count_subscribes']); ?>
                         </span>
                         <span class="profile__rating-text user__rating-text">
-                            <?= get_noun_plural_form($user['count_subscribes'], 'подписчик', 'подписчика', 'подписчиков'); ?>
+                            <?= get_noun_plural_form(esc($user['count_subscribes']), 'подписчик', 'подписчика', 'подписчиков'); ?>
                         </span>
                     </p>
                 </div>
-                <?php if ((int)$user['id'] !== $current_user['id']) : ?>
+                <?php if ((int)$user['id'] !== (int)$current_user['id']) : ?>
                     <div class="profile__user-buttons user__buttons">
                         <a
                             class="profile__user-button user__button user__button--subscription button button--main"
-                            href="add-subscribe.php?user_id=<?= $user['id']; ?>"
+                            href="add-subscribe.php?user_id=<?= esc($user['id']); ?>"
                         ><?= ($user['is_subscribe']) ? 'Отписаться' : 'Подписаться'; ?></a>
                         <a
                             class="profile__user-button user__button user__button--writing button button--green"
-                            href="messages.php?user_id=<?= $user['id']; ?>"
+                            href="messages.php?user_id=<?= esc($user['id']); ?>"
                         >Сообщение</a>
                     </div>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -57,19 +57,19 @@
                         <li class="profile__tabs-item filters__item">
                             <a
                                 class="profile__tabs-link filters__button tabs__item button <?= ($tab === 'posts') ? 'filters__button--active tabs__item--active' : ''; ?>"
-                                href="profile.php?tab=posts&user_id=<?= $user_id ?>"
+                                href="profile.php?tab=posts&user_id=<?= esc($user['id']) ?>"
                             >Посты</a>
                         </li>
                         <li class="profile__tabs-item filters__item">
                             <a
                                 class="profile__tabs-link filters__button tabs__item button <?= ($tab === 'favs') ? 'filters__button--active tabs__item--active' : ''; ?>"
-                                href="profile.php?tab=favs&user_id=<?= $user_id ?>"
+                                href="profile.php?tab=favs&user_id=<?= esc($user['id'])?>"
                             >Лайки</a>
                         </li>
                         <li class="profile__tabs-item filters__item">
                             <a
                                 class="profile__tabs-link filters__button tabs__item button <?= ($tab === 'subscribers') ? 'filters__button--active tabs__item--active' : ''; ?>"
-                                href="profile.php?tab=subscribers&user_id=<?= $user_id ?>"
+                                href="profile.php?tab=subscribers&user_id=<?= esc($user['id']) ?>"
                             >Подписки</a>
                         </li>
                     </ul>
@@ -87,10 +87,10 @@
                                         'current_user' => $current_user
                                     ]);
                                 ?>
-                            <? endforeach; ?>
-                        <? else : ?>
+                            <?php endforeach; ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
 
                     <section class="profile__likes tabs__content <?= $tab === 'favs' ? 'tabs__content--active' : ''; ?>">
@@ -101,9 +101,9 @@
                                     'user_id' => $user_id
                                 ]);
                             ?>
-                        <? else : ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
 
                     <section class="profile__subscriptions tabs__content <?= $tab === 'subscribers' ? 'tabs__content--active' : ''; ?>">
@@ -113,9 +113,9 @@
                                     'subscribers' => $subscribers
                                 ]);
                             ?>
-                        <? else : ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
                 </div>
             </div>

@@ -33,7 +33,7 @@ $required = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $file_name = $_FILES['img_file']['name'] ?? NULL;
+    $file_name = $_FILES['img_file']['name'] ?? null;
 
     switch ($type_id) {
         // Текст
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 3:
             $post = filter_input_array(INPUT_POST, ['type_id' => FILTER_DEFAULT, 'title' => FILTER_DEFAULT, 'photo_url' => FILTER_DEFAULT], true);
             $sql = "INSERT INTO post (user_id, type_id, title, photo_url) VALUES ($current_user_id, ?, ?, ?)";
-            $errors['photo_url'] = !$file_name && !$post['photo_url'] ? 'Вы не загрузили файл' : NULL;
+            $errors['photo_url'] = !$file_name && !$post['photo_url'] ? 'Вы не загрузили файл' : null;
             break;
         // Видео
         case 4:
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $video_url = $post['video_url'];
             $errors['video_url'] = validate_url($video_url);
             if (!$errors['video_url']) {
-                $errors['video_url'] = validate_youtube_url($video_url);
+                $errors['video_url'] = check_youtube_url($video_url);
             }
             break;
         // Ссылка
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Валидация заголовка на количество символов
-    if (!isset($errors['title']) && !check_length($post['title'], 2, 255)) {
+    if (!isset($errors['title']) && !check_length_of_string($post['title'], 2, 255)) {
         $errors['email'] = "Заголовок. Значение должно быть от 2 до 255 символов";
     }
 
