@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
-    if(empty($errors)) {
+    if (empty($errors)) {
         $password = password_hash($form['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, login, password, avatar) VALUES (?, ?, ?, ?)";
         $user = [$form['email'], $form['login'], $password, $avatar];

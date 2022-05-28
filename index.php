@@ -2,7 +2,6 @@
 
 require_once 'config/init.php';
 
-$page_title = 'readme: регистрация';
 $errors = [];
 $form = [];
 
@@ -46,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $main_layout = include_template('main-page.php', [
-    'page_title' => $page_title,
-    'form' => $form,
-    'errors' => $errors
-]);
-
+        'page_title' => 'readme',
+        'form' => $form,
+        'errors' => $errors
+    ]
+);
 print($main_layout);
