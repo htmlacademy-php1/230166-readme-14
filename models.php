@@ -29,7 +29,7 @@ function show_error($error)
  * Функция принимает email пользователя и возвращает запись
  * пользователя из БД
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  string - почта
  * @return array
 */
@@ -58,7 +58,7 @@ function get_сurrent_user($con, $email)
 /**
  * Получение пользователя по id
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $user_id - id пользователя
  * @param  int $current_user_id - id текущего пользователя
  * @return array
@@ -85,7 +85,7 @@ function get_user_by_id($con, $user_id, $current_user_id)
  * Функция принимает id пользователя и возвращает список id пользователей
  * на которые он подписан
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int - id пользователя
  * @return int
 */
@@ -108,7 +108,7 @@ function get_user_id_publishers($con, $user_id)
 /**
  * Получение всех категорий
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @return array
 */
 function get_all_types($con)
@@ -126,7 +126,7 @@ function get_all_types($con)
 /**
  * Получение определенной категории из БД по id
  *
- * @param mysqli $con Ресурс соединения
+ * @param mysqli $con - ресурс соединения
  * @param int - id категории
  * @return array - запись из БД
 */
@@ -150,7 +150,7 @@ function get_type($con, $type_id)
  * Получение всех постов или только для одной категории,
  * если был получен id категории
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id - id текущего пользователя для получения дополнительных
  *            данных, например добавлен ли пост в избранное
  * @param  int $type_id - id категории, по умолчанию ровен null
@@ -204,7 +204,7 @@ function get_all_posts($con, $current_user_id, $type_id = null)
  * Получение постранично отсортированных всех популярных постов или постов
  * только для одной категории, если был передан id категории
  *
- * @param mysqli $con Ресурс соединения
+ * @param mysqli $con - ресурс соединения
  * @param int $page_items - количество страниц
  * @param int $offset - количество постов на одной странице
  * @param int $current_user_id - id текущего пользователя
@@ -263,7 +263,7 @@ function get_popular_posts($con, $page_items, $offset, $current_user_id, $sortin
 /**
  * Получение одного поста по id
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $post_id - id поста
  * @param  int $current_user_id - id текущего пользователя
  * @return array
@@ -298,7 +298,7 @@ function get_post_by_id($con, $post_id, $current_user_id)
 /**
  * Получение постов определенного пользователя по id пользователя
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $user_id id пользователя
  * @param  int $current_user_id - id текущего пользователя
  * @return array
@@ -340,7 +340,7 @@ function get_user_posts($con, $user_id, $current_user_id)
 /**
  * Получение постов на которые подписан пользователь
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  array $publishers - id пользователей на которые подписан пользователь
  * @param  int $current_user_id - id текущего пользователя
  * @param  int $type_id - id категории
@@ -450,7 +450,7 @@ function get_repost($con, $post_id) {
  * Получение лайков пользователя, пользователя, категории,
  * и ссылок на материала поста для превьюшки
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int - id пользователя
  * @return array
  */
@@ -476,7 +476,7 @@ function get_favs($con, $user_id) {
 /**
  * Получение списка подписанных пользователей,
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $user_id id пользователя
  * @param  int $current_user_id - id текущего пользователя
  * @return array
@@ -513,7 +513,7 @@ function get_subscrubers($con, $user_id, $current_user_id)
 /**
  * Получение комментариев к посту
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int - id поста
  * @return array
 */
@@ -538,7 +538,7 @@ function get_comments($con, $post_id)
 /**
  * Получение id пользователей которым были отправлены сообщения
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id - id текущего пользователя
  * @return array
  */
@@ -560,7 +560,7 @@ function get_ids_recipient($con, $current_user_id) {
 /**
  * Получение id пользователей которые отправили сообщения
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id - id текущего пользователя
  * @return array
  */
@@ -581,7 +581,7 @@ function get_ids_sender($con, $current_user_id) {
 /**
  * Получение последнего сообщения для превью в сообщениях
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $user_id_sender
  * @param  int $user_id_recipient
  * @return array
@@ -606,7 +606,7 @@ function get_last_message($con, $user_id_sender, $user_id_recipient) {
 /**
  * Получение одного пользователя по id для сообщений
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int - id пользователя
  * @return array
  */
@@ -625,7 +625,7 @@ function get_communicate_user($con, $user_id) {
 /**
  * Получение всех пользователей для страницы сообщений, и сортировка их по дате по убыванию
  *
- * @param  mysqli $con Ресурс соединения
+ * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id
  * @return array
  */

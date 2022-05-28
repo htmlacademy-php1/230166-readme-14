@@ -10,25 +10,25 @@
  * @param  int $limit - число символов
  * @return string урезанный текст с ссылкой
 */
-function crop_text(string $string, $post_id, int $limit = 300): string
+function crop_text($string, $post_id, $limit = 300)
 {
-    if (mb_strlen($input, 'utf-8') < $limit) {
-        return '<p>' . $input . '</p>';
+    if (mb_strlen($string, 'utf-8') < $limit) {
+        return '<p>' . $string . '</p>';
     }
 
     $count = 0;
-    $output = [];
+    $result = [];
 
-    $arr = explode(' ', $input);
+    $arr = explode(' ', $string);
 
     foreach($arr as $item) {
-        array_push($output, $item);
+        array_push($result, $item);
 
         $count += mb_strlen($item, 'utf-8') + 1;
 
         if ($count > ($limit + 1)) {
-            $output = implode(' ', $output);
-            return "<p>" . $output . "...</p>\n<a class='post-text__more-link' href='post.php?post_id=$post_id'>Читать далее</a>";
+            $result = implode(' ', $result);
+            return "<p>" . $result . "...</p>\n<a class='post-text__more-link' href='post.php?post_id=$post_id'>Читать далее</a>";
         }
     }
 }
@@ -36,10 +36,10 @@ function crop_text(string $string, $post_id, int $limit = 300): string
 /**
  * Защита от XSS атак, заменяет специальные символы на безопасные
  *
- * @param  string $string - Конвертируемая строка
+ * @param  string - Конвертируемая строка
  * @return string - отконвертированная строка
  */
-function esc($string): string
+function esc($string)
 {
     return htmlspecialchars($string);
 }
@@ -48,7 +48,7 @@ function esc($string): string
  * Функция принимает дату, переводит в Unix и возвращает сколько прошло времени
  * относительно от текущего времени в минутах, часах, неделях, месяцах
  *
- * @param  string $date
+ * @param  string
  * @return string
 */
 function get_relative_date($date)
@@ -96,8 +96,8 @@ function get_date_for_title($date)
  * Функция принимает данные из формы и список обязательных полей. Сравнивает, если поле из формы
  * является обязательным и оно не заполненно, то поле добавляется в массив с ошибками
  *
- * @param  array $fields
- * @param  array $reqiured_fields
+ * @param  array $fields - все поля
+ * @param  array $reqiured_fields - обязательные поля
  * @return array
 */
 function get_required_errors($fields, $reqiured_fields)
@@ -135,10 +135,10 @@ function check_length_of_string($string, $min, $max)
 }
 
 /**
- * Функция принимает ссылку, и возвращает ошибку, если формат ссылки неправильный
+ * Функция принимает ссылку, и возвращает сообщение об ошибке, если формат ссылки неправильный
  *
- * @param  string $url - проверяемая ссылка
- * @return string - сообщение об ошибке
+ * @param  string
+ * @return string
  */
 function validate_url($url)
 {
@@ -152,7 +152,7 @@ function validate_url($url)
 /**
  * Функция принимает email, и возвращает ошибку, если формат email неправильный
  *
- * @param  string $email - почта пользователя
+ * @param  string
  * @return string
  */
 function validate_email($email)
@@ -168,7 +168,7 @@ function validate_email($email)
  * Функция принимает массив, и удаляет пробелы в начале и конце
  * у каждого элемента массива
  *
- * @param  array - массив со строками
+ * @param  array
  * @return array
  */
 function trim_array($array)
@@ -186,7 +186,7 @@ function trim_array($array)
  * Функция принимает ссылку и удаляет из неё GET параметры
  * Возвращает название сайта
  *
- * @param  string $url
+ * @param  string
  * @return string
  */
 function get_page_url($url)
