@@ -15,7 +15,7 @@ $current_user_id = (int)$current_user['id'];
 $post = get_post_by_id($con, $post_id, $current_user_id);
 
 $user_id = (int) $post['user_id'];
-$user = get_user_by_id($con, $user_id, $current_user_id);
+$user = get_all_user_data($con, $user_id, $current_user_id);
 
 $all_comments = get_comments($con, $post_id);
 $is_show_comments = filter_input(INPUT_GET, 'is_show_comments');

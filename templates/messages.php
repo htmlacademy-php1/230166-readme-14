@@ -31,8 +31,13 @@
                                 class="messages__contacts-tab tabs__item <?= $user['id'] === $user_id ? 'messages__contacts-tab--active tabs__item--active' : ''; ?>"
                                 href="messages.php?user_id=<?= $user['id'] ?>"
                             >
-                                <div class="messages__avatar-wrapper">
-                                    <img class="messages__avatar" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                                <div class="messages__avatar-holder">
+                                    <div class="messages__avatar-wrapper">
+                                        <img class="messages__avatar" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                                    </div>
+                                    <?php if ($user['count_new_messages']) : ?>
+                                    <i class="messages__indicator"><?= $user['count_new_messages'] ?></i>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="messages__info">
                                     <span class="messages__contact-name">

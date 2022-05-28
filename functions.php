@@ -242,3 +242,50 @@ function insert_first_sign($array, $sign)
 
     return $result;
 }
+
+/**
+ * Получение суммы количества всех новых сообщений
+ *
+ * @param  array - пoльзователи отправившие сообщенния
+ * @return int
+ */
+function sum_all_new_messages($users)
+{
+    $count = 0;
+
+    foreach($users as $user) {
+        $count .= $user['count_new_messages'];
+    }
+
+    return $count;
+}
+
+/**
+ * После выполнения процесса «Подписка на пользователя» юзер, на которого подписались, получает об этом уведомление.
+ *
+ * @param  array $user
+ * @param  array $current_user
+ * @return void
+ */
+function send_email_subscribe($user, $current_user)
+{
+    if (false) {
+        $dsn = 'smtp://keks@phpdemo.ru:pass@smtp.example.com:25';
+        $transport = Transport::fromDsn($dsn);
+        $message = new Email();
+        $message->to($user['email']);
+        $message->from('keks@phpdemo.ru');
+        $message->subject('У вас новый подписчик');
+        $message->text("Здравствуйте, {$user['login']}. На вас подписался новый пользователь {$current_user['login']}. Вот ссылка на его профиль: https://readme/profile.php?user_id={$user_id}");
+        $mailer = new Mailer($transport);
+
+        $result = $mailer->send($message);
+
+        if ($result) {
+            return 'Рассылка успешно отправлена';
+        }
+        else {
+            return 'Не удалось отправить рассылку';
+        }
+    }
+}

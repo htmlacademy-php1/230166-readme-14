@@ -3276,14 +3276,18 @@ img {
   opacity: .6
 }
 
-.messages__avatar-wrapper {
+.messages__avatar-holder {
   position: relative;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   width: 60px;
   height: 60px;
-  min-width: 60px;
   margin-right: 21px;
+}
+
+.messages__avatar-wrapper {
+  width: 60px;
+  height: 60px;
   background-color: #e2e8f7;
   background-image: url(../img/icon-input-user.svg);
   border-radius: 50%;

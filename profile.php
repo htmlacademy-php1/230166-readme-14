@@ -40,7 +40,7 @@ if (!$user_id && !check_user_id($con, $user_id)) {
     show_error('Такой пользователь не зарегистрирован.');
 }
 
-$user = get_user_by_id($con, $user_id, $current_user_id);
+$user = get_all_user_data($con, $user_id, $current_user_id);
 $posts = get_user_posts($con, $user_id, $current_user_id);
 $favs = get_favs($con, $user_id);
 $subscribers = get_subscrubers($con, $user_id, $current_user_id);

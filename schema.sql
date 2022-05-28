@@ -84,6 +84,7 @@ CREATE TABLE message (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id_sender INT(11),
   user_id_recipient INT(11),
+  is_new TINYINT(1) DEFAULT 0,
   text TEXT NOT NULL,
 
   FOREIGN KEY (user_id_sender) REFERENCES user(id),

@@ -63,7 +63,7 @@ function get_сurrent_user($con, $email)
  * @param  int $current_user_id - id текущего пользователя
  * @return array
 */
-function get_user_by_id($con, $user_id, $current_user_id)
+function get_all_user_data($con, $user_id, $current_user_id)
 {
     $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT * FROM user WHERE id = $user_id";
@@ -78,7 +78,7 @@ function get_user_by_id($con, $user_id, $current_user_id)
         return $user;
     }
 
-    show_error('get_user_by_id ' . mysqli_error($con));
+    show_error('get_all_user_data ' . mysqli_error($con));
 }
 
 /**
@@ -589,11 +589,13 @@ function get_ids_sender($con, $current_user_id) {
 function get_last_message($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
     $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
     $sql = "SELECT m.created_at, u.id, u.login, m.text FROM message m
             JOIN user u ON m.user_id_sender = u.id
             WHERE (m.user_id_sender = $user_id_sender AND m.user_id_recipient = $user_id_recipient)
             OR (m.user_id_sender = $user_id_recipient AND m.user_id_recipient = $user_id_sender)
             ORDER BY m.created_at DESC LIMIT 1";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -610,20 +612,21 @@ function get_last_message($con, $user_id_sender, $user_id_recipient) {
  * @param  int - id пользователя
  * @return array
  */
-function get_communicate_user($con, $user_id) {
+function get_user($con, $user_id) {
     $user_id = mysqli_real_escape_string($con, $user_id);
-    $sql = "SELECT id, login, avatar FROM user WHERE id = $user_id";
+    $sql = "SELECT id, login, email, avatar FROM user WHERE id = $user_id";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
         return mysqli_fetch_assoc($result);
     }
 
-    show_error('get_communicate_user ' . mysqli_error($con));
+    show_error('get_user ' . mysqli_error($con));
 }
 
 /**
- * Получение всех пользователей для страницы сообщений, и сортировка их по дате по убыванию
+ * Получение всех пользователей для страницы сообщений для текущего пользователя,
+ * и сортировка их по дате по убыванию
  *
  * @param  mysqli $con - ресурс соединения
  * @param  int $current_user_id
@@ -637,9 +640,10 @@ function get_all_communicate_users($con, $current_user_id) {
     $last_message = [];
 
     foreach($ids as $id) {
-        $user = get_communicate_user($con, $id);
+        $user = get_user($con, $id);
         $last_messages = get_last_message($con, $id, $current_user_id);
         $user['last_message'] = $last_messages;
+        $user['count_new_messages'] = get_count_new_messages($con, $id, $current_user_id);
 
         $users[] = $user;
     }
@@ -666,12 +670,16 @@ function get_messages($con, $user_id_sender, $user_id_recipient) {
     $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
     $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
 
-    $sql = "SELECT u.id user_id, u.login, u.avatar, m.created_at, m.text FROM message m
+    remove_new_messages($con, $user_id_sender, $user_id_recipient);
+
+    $sql = "SELECT u.id user_id, u.login, u.avatar, m.created_at, m.text
+            FROM message m
             JOIN user u ON m.user_id_sender = u.id
             WHERE
                 (m.user_id_sender = $user_id_sender AND m.user_id_recipient = $user_id_recipient) OR
                 (m.user_id_sender = $user_id_recipient AND m.user_id_recipient = $user_id_sender)
             ORDER BY m.created_at";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -693,11 +701,13 @@ function get_messages($con, $user_id_sender, $user_id_recipient) {
 function get_tags($con, $post_id)
 {
     $post_id = mysqli_real_escape_string($con, $post_id);
+
     $sql = "SELECT h.* FROM tag h
             JOIN post_tag ph ON ph.tag_id = h.id
             JOIN post p ON p.id = ph.post_id
             WHERE ph.post_id = $post_id
             GROUP BY ph.tag_id";
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -797,6 +807,7 @@ function get_count_comments($con, $post_id)
 */
 function get_count_user_posts($con, $user_id)
 {
+    $user_id = mysqli_real_escape_string($con, $user_id);
     $sql = "SELECT COUNT(id) AS count FROM post WHERE user_id = $user_id";
     $result = mysqli_query($con, $sql);
 
@@ -805,6 +816,33 @@ function get_count_user_posts($con, $user_id)
     }
 
     show_error('get_count_user_posts ' . mysqli_error($con));
+}
+
+/**
+ * Количество новых непрочитанных сообщений
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender - id отправителя
+ * @param  int $user_id_recipient - id получателя
+ * @return int
+ */
+function get_count_new_messages($con, $user_id_sender, $user_id_recipient)
+{
+    $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
+    $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
+    $sql = "SELECT COUNT(is_new) as count FROM message
+                WHERE user_id_sender = $user_id_sender
+                AND user_id_recipient = $user_id_recipient
+                AND is_new = 1";
+
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        return mysqli_fetch_assoc($result)['count'];
+    }
+
+    show_error('get_count_new_messages ' . mysqli_error($con));
 }
 
 // Проверки
@@ -1069,7 +1107,7 @@ function add_fav($con, $post_id, $current_user_id)
 */
 function add_message($con, $user_id_sender, $user_id_recipient, $message)
 {
-    $sql = "INSERT INTO message (user_id_sender, user_id_recipient, text) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO message (user_id_sender, user_id_recipient, text, is_new) VALUES (?, ?, ?, 1)";
     $stmt = db_get_prepare_stmt($con, $sql, [$user_id_sender, $user_id_recipient, $message]);
     $result = mysqli_stmt_execute($stmt);
 
@@ -1116,5 +1154,29 @@ function remove_subcribe($con, $user_id_publisher, $user_id_subscriber)
 
     if (!$result) {
         show_error('remove_subcribe ' . mysqli_error($con));
+    }
+}
+
+/**
+ * Обнуление поля что сообщение новое
+ *
+ * @param  mysqli $con - ресурс соединения
+ * @param  int $user_id_sender - id отправителя
+ * @param  int $user_id_recipient - id получателя
+ * @return void
+ */
+function remove_new_messages($con, $user_id_sender, $user_id_recipient)
+{
+    $user_id_sender = mysqli_real_escape_string($con, $user_id_sender);
+    $user_id_recipient = mysqli_real_escape_string($con, $user_id_recipient);
+
+    $sql = "UPDATE message SET is_new = 0
+                WHERE user_id_sender = $user_id_sender
+                AND user_id_recipient = $user_id_recipient";
+
+    $result = mysqli_query($con, $sql);
+
+    if (!$result) {
+        show_error('get_count_user_posts ' . mysqli_error($con));
     }
 }

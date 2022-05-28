@@ -93,72 +93,63 @@
             <?php endforeach; ?>
         </ul>
     </footer>
-    <!-- <?php if ($post['is_show_comments']) : ?>
-        <div class="comments">
-            <a
-                class="comments__button button"
-                href="#"
-            >Показать комментарии</a>
-        </div>
-    <?php else : ?> -->
-        <div class="comments">
-            <div class="comments__list-wrapper">
-                <ul class="comments__list">
-                    <?php foreach ($post['comments'] as $comment) : ?>
-                        <li class="comments__item user">
-                            <div class="comments__avatar">
-                                <a class="user__avatar-link" href="profile.php?user_id=<?= $comment['user_id'] ?>">
-                                    <img class="comments__picture" src="<?= esc($comment['avatar']); ?>" alt="Аватар пользователя">
+    <div class="comments">
+        <div class="comments__list-wrapper">
+            <ul class="comments__list">
+                <?php foreach ($post['comments'] as $comment) : ?>
+                    <li class="comments__item user">
+                        <div class="comments__avatar">
+                            <a class="user__avatar-link" href="profile.php?user_id=<?= $comment['user_id'] ?>">
+                                <img class="comments__picture" src="<?= esc($comment['avatar']); ?>" alt="Аватар пользователя">
+                            </a>
+                        </div>
+                        <div class="comments__info">
+                            <div class="comments__name-wrapper">
+                                <a class="comments__user-name" href="profile.php?user_id=<?= $comment['user_id'] ?>">
+                                    <span><?= esc($comment['login']); ?></span>
                                 </a>
+                                <time class="comments__time"
+                                    datetime="<?= $comment['created_at']; ?>"
+                                    title="<?= get_date_for_title($comment['created_at']); ?>"
+                                ><?= get_relative_date($comment['created_at']); ?></time>
                             </div>
-                            <div class="comments__info">
-                                <div class="comments__name-wrapper">
-                                    <a class="comments__user-name" href="profile.php?user_id=<?= $comment['user_id'] ?>">
-                                        <span><?= esc($comment['login']); ?></span>
-                                    </a>
-                                    <time class="comments__time"
-                                        datetime="<?= $comment['created_at']; ?>"
-                                        title="<?= get_date_for_title($comment['created_at']); ?>"
-                                    ><?= get_relative_date($comment['created_at']); ?></time>
-                                </div>
-                                <p class="comments__text">
-                                    <?= esc($comment['text']) ?>
-                                </p>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-                <!-- <?php if ($post['count_comments'] > 2 && !$post['is_show_comments']) : ?>
-                    <a class="comments__more-link" href="profile.php?post_id=<?= $post['id'] ?>">
-                        <span>Показать все комментарии</span>
-                        <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
-                    </a>
-                <?php endif; ?> -->
-            </div>
+                            <p class="comments__text">
+                                <?= esc($comment['text']) ?>
+                            </p>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <!-- <?php if ($post['count_comments'] > 2 && !$post['is_show_comments']) : ?>
+                <a class="comments__more-link" href="profile.php?post_id=<?= $post['id'] ?>">
+                    <span>Показать все комментарии</span>
+                    <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
+                </a>
+            <?php endif; ?> -->
         </div>
-        <form class="comments__form form" action="profile.php?post_id=<?= $post['id'] ?>" method="post">
-            <input type="hidden" name="user_id" value="<?= $user_id ?>">
-            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+    </div>
+    <form class="comments__form form" action="profile.php?post_id=<?= $post['id'] ?>" method="post">
+        <input type="hidden" name="user_id" value="<?= esc($user_id) ?>">
+        <input type="hidden" name="post_id" value="<?= esc($post['id']) ?>">
 
-            <div class="comments__my-avatar">
-                <img class="comments__picture" src="<?= $current_user['avatar']; ?>" alt="Аватар пользователя">
-            </div>
-            <div class="form__input-section <?= $comment_error_text && $comment_error_id === $post['id'] ? 'form__input-section--error' : ''; ?>">
-                <textarea
-                    class="comments__textarea form__textarea form__input"
-                    placeholder="Ваш комментарий"
-                    name="comment"
-                ><?= $post['comment'] ?? ''; ?></textarea>
-                <label class="visually-hidden">Ваш комментарий</label>
-                <?php if ($comment_error_text && $comment_error_id === $post['id']) : ?>
-                    <button class="form__error-button button" type="button">!</button>
-                    <div class="form__error-text">
-                        <h3 class="form__error-title">Ошибка валидации</h3>
-                        <p class="form__error-desc"><?= $comment_error_text; ?></p>
-                    </div>
-                <?php endif ?>
-            </div>
-            <button class="comments__submit button button--green" type="submit">Отправить</button>
-        </form>
-    <?php endif ?>
+        <div class="comments__my-avatar">
+            <img class="comments__picture" src="<?= $current_user['avatar']; ?>" alt="Аватар пользователя">
+        </div>
+        <div class="form__input-section <?= $comment_error_text && $comment_error_id === $post['id'] ? 'form__input-section--error' : ''; ?>">
+            <textarea
+                class="comments__textarea form__textarea form__input"
+                placeholder="Ваш комментарий"
+                name="comment"
+            ><?= $post['comment'] ?? ''; ?></textarea>
+            <label class="visually-hidden">Ваш комментарий</label>
+            <?php if ($comment_error_text && $comment_error_id === $post['id']) : ?>
+                <button class="form__error-button button" type="button">!</button>
+                <div class="form__error-text">
+                    <h3 class="form__error-title">Ошибка валидации</h3>
+                    <p class="form__error-desc"><?= $comment_error_text; ?></p>
+                </div>
+            <?php endif ?>
+        </div>
+        <button class="comments__submit button button--green" type="submit">Отправить</button>
+    </form>
 </article>

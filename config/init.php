@@ -1,4 +1,11 @@
 <?php
+
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
+require_once 'vendor/autoload.php';
+
 require_once 'config/config.php';
 require_once 'helpers.php';
 require_once 'models.php';

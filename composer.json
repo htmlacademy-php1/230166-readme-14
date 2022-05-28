@@ -1,0 +1,8 @@
+{
+    "name": "mrp/readme",
+    "license": "MIT",
+    "require": {
+        "symfony/mailer": "^6.0",
+        "symfony/google-mailer": "^6.0"
+    }
+}

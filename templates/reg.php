@@ -16,7 +16,7 @@
                                 type="text"
                                 name="email"
                                 placeholder="Укажите эл.почту"
-                                value="<?= $form['email'] ?? ''; ?>"
+                                value="<?= isset($form['email']) ? esc($form['email']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -34,7 +34,7 @@
                                 type="text"
                                 name="login"
                                 placeholder="Укажите логин"
-                                value="<?= $form['login'] ?? ''; ?>"
+                                value="<?= isset($form['login']) ? esc($form['login']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -52,7 +52,7 @@
                                 type="password"
                                 name="password"
                                 placeholder="Придумайте пароль"
-                                value="<?= $form['password'] ?? ''; ?>"
+                                value="<?= isset($form['password']) ? esc($form['password']) : ''; ?>"
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">
@@ -70,7 +70,7 @@
                                 type="password"
                                 name="password-repeat"
                                 placeholder="Повторите пароль"
-                                value="<?= $form['password-repeat'] ?? ''; ?>"
+                                value=""
                             >
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                             <div class="form__error-text">

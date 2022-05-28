@@ -1,0 +1,15 @@
+{
+    "name": "mrp/pages",
+    "autoload": {
+        "psr-4": {
+            "Mrp\\Pages\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lipsum",
+            "email": "m.margaritapopova@google.com"
+        }
+    ],
+    "require": {}
+}

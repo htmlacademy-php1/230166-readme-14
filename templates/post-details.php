@@ -205,7 +205,10 @@
                             >
                                 <?= ($user['is_subscribe']) ? 'Отписаться' : 'Подписаться'; ?>
                             </a>
-                            <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
+                            <a
+                                class="user__button user__button--writing button button--green"
+                                href="messages.php?user_id=<?= $user['id']; ?>"
+                            >Сообщение</a>
                         </div>
                     <?php endif; ?>
                 </div>

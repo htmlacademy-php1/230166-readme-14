@@ -96,7 +96,7 @@
                                             <a class="header__profile-nav-link" href="messages.php">
                                                 <span class="header__profile-nav-text">
                                                     Сообщения
-                                                    <i class="header__profile-indicator">2</i>
+                                                    <!-- <i class="header__profile-indicator">2</i> -->
                                                 </span>
                                             </a>
                                         </li>
