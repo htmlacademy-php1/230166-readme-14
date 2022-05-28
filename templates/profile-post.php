@@ -17,11 +17,11 @@
                     </div>
                 </a>
             </div>
-        <? else : ?>
+        <?php else : ?>
             <h2>
                 <a href="post.php?post_id=<?= $post['id'] ?>"><?= esc($post['title']) ?></a>
             </h2>
-        <? endif; ?>
+        <?php endif; ?>
     </header>
     <div class="post__main">
         <?php if ((int)$post['type_id'] === 1) : ?>
@@ -51,7 +51,7 @@
                     'title' => $post['title'],
                 ]);
             ?>
-        <? endif; ?>
+        <?php endif; ?>
     </div>
     <footer class="post__footer">
         <div class="post__indicators">
@@ -90,7 +90,7 @@
         <ul class="post__tags">
             <?php foreach ($post['tags'] as $tag) : ?>
                 <li><a href="#"><?= $tag['text'] ?></a></li>
-            <? endforeach; ?>
+            <?php endforeach; ?>
         </ul>
     </footer>
     <!-- <?php if ($post['is_show_comments']) : ?>
@@ -100,7 +100,7 @@
                 href="#"
             >Показать комментарии</a>
         </div>
-    <? else : ?> -->
+    <?php else : ?> -->
         <div class="comments">
             <div class="comments__list-wrapper">
                 <ul class="comments__list">
@@ -126,14 +126,14 @@
                                 </p>
                             </div>
                         </li>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                 </ul>
                 <!-- <?php if ($post['count_comments'] > 2 && !$post['is_show_comments']) : ?>
                     <a class="comments__more-link" href="profile.php?post_id=<?= $post['id'] ?>">
                         <span>Показать все комментарии</span>
                         <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
                     </a>
-                <? endif; ?> -->
+                <?php endif; ?> -->
             </div>
         </div>
         <form class="comments__form form" action="profile.php?post_id=<?= $post['id'] ?>" method="post">
@@ -156,9 +156,9 @@
                         <h3 class="form__error-title">Ошибка валидации</h3>
                         <p class="form__error-desc"><?= $comment_error_text; ?></p>
                     </div>
-                <? endif ?>
+                <?php endif ?>
             </div>
             <button class="comments__submit button button--green" type="submit">Отправить</button>
         </form>
-    <? endif ?>
+    <?php endif ?>
 </article>

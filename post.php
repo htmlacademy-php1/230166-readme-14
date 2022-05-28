@@ -45,8 +45,8 @@ $page_content = include_template('post-details.php', [
     'current_user' => $current_user,
     'post' => $post,
     'is_show_comments' => $is_show_comments,
-    'comment' => $comment ?? NULL,
-    'error' => $error ?? NULL
+    'comment' => $comment ?? null,
+    'error' => $error ?? null
 ]);
 
 $page_layout = include_template('page-layout.php', [

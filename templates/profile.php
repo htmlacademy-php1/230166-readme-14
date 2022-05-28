@@ -45,7 +45,7 @@
                             href="messages.php?user_id=<?= $user['id']; ?>"
                         >Сообщение</a>
                     </div>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -87,10 +87,10 @@
                                         'current_user' => $current_user
                                     ]);
                                 ?>
-                            <? endforeach; ?>
-                        <? else : ?>
+                            <?php endforeach; ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
 
                     <section class="profile__likes tabs__content <?= $tab === 'favs' ? 'tabs__content--active' : ''; ?>">
@@ -101,9 +101,9 @@
                                     'user_id' => $user_id
                                 ]);
                             ?>
-                        <? else : ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
 
                     <section class="profile__subscriptions tabs__content <?= $tab === 'subscribers' ? 'tabs__content--active' : ''; ?>">
@@ -113,9 +113,9 @@
                                     'subscribers' => $subscribers
                                 ]);
                             ?>
-                        <? else : ?>
+                        <?php else : ?>
                             Пусто!
-                        <? endif; ?>
+                        <?php endif; ?>
                     </section>
                 </div>
             </div>

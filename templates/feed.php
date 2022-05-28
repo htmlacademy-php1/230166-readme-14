@@ -53,7 +53,7 @@
                                         'title' => $post['title'],
                                     ]);
                                 ?>
-                            <? endif; ?>
+                            <?php endif; ?>
                         </div>
                         <footer class="post__footer post__indicators">
                             <div class="post__buttons">
@@ -88,7 +88,7 @@
                             </div>
                         </footer>
                     </article>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <ul class="feed__filters filters">
@@ -108,7 +108,7 @@
                         </svg>
                     </a>
                 </li>
-                <? endforeach; ?>
+                <?php endforeach; ?>
             </ul>
         </section>
         <aside class="promo">

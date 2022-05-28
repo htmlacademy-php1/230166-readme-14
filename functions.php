@@ -1,14 +1,16 @@
 <?php
 
 /**
+ * Функция принимает строку, id поста для ссылки, и количество символов.
  * Функция должна возвращать результат: оригинальный текст, если его длина меньше заданного числа символов.
  * В противном случае это должен быть урезанный текст с прибавленной к нему ссылкой.
- * @param string $input текст поста
- * @param int $post_id
- * @param int $limit
- * @return string обрезанный текст
+ *
+ * @param  string $string текст поста
+ * @param  int $post_id - id поста
+ * @param  int $limit - число символов
+ * @return string урезанный текст с ссылкой
 */
-function crop_text(string $input, $post_id, int $limit = 300): string
+function crop_text(string $string, $post_id, int $limit = 300): string
 {
     if (mb_strlen($input, 'utf-8') < $limit) {
         return '<p>' . $input . '</p>';
@@ -32,24 +34,27 @@ function crop_text(string $input, $post_id, int $limit = 300): string
 }
 
 /**
- * Функция фильтрует текст (базар) от пользователя для защиты от XSS
- * @param string данные от пользователя
- * @return string безопасные данные от пользователя
-*/
-function esc($input): string
+ * Защита от XSS атак, заменяет специальные символы на безопасные
+ *
+ * @param  string $string - Конвертируемая строка
+ * @return string - отконвертированная строка
+ */
+function esc($string): string
 {
-    return htmlspecialchars($input);
+    return htmlspecialchars($string);
 }
 
 /**
- * Получение относительной даты
- * @param string дата в Unix формате
- * @return string дата относительно текущего времени
+ * Функция принимает дату, переводит в Unix и возвращает сколько прошло времени
+ * относительно от текущего времени в минутах, часах, неделях, месяцах
+ *
+ * @param  string $date
+ * @return string
 */
-function get_relative_date(string $input): string
+function get_relative_date($date)
 {
     $cur_date = time();
-    $post_date = strtotime($input);
+    $post_date = strtotime($date);
     $dif_date = $cur_date - $post_date;
 
     if ($dif_date < 3600) {
@@ -77,28 +82,31 @@ function get_relative_date(string $input): string
 }
 
 /**
- * Получение даты в виде дд.мм.гггг чч: мм
- * @param string дата в Unix формате Timestamp
+ * Функция переводит переданную дату в Unix и возвращает в виде дд.мм.гггг чч:мм
+ *
+ * @param  string
  * @return string
 */
-function get_date_for_title(string $input):string
+function get_date_for_title($date)
 {
     return date('d.m.Y H:i', strtotime($input));
 }
 
 /**
- * Получение ошибок для незаполненных обязательных полей
- * @param array $array заполненные поля
- * @param array $reqiured обязательные поля
+ * Функция принимает данные из формы и список обязательных полей. Сравнивает, если поле из формы
+ * является обязательным и оно не заполненно, то поле добавляется в массив с ошибками
+ *
+ * @param  array $fields
+ * @param  array $reqiured_fields
  * @return array
 */
-function get_required_errors($array, $required)
+function get_required_errors($fields, $reqiured_fields)
 {
     $errors = [];
 
-    foreach ($array as $key => $value) {
-        if (array_key_exists($key, $required) && empty($value)) {
-            $errors[$key] = "$required[$key]. Это поле должно быть заполнено.";
+    foreach ($fields as $field => $value) {
+        if (array_key_exists($field, $reqiured_fields) && empty($value)) {
+            $errors[$field] = "$reqiured_fields[$field]. Это поле должно быть заполнено.";
         }
     }
 
@@ -106,28 +114,31 @@ function get_required_errors($array, $required)
 }
 
 /**
- * Валидирует количество символов в сообщении, максимальное и минимальное значение,
- * возвращает сообщение об ошибке
- * @param int $id категория, которую ввел пользователь в форму
- * @param array $allowed_list Список существующих категорий
- * @return string Текст сообщения об ошибке
+ * Функция проверяет количество символов в сообщении, максимальное и минимальное значение,
+ * возвращает true или false
+ *
+ * @param  string $string - проверяемая строка
+ * @param  int $min - минимальное количество символов в строке
+ * @param  int $max - максимальное количество символов в строке
+ * @return bool
  */
-function check_length($value, $min, $max)
+function check_length_of_string($string, $min, $max)
 {
-    if ($value) {
-        $len = strlen($value);
+    if ($string) {
+        $len = strlen($string);
         if ($len >= $min or $len <= $max) {
             return true;
         }
     }
 
-    return null;
+    return false;
 }
 
 /**
- * Проверяет url и возвращает ошибку, если формат неправильный
- * @param string ссылка
- * @return mixed текст ошибки или null
+ * Функция принимает ссылку, и возвращает ошибку, если формат ссылки неправильный
+ *
+ * @param  string $url - проверяемая ссылка
+ * @return string - сообщение об ошибке
  */
 function validate_url($url)
 {
@@ -135,13 +146,14 @@ function validate_url($url)
         return 'Неправильный формат ссылки';
     }
 
-    return NULL;
+    return null;
 }
 
 /**
- * Проверяет почту и возвращает ошибку, если формат неправильный
- * @param string ссылка
- * @return mixed текст ошибки или null
+ * Функция принимает email, и возвращает ошибку, если формат email неправильный
+ *
+ * @param  string $email - почта пользователя
+ * @return string
  */
 function validate_email($email)
 {
@@ -149,73 +161,54 @@ function validate_email($email)
         return 'Неправильный формат почты';
     }
 
-    return NULL;
+    return null;
 }
 
 /**
- * Функция проверяет доступно ли видео по ссылке на youtube
- * @param string $url ссылка на видео
- * @return string Ошибку если валидация не прошла
- */
-function validate_youtube_url($url)
-{
-    $id = extract_youtube_id($url);
-
-    set_error_handler(function () {}, E_WARNING);
-    $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
-    restore_error_handler();
-
-    if (!is_array($headers)) {
-        return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
-    }
-
-    $err_flag = strpos($headers[0], '200') ? 200 : 404;
-
-    if ($err_flag !== 200) {
-        return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
-    }
-
-    return NULL;
-}
-
-/**
- * Функция проверяет доступно ли видео по ссылке на youtube
- * @param string $url ссылка на видео
- * @return string Ошибку если валидация не прошла
+ * Функция принимает массив, и удаляет пробелы в начале и конце
+ * у каждого элемента массива
+ *
+ * @param  array - массив со строками
+ * @return array
  */
 function trim_array($array)
 {
-    $output_array = [];
+    $result = [];
 
     foreach($array as $key => $value) {
-        $output_array[$key] = trim($value);
+        $result[$key] = trim($value);
     }
 
-    return $output_array;
+    return $result;
 }
 
 /**
- * Получение названия страницы
- * @param string $url
+ * Функция принимает ссылку и удаляет из неё GET параметры
+ * Возвращает название сайта
+ *
+ * @param  string $url
  * @return string
  */
 function get_page_url($url)
 {
     $url = explode('?', $url);
     $url = $url[0];
+
     return $url;
 }
 
 /**
- *  поле категории, если такой категории нет в списке
- * возвращает сообщение об этом
- * @param int $id категория, которую ввел пользователь в форму
- * @param array $allowed_list Список существующих категорий
- * @return string Текст сообщения об ошибке
+ * Функция принимает массив с данными, например пользователей, и id
+ * полученное из POST или GET параметров. Выделяет из массива все id в отдельных массив,
+ * и возвращает true или false, если в этим массиве есть полученное id
+ *
+ * @param  array $allowed_list Список существующих данных
+ * @param  int $id проверяемое id
+ * @return bool
  */
-function check_id($array, $id)
+function check_id($allowed_list, $id)
 {
-    $ids = array_column($array, 'id');
+    $ids = array_column($allowed_list, 'id');
 
     if (!in_array($id, $ids)) {
         return true;
@@ -225,9 +218,14 @@ function check_id($array, $id)
 }
 
 /**
- * Проверяет стоит ли вначале переданный символ, если нет то подставляет его
- * @param array $tags массив с тэгами
- * @return array  массив с обрешеченными тэгами
+ * Принимает массив или строку и символ. Если получена строка,
+ * то она переводится в массив. Циклом проверяется есть ли в начале
+ * каждого элемента переданный символ, например решётка для тэгов.
+ * Если нет, то этот символ добавляется в начале элемента
+ *
+ * @param  array $array
+ * @param  string $sign
+ * @return array  массив, например с обрешеченными тэгами
  */
 function insert_first_sign($array, $sign)
 {

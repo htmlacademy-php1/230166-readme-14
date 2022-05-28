@@ -19,8 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = get_required_errors($form, $required);
 
-    var_dump($errors);
-
     if (!isset($errors['login']) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['login'] = 'Неверный формат email';
     }

@@ -120,7 +120,7 @@
                     </ul>
                 </nav>
             </div>
-            <? else : ?>
+            <?php else : ?>
             <nav class="header__nav">
                 <p class="header__register-slogan">
                 </p>
@@ -130,7 +130,7 @@
                     </li>
                 </ul>
             </nav>
-            <? endif; ?>
+            <?php endif; ?>
         </div>
     </header>
 

@@ -75,7 +75,7 @@
                         </div>
                         <?php if (isset($errors['login'])) : ?>
                         <span class="form__error-label form__error-label--login"><?= $errors['login'] ?></span>
-                        <? endif; ?>
+                        <?php endif; ?>
                     </div>
                     <div class="authorization__input-wrapper form__input-wrapper">
                         <div class="form__input-section <?= isset($errors['password']) ? 'form__input-section--error' : ''; ?>">
@@ -93,7 +93,7 @@
                         </div>
                         <?php if (isset($errors['password'])) : ?>
                         <span class="form__error-label"><?= $errors['password'] ?></span>
-                        <? endif ?>
+                        <?php endif ?>
                     </div>
                     <a class="authorization__recovery" href="#">Восстановить пароль</a>
                     <button class="authorization__submit button button--main" type="submit">Войти</button>

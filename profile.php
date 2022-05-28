@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $comment_error_id = $post_id;
     }
 } else {
-    $user_id = filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT) ?? NULL;
+    $user_id = filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT) ?? null;
 }
 
 if (!$user_id && !check_user_id($con, $user_id)) {
@@ -53,8 +53,8 @@ $page_content = include_template('profile.php', [
     'tab' => $tab,
     'favs' => $favs,
     'subscribers' => $subscribers,
-    'comment_error_id' => $comment_error_id ?? NULL,
-    'comment_error_text' => $comment_error_text ?? NULL,
+    'comment_error_id' => $comment_error_id ?? null,
+    'comment_error_text' => $comment_error_text ?? null,
 ]);
 
 $page_layout = include_template('page-layout.php', [

@@ -64,7 +64,7 @@
                             </svg>
                         </a>
                     </li>
-                    <? endforeach ?>
+                    <?php endforeach ?>
                 </ul>
             </div>
         </div>
@@ -75,7 +75,7 @@
                         'post' => $post,
                     ]);
                 ?>
-            <? endforeach; ?>
+            <?php endforeach; ?>
         </div>
         <div class="popular__page-links">
             <a

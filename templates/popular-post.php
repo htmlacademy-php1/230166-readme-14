@@ -52,7 +52,7 @@
                 <span><?= esc($post['link_url']) ?></span>
             </a>
         </div>
-        <? endif; ?>
+        <?php endif; ?>
     </div>
     <footer class="post__footer">
         <div class="post__author">

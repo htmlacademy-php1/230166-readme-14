@@ -22,7 +22,7 @@
                             </div>
                         </a>
                     </li>
-                <? endif; ?>
+                <?php endif; ?>
 
                 <?php if ($users) : ?>
                     <?php foreach ($users as $user) : ?>
@@ -51,8 +51,8 @@
                                 </div>
                             </a>
                         </li>
-                    <? endforeach; ?>
-                <? endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </ul>
         </div>
 
@@ -83,10 +83,10 @@
                                         <?= $message['text'] ?>
                                     </p>
                                 </li>
-                            <? endforeach; ?>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
-                <? endif; ?>
+                <?php endif; ?>
                 <div class="comments">
                     <form class="comments__form form" action="messages.php?user_id=<?= $user_id; ?>" method="post">
                         <input type="hidden" name="user_id" value="<?= $user_id ?>">
@@ -107,16 +107,16 @@
                                     <h3 class="form__error-title">Ошибка валидации</h3>
                                     <p class="form__error-desc"><?= $error ?></p>
                                 </div>
-                            <? endif ?>
+                            <?php endif ?>
                         </div>
                         <button class="comments__submit button button--green" type="submit">Отправить</button>
                     </form>
                 </div>
             </div>
-        <? endif; ?>
+        <?php endif; ?>
     </section>
 
     <?php if (!$user_id && !$start_user) : ?>
         <p class="note">Выберите пользователя!</p>
-    <? endif; ?>
+    <?php endif; ?>
 </main>

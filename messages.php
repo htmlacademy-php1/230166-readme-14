@@ -54,12 +54,12 @@ if ($user_id) {
 
 $page_content = include_template('messages.php', [
     'current_user' => $current_user,
-    'user_id' => $user_id ?? NULL,
+    'user_id' => $user_id ?? null,
     'messages' => $messages ?? [],
     'users' => $users ?? [],
-    'error' => $error ?? NULL,
-    'start_user' => $start_user ?? NULL,
-    'comment' => $comment ?? NULL
+    'error' => $error ?? null,
+    'start_user' => $start_user ?? null,
+    'comment' => $comment ?? null
 ]);
 
 $page_layout = include_template('page-layout.php', [

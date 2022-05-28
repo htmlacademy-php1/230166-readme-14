@@ -9,7 +9,7 @@ $search_results = [];
 
 if ($search) {
 
-    $search_results = get_search_results($con, $search) ?? NULL;
+    $search_results = get_search_results($con, $search) ?? null;
 
     if ($search_results) {
         $page_content = include_template('search-results.php', [

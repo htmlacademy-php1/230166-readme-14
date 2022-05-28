@@ -7,7 +7,7 @@ require_once 'data.php';
 
 session_start();
 
-$current_user = $_SESSION['current_user'] ?? NULL;
+$current_user = $_SESSION['current_user'] ?? null;
 
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));

@@ -86,10 +86,10 @@
                         <ul class="form__invalid-list">
                             <?php foreach($errors as $key => $value) : ?>
                                 <li class="form__invalid-item"><?= $value ?></li>
-                            <? endforeach ?>
+                            <?php endforeach ?>
                         </ul>
                     </div>
-                <? endif ?>
+                <?php endif ?>
             </div>
             <div class="registration__input-file-container form__input-container form__input-container--file">
                 <div class="registration__input-file-wrapper form__input-file-wrapper">
