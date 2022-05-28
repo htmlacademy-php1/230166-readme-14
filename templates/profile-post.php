@@ -120,12 +120,6 @@
                     </li>
                 <?php endforeach; ?>
             </ul>
-            <!-- <?php if ($post['count_comments'] > 2 && !$post['is_show_comments']) : ?>
-                <a class="comments__more-link" href="profile.php?post_id=<?= $post['id'] ?>">
-                    <span>Показать все комментарии</span>
-                    <sup class="comments__amount"><?= esc($post['count_comments']); ?></sup>
-                </a>
-            <?php endif; ?> -->
         </div>
     </div>
     <form class="comments__form form" action="profile.php?post_id=<?= $post['id'] ?>" method="post">

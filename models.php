@@ -367,19 +367,22 @@ function get_feed_posts($con, $publishers, $current_user_id, $type_id)
  *
  * @param  mysqli $con - Ресурс соединения
  * @param  string $search - хэштег или строка поиска
+ * @param  int $current_user_id
  * @return array
 */
-function get_search_results($con, $search)
+function get_search_results($con, $search, $current_user_id)
 {
     if (mb_substr($search, 0, 1) !== '#') {
         $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
                         p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                        p.views, p.repost_count
+                        p.views, p.repost_count,
+                        (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
                 FROM post p
                 JOIN user u ON p.user_id = u.id
                 JOIN type t ON p.type_id = t.id
                 WHERE MATCH(p.title, p.text) AGAINST(?)
                 ORDER BY p.created_at";
+
         $stmt = db_get_prepare_stmt($con, $sql, [$search]);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
@@ -389,7 +392,8 @@ function get_search_results($con, $search)
         if ($tag_id) {
             $sql = "SELECT u.login, u.avatar, t.class, t.name, p.id, p.created_at, p.user_id, p.type_id,
                             p.title, p.text, p.quote, p.caption, p.photo_url, p.video_url, p.link_url,
-                            p.views, p.repost_count
+                            p.views, p.repost_count,
+                            (SELECT COUNT(id) FROM fav WHERE post_id = p.id) count_favs
             FROM post p
             JOIN user u ON p.user_id = u.id
             JOIN type t ON p.type_id = t.id
@@ -403,7 +407,20 @@ function get_search_results($con, $search)
     }
 
     if ($result) {
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $arr = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $posts = [];
+
+        foreach($arr as $post) {
+            $post_id = $post['id'];
+            $post['count_comments'] = get_count_comments($con, $post_id);
+            $post['is_fav'] = check_is_fav($con, $post['id'], $current_user_id);
+            $post['tags'] = get_tags($con, $post_id);
+            $post['comments'] = get_comments($con, $post_id);
+            $post['repost'] = get_repost($con, $post_id);
+            $posts[] = $post;
+        }
+
+        return $posts;
     }
 
     show_error('get_search_results ' . mysqli_error($con));
